@@ -1,0 +1,22 @@
+# 1. Imagen base de Node.js (versión ligera)
+FROM node:18-alpine
+
+# 2. Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# 3. Copiamos los archivos de gestión de dependencias
+COPY package*.json ./
+
+# 4. Instalamos las dependencias
+# Nota: Si usas 'nodemon', asegúrate de que esté en tu package.json
+RUN npm install
+
+# 5. Copiamos todo el código fuente del microservicio
+COPY . .
+
+# 6. Exponemos el puerto 3002 (el que definimos para Docentes)
+EXPOSE 3002
+
+# 7. Comando para arrancar. 
+# Si vas a desarrollar y quieres cambios en tiempo real, usa "npm run dev"
+CMD ["npm", "run", "dev"]
