@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  alumno-service:
+    build: ./servicio_alumnos
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./servicio_alumnos:/app
+      - /app/node_modules
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/escuela_db
+      - PORT=3001
+    depends_on:
+      - mongodb
+
+  docente-service:
+    build: ./servicio_docente
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./servicio_docente:/app
+      - /app/node_modules
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/escuela_db
+      - PORT=3002
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
