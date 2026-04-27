@@ -1,9 +1,61 @@
+// Visualizar calificaciones de una materia (todas las unidades)
+exports.verCalificacionesMateria = async (req, res) => {
+    try {
+        const alumno = await Alumno.findById(req.params.id);
+        if (!alumno) {
+            return res.status(404).json({ error: 'Alumno no encontrado' });
+        }
+        const materia = alumno.materias.find(m => m.nombre === req.params.materiaNombre);
+        if (!materia) {
+            return res.status(404).json({ error: 'Materia no encontrada' });
+        }
+        res.json(materia.unidades.map(u => ({ numero: u.numero, calificacion: u.calificacion })));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+// --- AUTENTICACIÓN ---
+exports.autenticarAlumno = async (req, res) => {
+    const { email, username, password } = req.body;
+    try {
+        // Buscar por email o username
+        const alumno = await Alumno.findOne({
+            $or: [
+                { email },
+                { username }
+            ]
+        });
+        if (!alumno) {
+            return res.status(404).json({ error: 'Alumno no encontrado' });
+        }
+        const passwordValida = await bcrypt.compare(password, alumno.password);
+        if (!passwordValida) {
+            return res.status(401).json({ error: 'Contraseña incorrecta' });
+        }
+        const token = jwt.sign(
+            { id: alumno._id, nombre: alumno.nombre, username: alumno.username, matricula: alumno.matricula },
+            process.env.JWT_SECRET || 'secreto',
+            { expiresIn: '1d' }
+        );
+        res.json({ token, alumno: { id: alumno._id, nombre: alumno.nombre, username: alumno.username, matricula: alumno.matricula, email: alumno.email } });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 const Alumno = require('../models/Alumno');
 
 // --- SECCIÓN ALUMNOS ---
 exports.registrarAlumno = async (req, res) => {
     try {
-        const nuevoAlumno = new Alumno(req.body);
+        const { password, username, ...resto } = req.body;
+        if (!username) {
+            return res.status(400).json({ error: 'El nombre de usuario es obligatorio' });
+        }
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+        const nuevoAlumno = new Alumno({ ...resto, username, password: passwordHash });
         await nuevoAlumno.save();
         res.status(201).json(nuevoAlumno);
     } catch (error) {

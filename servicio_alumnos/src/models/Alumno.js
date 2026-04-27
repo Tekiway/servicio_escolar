@@ -12,8 +12,11 @@ const MateriaSchema = new mongoose.Schema({
 });
 
 const AlumnoSchema = new mongoose.Schema({
-    nombre: { type: String, required: true },
+    nombre: { type: String, required: true }, // Nombre real
+    username: { type: String, required: true, unique: true }, // Nombre de usuario para autenticación
     matricula: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
     carrera: { type: String, required: true },
     materias: [MateriaSchema]
 });
