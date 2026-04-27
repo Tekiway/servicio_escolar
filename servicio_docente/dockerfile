@@ -17,6 +17,5 @@ COPY . .
 # 6. Exponemos el puerto 3002 (el que definimos para Docentes)
 EXPOSE 3002
 
-# 7. Comando para arrancar. 
-# Si vas a desarrollar y quieres cambios en tiempo real, usa "npm run dev"
-CMD ["npm", "run", "dev"]
+# 7. Comando para desarrollo: usar nodemon si está instalado (útil con bind mount)
+CMD [ "sh", "-c", "if [ -f ./node_modules/.bin/nodemon ]; then npm run dev; else npm start; fi" ]
