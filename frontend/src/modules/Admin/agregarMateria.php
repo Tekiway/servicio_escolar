@@ -1,32 +1,56 @@
-<div class="admin-card">
-    <div class="card-head">
-        <i class='bx bxs-book-bookmark'></i>
-        <h3>Configurar Nueva Materia</h3>
+<div class="main-card-materias">
+    <div class="header-materias">
+        <div class="icon-materia-box">
+            <i class='bx bxs-book-add'></i>
+        </div>
+        <div class="info-materia">
+            <h2>Configurar Nueva Materia</h2>
+            <p>Selecciona la ubicación en la retícula y los detalles académicos.</p>
+        </div>
     </div>
-    <p style="margin-bottom: 20px; color: #64748b;">Selecciona la ubicación en la retícula antes de registrar.</p>
-    
-    <form class="admin-form">
-        <div class="form-row">
-            <select id="carrera-materia" required>
-                <option value="">Seleccionar Carrera...</option>
-                <option value="TICs">Ingeniería en TICs</option>
-                <option value="Industrial">Ingeniería Industrial</option>
-            </select>
+
+    <div class="body-materias">
+        <form id="form-agregar-materia" class="form-materias-grid">
             
-            <select id="semestre-materia" required>
-                <option value="">Seleccionar Semestre...</option>
-                <option value="1">1er Semestre</option>
-                <option value="2">2do Semestre</option>
-                <option value="3">3er Semestre</option>
-            </select>
-        </div>
+            <div class="materia-row-2col">
+                <div class="materia-input-group">
+                    <label>Seleccionar Carrera</label>
+                    <select name="carrera_materia" required>
+                        <option value="" disabled selected>Seleccionar Carrera...</option>
+                        </select>
+                </div>
+                <div class="materia-input-group">
+                    <label>Seleccionar Semestre</label>
+                    <select name="semestre_materia" required>
+                        <option value="" disabled selected>Seleccionar Semestre...</option>
+                        <option value="1">1er Semestre</option>
+                        <option value="2">2do Semestre</option>
+                    </select>
+                </div>
+            </div>
 
-        <input type="text" placeholder="Nombre de la Materia (Ej. Estructura de Datos)">
-        <div class="form-row">
-            <input type="text" placeholder="Clave de Materia">
-            <input type="number" placeholder="Créditos">
-        </div>
+            <div class="materia-input-group full-width">
+                <label>Nombre de la Materia</label>
+                <input type="text" name="nombre_materia" placeholder="Ej. Estructura de Datos" required>
+            </div>
 
-        <button type="button" class="btn-primary">Guardar en Retícula</button>
-    </form>
+            <div class="materia-row-2col">
+                <div class="materia-input-group">
+                    <label>Clave de Materia</label>
+                    <input type="text" name="clave_materia" placeholder="Ej. AED-1285" required>
+                </div>
+                <div class="materia-input-group">
+                    <label>Créditos</label>
+                    <input type="number" name="creditos" placeholder="Ej. 5" required>
+                </div>
+            </div>
+
+            <div class="materia-actions">
+                <button type="submit" class="btn-guardar-materia">
+                    <i class='bx bx-plus-circle'></i>
+                    Guardar en Retícula
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

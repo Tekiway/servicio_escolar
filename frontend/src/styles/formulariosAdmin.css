@@ -138,3 +138,53 @@
 .btn-cancel {
     background: transparent; color: #ef4444; border: none; font-weight: 600; cursor: pointer;
 }
+
+/* Contenedor que alinea la card al centro */
+.gestion-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card-carrera-full {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 600px; /* Limita el ancho para que no se estire feo */
+    overflow: hidden;
+}
+
+.panel-body {
+    padding: 30px;
+}
+
+.formulario-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #a855f7;
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+}

@@ -1,8 +1,7 @@
-/* --- ESTILO INDEPENDIENTE PARA CARGA ACADÉMICA --- */
-
-.main-card-carga {
+/* TARJETA PRINCIPAL */
+.main-card-materias {
     background: #ffffff;
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
     border-radius: 20px;
     border: 1px solid #e2e8f0;
@@ -10,18 +9,17 @@
     overflow: hidden;
 }
 
-/* Encabezado con Icono Morado */
-.header-carga {
+/* ENCABEZADO */
+.header-materias {
     display: flex;
     align-items: center;
     gap: 20px;
     padding: 30px;
-    background: #ffffff;
     border-bottom: 1px solid #f1f5f9;
 }
 
-.icon-carga-box {
-    background: #f3e8ff; /* Morado clarito */
+.icon-materia-box {
+    background: #f3e8ff;
     width: 60px;
     height: 60px;
     border-radius: 14px;
@@ -30,113 +28,90 @@
     justify-content: center;
 }
 
-.icon-carga-box i {
+.icon-materia-box i {
     font-size: 2.2rem;
-    color: #a855f7; /* Morado principal */
+    color: #a855f7;
 }
 
-.info-carga h2 {
+.info-materia h2 {
     color: #1e293b;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    margin: 0;
 }
 
-.info-carga p {
+.info-materia p {
     color: #64748b;
     font-size: 0.9rem;
-    margin: 2px 0 0 0;
 }
 
-/* Cuerpo del Módulo */
-.body-carga {
+/* FORMULARIO */
+.body-materias {
     padding: 30px 40px;
 }
 
-/* Estilo del Sub-título (Registro de Docentes) */
-.sub-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #1e293b;
-    font-weight: 700;
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-}
-
-.sub-card-header i {
-    color: #a855f7;
-    font-size: 1.4rem;
-}
-
-/* Formulario Estilo Carreras */
-.form-carga-grid {
+.form-materias-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.carga-row-2col {
+.materia-row-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-.carga-input-group {
+.materia-input-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.carga-input-group label {
+.materia-input-group label {
     font-size: 0.8rem;
     font-weight: 700;
     color: #475569;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.carga-input-group input, 
-.carga-input-group select {
+.materia-input-group input, 
+.materia-input-group select {
     padding: 12px 15px;
-    border-radius: 12px;
+    border-radius: 10px;
     border: 2px solid #f1f5f9;
     background: #f8fafc;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s;
 }
 
-.carga-input-group input:focus {
+.materia-input-group input:focus {
     border-color: #a855f7;
     background: #fff;
     outline: none;
-    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.05);
 }
 
-/* Botón llamativo */
-.carga-actions {
+/* BOTÓN */
+.materia-actions {
     display: flex;
     justify-content: center;
     margin-top: 15px;
 }
 
-.btn-registrar-docente {
+.btn-guardar-materia {
     background: #a855f7;
     color: white;
     border: none;
-    padding: 15px 40px;
-    border-radius: 14px;
-    font-weight: 800;
-    font-size: 1rem;
+    padding: 15px 35px;
+    border-radius: 12px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
-.btn-registrar-docente:hover {
+.btn-guardar-materia:hover {
     background: #9333ea;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(147, 51, 234, 0.2);
 }
