@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="./src/styles/carga.css">
     <link rel="stylesheet" href="./src/styles/formulariosAdmin.css">
     <link rel="stylesheet" href="./src/styles/agregarMateria.css">
+    <link rel="stylesheet" href="./src/styles/asignarMateria.css"> 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
+
 <body>
     <div class="dashboard-container">
         <aside class="sidebar">
@@ -27,7 +29,7 @@
                         <li><a href="#" onclick="cargarModulo('Carreras')"><i class='bx bxs-graduation'></i> Gestión de Carreras</a></li>
                         <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-layout'></i> Registro de Docentes</a></li>
                         <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
-                        <li><a href="#" onclick="cargarModulo('AsignarMaestro')"><i class='bx bxs-user-check'></i> Asignar a Maestro</a></li>
+                        <li><a href="#" onclick="cargarModulo('AsignarMateria')"><i class='bx bxs-user-check'></i> Asignar a Materia</a></li>
                         
                     </ul>
                                     
@@ -47,6 +49,13 @@
         </main>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script src="./src/js/navegacion.js"></script>
+
+    <script src="./src/modules/Admin/js/asignarMateria.js"></script>
+    <script src="./src/modules/Admin/js/carreras.js"></script>
+    <script src="./src/modules/Admin/js/carga.js"></script>
+    <script src="./src/modules/Admin/js/agregarMateria.js"></script>
 </body>
 </html>

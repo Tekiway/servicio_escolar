@@ -7,8 +7,9 @@
         </div>
     </div>
 
-    <div class="section-panel">
-        <div class="section-title">
+    <!-- PASO 1 -->
+    <div class="section-panel active" id="panel-1">
+        <div class="section-title" onclick="togglePanel('panel-1')">
             <span class="step-num">1</span>
             <h4>Seleccionar Materia Base</h4>
         </div>
@@ -43,10 +44,9 @@
         </div>
     </div>
 
-    <hr class="section-divider">
-
-    <div class="section-panel">
-        <div class="section-title">
+    <!-- PASO 2 -->
+    <div class="section-panel active" id="panel-2">
+        <div class="section-title" onclick="togglePanel('panel-2')">
             <span class="step-num">2</span>
             <h4>Seleccionar Docente</h4>
         </div>
@@ -76,22 +76,21 @@
         </div>
     </div>
 
-    <hr class="section-divider">
-
-    <div class="section-panel config-section">
-        <div class="section-title">
+    <!-- PASO 3 -->
+    <div class="section-panel active" id="panel-3">
+        <div class="section-title" onclick="togglePanel('panel-3')">
             <span class="step-num">3</span>
             <h4>Confirmar y Configurar</h4>
         </div>
         <div class="section-body">
             <div class="summary-area">
-                <div class="summary-item"><strong>Materia:</strong> Estructura de Datos (TICs)</div>
+                <div class="summary-item"><strong>Materia:</strong> Estructura de Datos</div>
                 <div class="summary-item"><strong>Docente:</strong> Heber Castañeda</div>
             </div>
             <div class="form-grid-3cols">
-                <input type="text" placeholder="Grupo (Ej: T6A)" class="modern-input-small">
-                <input type="text" placeholder="Aula (Ej: Lab 1)" class="modern-input-small">
-                <input type="text" placeholder="Horario (Ej: Lun 7-9)" class="modern-input-small">
+                <input type="text" placeholder="Grupo" class="modern-input-small">
+                <input type="text" placeholder="Aula" class="modern-input-small">
+                <input type="text" placeholder="Horario" class="modern-input-small">
             </div>
             <div class="action-buttons-row">
                 <button class="btn-cancel">Cancelar</button>
@@ -100,3 +99,5 @@
         </div>
     </div>
 </div>
+
+
