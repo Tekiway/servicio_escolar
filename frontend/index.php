@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>Panel Administrativo - Sistema Control Escolar</title>
     <link rel="stylesheet" href="./src/styles/adminInicio.css">
+    <link rel="stylesheet" href="./src/styles/carreras.css">
     <link rel="stylesheet" href="./src/styles/dashboard.css">
     <link rel="stylesheet" href="./src/styles/carga.css">
     <link rel="stylesheet" href="./src/styles/formulariosAdmin.css">
+    <link rel="stylesheet" href="./src/styles/agregarMateria.css">
+    <link rel="stylesheet" href="./src/styles/asignarMateria.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
