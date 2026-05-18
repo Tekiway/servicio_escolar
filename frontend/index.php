@@ -23,7 +23,7 @@
                         <li><a href="#" onclick="cargarModulo('Inicio')"><i class='bx bxs-dashboard'></i> Panel Inicio</a></li>
                         <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-layout'></i> Carga Base</a></li>
                         <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
-                        <li><a href="#" onclick="cargarModulo('AsignarMaestro')"><i class='bx bxs-user-check'></i> Asignar a Maestro</a></li>
+                        <li><a href="#" onclick="cargarModulo('AsignarMateria')"><i class='bx bxs-user-check'></i> Asignar a Materia</a></li>
                     </ul>
                                     
                 <p class="menu-label">Portales del Sistema</p>
@@ -87,10 +87,14 @@
                 });
         }
 
-        // Cargar el inicio automáticamente al abrir admin.html
-        document.addEventListener('DOMContentLoaded', () => {
-            cargarModulo('Inicio'); 
-        });
+        // Cargar el inicio de forma robusta evitando condiciones de carrera
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                cargarModulo('Inicio'); 
+            });
+        } else {
+            cargarModulo('Inicio');
+        }
     </script>
 </body>
 </html>

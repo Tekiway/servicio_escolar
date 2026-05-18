@@ -97,10 +97,14 @@
                 });
         }
 
-        // Cargar 'Inicio' por defecto
-        document.addEventListener('DOMContentLoaded', () => {
+        // Cargar 'Inicio' por defecto de forma robusta
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                cargarModulo('Inicio');
+            });
+        } else {
             cargarModulo('Inicio');
-        });
+        }
     </script>
 </body>
 </html>

@@ -137,8 +137,8 @@
                 });
         }
 
-        // Carga de inicio automático
-        document.addEventListener('DOMContentLoaded', () => {
+        // Carga de inicio automático de forma robusta
+        const initAlumno = () => {
             // Actualizar nombre dinámico desde perfil si está almacenado
             const storedPerfil = localStorage.getItem('alumno_perfil');
             if (storedPerfil) {
@@ -147,7 +147,13 @@
             }
             
             cargarModulo('Inicio');
-        });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAlumno);
+        } else {
+            initAlumno();
+        }
     </script>
 </body>
 </html>

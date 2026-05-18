@@ -121,10 +121,14 @@
                 });
         }
 
-        // Cargar el Dashboard de Inicio por defecto al iniciar
-        document.addEventListener('DOMContentLoaded', () => {
+        // Cargar el Dashboard de Inicio por defecto al iniciar de forma robusta
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                cargarModulo('Inicio');
+            });
+        } else {
             cargarModulo('Inicio');
-        });
+        }
     </script>
 </body>
 </html>

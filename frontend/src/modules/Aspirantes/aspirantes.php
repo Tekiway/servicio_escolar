@@ -127,15 +127,21 @@
                 });
         }
 
-        // Carga de inicio automático
-        document.addEventListener('DOMContentLoaded', () => {
+        // Carga de inicio automático de forma robusta
+        const initAspirante = () => {
             const storedAspirante = localStorage.getItem('aspirante_registro');
             if (storedAspirante) {
                 const data = JSON.parse(storedAspirante);
                 document.getElementById('aspirante-header-name').textContent = data.nombre;
             }
             cargarModulo('Inicio');
-        });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAspirante);
+        } else {
+            initAspirante();
+        }
     </script>
 </body>
 </html>
