@@ -39,17 +39,17 @@
     <div class="quick-actions-section">
         <h3>Acciones Frecuentes</h3>
         <div class="actions-grid">
-            <div class="action-btn-card" onclick="cargarModulo('Carga')">
+            <div class="action-btn-card" onclick="cargarModulo('Carreras')">
                 <i class='bx bxs-edit-location'></i>
-                <span>Gestionar Carga</span>
+                <span>Gestionar de Carrera</span>
             </div>
-            <div class="action-btn-card" onclick="cargarModulo('Docentes')">
+            <div class="action-btn-card" onclick="cargarModulo('Carga')">
                 <i class='bx bxs-user-plus'></i>
                 <span>Alta de Docente</span>
             </div>
-            <div class="action-btn-card" onclick="cargarModulo('Institucion')">
+            <div class="action-btn-card" onclick="cargarModulo('AsignarMaestro')">
                 <i class='bx bxs-building-house'></i>
-                <span>Datos Escuela</span>
+                <span>Asignar Materia</span>
             </div>
         </div>
     </div>

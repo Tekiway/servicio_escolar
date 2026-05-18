@@ -1,3 +1,28 @@
+/* =================================================INDICACIONES=================================================
+   Este CSS reemplaza o complementa tu archivo agregarMateria.css. 
+   He añadido "box-sizing" y "width: 100%" para corregir el error visual de los inputs pequeños.
+   ============================================================================================================== */
+
+:root {
+    --primary-color: #a855f7;
+    --primary-hover: #9333ea;
+    --bg-light: #f8fafc;
+    --border-color: #f1f5f9;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+}
+
+/* CONTENEDOR GENERAL */
+.container-materias-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
 /* TARJETA PRINCIPAL */
 .main-card-materias {
     background: rgba(255, 255, 255, 0.85);
@@ -8,16 +33,24 @@
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 15px 35px rgba(31, 38, 135, 0.05);
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-/* ENCABEZADO */
+/* ENCABEZADOS Y ACORDEÓN */
 .header-materias {
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 30px;
+    padding: 25px 30px;
     background: transparent;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+
+.header-materias:hover {
+    background: rgba(253, 250, 255, 0.5);
 }
 
 .icon-materia-box {
@@ -29,6 +62,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.1);
+    flex-shrink: 0;
 }
 
 .icon-materia-box i {
@@ -37,48 +71,83 @@
 }
 
 .info-materia h2 {
-    color: #1e293b;
-    font-size: 1.5rem;
+    color: var(--text-main);
+    font-size: 1.3rem;
     font-weight: 800;
+    margin: 0;
 }
 
 .info-materia p {
-    color: #64748b;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 4px 0 0 0;
 }
 
-/* FORMULARIO */
+.arrow-icon {
+    position: absolute;
+    right: 30px;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    transition: transform 0.3s ease;
+}
+
+.accordion-header.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* CONTENIDO DEL ACORDEÓN */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 0 solid var(--border-color);
+}
+
+.accordion-content.open {
+    max-height: 2500px; /* Suficiente para el formulario largo */
+    border-top: 1px solid var(--border-color);
+}
+
 .body-materias {
     padding: 30px 40px;
 }
 
+/* FORMULARIO Y GRIDS */
 .form-materias-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
 }
 
 .materia-row-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 25px;
+    width: 100%;
 }
 
 .materia-input-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
 }
 
 .materia-input-group label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #475569;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+/* CORRECCIÓN CRUCIAL DE INPUTS */
 .materia-input-group input, 
-.materia-input-group select {
+.materia-input-group select,
+.materia-input-group textarea {
+    width: 100% !important; /* Forzar el ancho completo */
+    box-sizing: border-box; /* Evita que el padding los ensanche de más */
     padding: 12px 16px;
     border-radius: 12px;
     border: 1.5px solid #e2e8f0;
@@ -86,29 +155,82 @@
     font-size: 0.95rem;
     transition: all 0.3s ease;
     color: #1e293b;
+    font-family: inherit;
 }
 
 .materia-input-group input:focus,
-.materia-input-group select:focus {
+.materia-input-group select:focus,
+.materia-input-group textarea:focus {
     border-color: #6366f1;
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-/* BOTÓN */
-.materia-actions {
+.full-width {
+    width: 100%;
+}
+
+/* DIVISORES DE SECCIÓN */
+.section-divider {
+    margin: 15px 0 5px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-light);
+}
+
+.section-divider span {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+/* UNIDADES DINÁMICAS */
+.unidad-item {
+    background: #fdfaff;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #f3e8ff;
+    border-left: 5px solid var(--primary-color);
+    margin-bottom: 15px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.btn-secundario {
+    background: #f3e8ff;
+    color: var(--primary-color);
+    border: 2px dashed var(--primary-color);
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    margin: 10px 0 20px 0;
+    transition: 0.3s;
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-top: 15px;
+    gap: 8px;
+}
+
+.btn-secundario:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+/* BOTÓN GUARDAR */
+.materia-actions {
+    margin-top: 20px;
 }
 
 .btn-guardar-materia {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     color: white;
     border: none;
-    padding: 14px 40px;
-    border-radius: 14px;
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
     font-weight: 800;
     font-size: 1rem;
     display: flex;
@@ -124,4 +246,54 @@
     transform: translateY(-3px);
     box-shadow: 0 12px 28px rgba(99, 102, 241, 0.35);
     opacity: 0.95;
+}
+
+/* TABLA DE REGISTROS */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.materia-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.materia-custom-table th {
+    text-align: left;
+    padding: 15px;
+    background: var(--bg-light);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.materia-custom-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+.btn-edit { color: var(--primary-color); background: #f3e8ff; border: none; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.btn-delete { color: #ef4444; background: #fee2e2; border: none; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+
+.btn-edit:hover { background: var(--primary-color); color: var(--white); }
+.btn-delete:hover { background: #ef4444; color: var(--white); }
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+    .materia-row-2col {
+        grid-template-columns: 1fr;
+    }
+    .body-materias {
+        padding: 20px;
+    }
+}
 }
