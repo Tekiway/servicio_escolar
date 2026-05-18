@@ -43,7 +43,7 @@
         </div>
         <div class="news-item">
             <span class="news-date">20 Abr</span>
-            <p>Mantenimiento programado de la plataforma Nakumi.</p>
+            <p>Mantenimiento programado de la plataformas.</p>
         </div>
     </div>
 </div>
