@@ -1,0 +1,177 @@
+/* --- ESTILOS MÓDULO HORARIOS (CURSO) --- */
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease;
+}
+
+.modulo-horarios {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.header-seccion {
+    margin-bottom: 5px;
+}
+
+.header-seccion h2 {
+    color: #1e293b;
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-seccion h2 i {
+    color: var(--primary, #6366f1);
+}
+
+.header-seccion p {
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* Ciclo Activo Card (Glassmorphism) */
+.ciclo-card {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.7));
+    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.3));
+    padding: 15px 25px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.ciclo-text {
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+}
+
+.ciclo-text i {
+    color: var(--accent, #0ea5e9);
+    margin-right: 6px;
+    font-size: 1.2rem;
+}
+
+.badges-container {
+    display: flex;
+    gap: 10px;
+}
+
+.badge-semestre {
+    padding: 6px 12px;
+    background: rgba(99,102,241,0.1);
+    color: var(--primary, #6366f1);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.badge-grupo {
+    padding: 6px 12px;
+    background: rgba(168,85,247,0.1);
+    color: var(--secondary, #a855f7);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Tabla Horario Container */
+.tabla-horario-container {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.7));
+    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.3));
+    padding: 25px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.04);
+}
+
+.tabla-horario-container h3 {
+    margin: 0 0 20px 0;
+    color: #1e293b;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tabla-horario-container h3 i {
+    color: var(--primary, #6366f1);
+}
+
+.tabla-responsiva {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.horario-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+}
+
+.horario-table th {
+    background: linear-gradient(135deg, var(--primary, #6366f1), var(--secondary, #a855f7));
+    color: #fff;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.horario-table th:first-child {
+    background: linear-gradient(135deg, var(--primary, #6366f1), var(--primary, #6366f1));
+}
+
+.horario-table td {
+    padding: 16px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    font-size: 0.9rem;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.horario-table tr:last-child td {
+    border-bottom: none;
+}
+
+.horario-table td strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.horario-table td span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: block;
+}
+
+.horario-table .receso-row {
+    background: rgba(241, 245, 249, 0.4);
+    text-align: center;
+}
+
+.horario-table .receso-row td {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #94a3b8;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
