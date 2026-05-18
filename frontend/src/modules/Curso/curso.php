@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Horarios - Sistema Escolar</title>
     
-    <link rel="stylesheet" href="/src/styles/Horarios.css">
+    <link rel="stylesheet" href="../../styles/curso.css">
 </head>
 <body>
 
@@ -41,6 +41,6 @@
         </div>
     </div>
 
-    <script src="./Horarios.js"></script>
+    <script src="../Curso/curso.js"></script>
 </body>
 </html>

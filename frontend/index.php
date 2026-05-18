@@ -2,112 +2,95 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolar</title>
-    
-    <link rel="stylesheet" href="./src/styles/Dashboard.css">
-    <link rel="stylesheet" href="./src/styles/curso.css">
-    
+    <title>Panel Administrativo - Sistema Control Escolar</title>
+    <link rel="stylesheet" href="./src/styles/adminInicio.css">
+    <link rel="stylesheet" href="./src/styles/dashboard.css">
+    <link rel="stylesheet" href="./src/styles/carga.css">
+    <link rel="stylesheet" href="./src/styles/formulariosAdmin.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
-                <i class='bx bxs-shield-quarter'></i>
-                <span>SISTEMA ESCOLAR</span>
+                <i class='bx bxs-cog'></i>
+                <span>ADMINISTRACIÓN</span>
             </div>
             
             <nav class="nav-menu">
-                <p class="menu-label">Principal</p>
+                <p class="menu-label">Control Académico</p>
+                    <ul>
+                        <li><a href="#" onclick="cargarModulo('Inicio')"><i class='bx bxs-dashboard'></i> Panel Inicio</a></li>
+                        <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-layout'></i> Carga Base</a></li>
+                        <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
+                        <li><a href="#" onclick="cargarModulo('AsignarMaestro')"><i class='bx bxs-user-check'></i> Asignar a Maestro</a></li>
+                    </ul>
+                                    
+                <p class="menu-label">Portales del Sistema</p>
                 <ul>
-                    <li>
-                        <a href="#" onclick="cargarModulo('Inicio')">
-                            <i class='bx bxs-home-circle'></i> Inicio
-                        </a>
-                    </li>
+                    <li><a href="./src/modules/alumnos/alumnos.php"><i class='bx bxs-graduation'></i> Portal Alumnos</a></li>
+                    <li><a href="./src/modules/Aspirantes/aspirantes.php"><i class='bx bxs-user-plus'></i> Portal Aspirantes</a></li>
+                    <li><a href="./src/modules/Docente/docente.php"><i class='bx bxs-user-rectangle'></i> Portal Docente</a></li>
+                    <li><a href="./src/modules/Finanzas/finanzas.php"><i class='bx bxs-bank'></i> Portal Finanzas</a></li>
                 </ul>
-
-                <p class="menu-label">Gestión</p>
+                                    
+                <p class="menu-label">Sesión</p>
                 <ul>
-                    <li><a href="#" onclick="cargarModulo('Cursos')"><i class='bx bxs-calendar-event'></i> Cursos</a></li>
-                    <li><a href="#" onclick="cargarModulo('Perfil')"><i class='bx bxs-user-badge'></i> Perfil</a></li>
-                    <li><a href="#" onclick="cargarModulo('Evaluaciones')"><i class='bx bxs-spreadsheet'></i> Calificaciones</a></li>
-                </ul>
-
-                <p class="menu-label">Servicios</p>
-                <ul>
-                    <li><a href="#" onclick="cargarModulo('Ficha')"><i class='bx bxs-edit-location'></i> Trámite Ficha</a></li>
-                    <li><a href="#" onclick="cargarModulo('Boletos')"><i class='bx bxs-credit-card-front'></i> Boletos</a></li>
+                    <li><a href="./src/modules/login/personal.php"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
 
         <main class="main-content">
             <header class="top-header">
-                <div class="user-welcome">
-                    <span>Bienvenido, <strong>Heber Castañeda</strong></span>
-                </div>
+                <div class="user-welcome">Modo: <strong>Administrador TICs</strong></div>
             </header>
 
-            <section id="vista-dinamica" class="content-body">
-                <div class="hero-card">
-                    <h1>Panel de Control Estudiantil</h1>
-                    <p>Selecciona una opción del menú para gestionar tus actividades escolares.</p>
-                </div>
-            </section>
+            <section id="vista-dinamica" class="content-body"></section>
         </main>
     </div>
 
     <script>
-
         function cargarModulo(nombre) {
             const contenedor = document.getElementById('vista-dinamica');
             
-            // IMPORTANTE: Revisa que la ruta coincida con tus carpetas
-            const ruta = `./src/modules/${nombre}/${nombre}.php`;
+            // Ruta corregida a la carpeta general Admin
+            const nombreArchivo = nombre.charAt(0).toLowerCase() + nombre.slice(1);
+            const ruta = `./src/modules/Admin/${nombreArchivo}.php`; 
 
             fetch(ruta)
                 .then(response => {
-                    if (!response.ok) throw new Error('Archivo no encontrado');
+                    if (!response.ok) throw new Error('No se encontró el archivo');
                     return response.text();
                 })
                 .then(html => {
                     contenedor.innerHTML = html;
+                    
+                    // Actualizar clase activa en el menú
+                    const links = document.querySelectorAll('.nav-menu li');
+                    links.forEach(li => li.classList.remove('active'));
+                    const linksA = document.querySelectorAll('.nav-menu a');
+                    linksA.forEach(a => a.classList.remove('active'));
+                    
+                    const activeLink = Array.from(document.querySelectorAll('.nav-menu a')).find(a => a.getAttribute('onclick')?.includes(`'${nombre}'`));
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                        activeLink.parentElement.classList.add('active');
+                    }
                 })
                 .catch(err => {
-                    // Esto es lo que ves ahora porque la ruta falla
                     contenedor.innerHTML = `
-                        <div style="padding:40px; text-align:center;">
-                            <h2>Opps! El módulo ${nombre} aún no existe</h2>
-                            <p>Crea el archivo en: src/modules/${nombre}/${nombre}.php</p>
+                        <div style="padding:20px; color: #64748b;">
+                            <h3>Error de Carga</h3>
+                            <p>No se encontró "${nombre}.php" en src/modules/Admin/</p>
                         </div>`;
                 });
-}
-
-        // Esto hace que "Inicio" se cargue solito al abrir la página
-        document.addEventListener('DOMContentLoaded', () => {
-            cargarModulo('Inicio');
-        });
-        
-        function cargarModulo(nombre) {
-            const contenedor = document.getElementById('vista-dinamica');
-            
-            // Ruta hacia el archivo del módulo (ej: src/modules/Horarios/Horario.php)
-            // Nota: Si usas .php necesitas correrlo en un servidor como XAMPP
-            const ruta = `./src/modules/${nombre}/${nombre}.php`;
-
-            fetch(ruta)
-                .then(response => response.text())
-                .then(html => {
-                    contenedor.innerHTML = html;
-                })
-                .catch(err => {
-                    contenedor.innerHTML = "<h2>Error al cargar el módulo</h2>";
-                    console.error(err);
-                });
         }
+
+        // Cargar el inicio automáticamente al abrir admin.html
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarModulo('Inicio'); 
+        });
     </script>
 </body>
 </html>

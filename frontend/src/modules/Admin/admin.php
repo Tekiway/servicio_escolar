@@ -1,14 +1,18 @@
+<?php
+header("Location: ../../../index.php");
+exit;
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Panel Administrativo </title>
-    <link rel="stylesheet" href="./src/styles/adminInicio.css">
-    <link rel="stylesheet" href="./src/styles/carreras.css">
-    <link rel="stylesheet" href="./src/styles/dashboard.css">
-    <link rel="stylesheet" href="./src/styles/carga.css">
-    <link rel="stylesheet" href="./src/styles/formulariosAdmin.css">
-    <link rel="stylesheet" href="./src/styles/agregarMateria.css">
+    <link rel="stylesheet" href="../../styles/adminInicio.css">
+    <link rel="stylesheet" href="../../styles/carreras.css">
+    <link rel="stylesheet" href="../../styles/dashboard.css">
+    <link rel="stylesheet" href="../../styles/carga.css">
+    <link rel="stylesheet" href="../../styles/formulariosAdmin.css">
+    <link rel="stylesheet" href="../../styles/agregarMateria.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -31,9 +35,17 @@
                         
                     </ul>
                                     
-                <p class="menu-label">Salir</p>
+                <p class="menu-label">Portales del Sistema</p>
                 <ul>
-                    <li><a href="index.html"><i class='bx bx-log-out'></i> Volver a Alumnos</a></li>
+                    <li><a href="../alumnos/alumnos.php"><i class='bx bxs-graduation'></i> Portal Alumnos</a></li>
+                    <li><a href="../Aspirantes/aspirantes.php"><i class='bx bxs-user-plus'></i> Portal Aspirantes</a></li>
+                    <li><a href="../Docente/docente.php"><i class='bx bxs-user-rectangle'></i> Portal Docente</a></li>
+                    <li><a href="../Finanzas/finanzas.php"><i class='bx bxs-bank'></i> Portal Finanzas</a></li>
+                </ul>
+                                    
+                <p class="menu-label">Sesión</p>
+                <ul>
+                    <li><a href="../login/personal.php"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
@@ -47,6 +59,6 @@
         </main>
     </div>
 
-    <script src="./src/js/navegacion.js"></script>
+    <script src="../../js/navegacion.js"></script>
 </body>
 </html>
