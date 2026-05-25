@@ -1,9 +1,14 @@
 const Docente = require('../models/Docente');
 
 // Registrar un nuevo docente
+const bcrypt = require('bcryptjs');
 exports.registrarDocente = async (req, res) => {
     try {
-        const nuevoDocente = new Docente(req.body);
+        const { password, ...resto } = req.body;
+        if (!password) return res.status(400).json({ error: 'La contraseña es obligatoria' });
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+        const nuevoDocente = new Docente({ ...resto, password: passwordHash });
         await nuevoDocente.save();
         res.status(201).json(nuevoDocente);
     } catch (error) {
