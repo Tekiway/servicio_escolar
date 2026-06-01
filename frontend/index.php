@@ -46,7 +46,20 @@
 
         <main class="main-content">
             <header class="top-header">
-                <div class="user-welcome">Modo: <strong>Administrador TICs</strong></div>
+                <div class="header-actions">
+                    <button class="icon-btn" aria-label="Notificaciones">
+                        <i class='bx bx-bell'></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin+TICs&background=6366f1&color=fff&rounded=true" alt="Perfil">
+                        <div class="user-info">
+                            <span class="user-name">Admin TICs</span>
+                            <span class="user-role">Modo Maestro</span>
+                        </div>
+                        <i class='bx bx-chevron-down profile-dropdown-icon'></i>
+                    </div>
+                </div>
             </header>
 
             <section id="vista-dinamica" class="content-body"></section>
