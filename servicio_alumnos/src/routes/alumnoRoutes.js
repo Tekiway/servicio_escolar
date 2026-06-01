@@ -4,23 +4,45 @@ const ctrl = require('../controllers/alumnoController');
 const auth = require('../middlewares/auth');
 
 // Alumnos
+
+
+
+// Registro de alumno (solo para uso interno desde el microservicio de docente)
 router.post('/', ctrl.registrarAlumno);
+// Solo login es público
 router.post('/login', ctrl.autenticarAlumno);
-router.delete('/:id', ctrl.eliminarAlumno);
-router.get('/buscar', auth, ctrl.buscarAlumnos); // /buscar?query=Juan
-router.get('/info-basica', auth, ctrl.obtenerTodosSoloInfo);
 
-// Carrera
-router.patch('/:id/carrera', ctrl.actualizarCarrera);
+// Solo visualización para alumno autenticado
+router.get('/mi-info', auth, async (req, res) => {
+	try {
+		const alumno = await require('../models/Alumno').findById(req.user.id, '-password');
+		if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+		res.json(alumno);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
 
-// Materias
-router.post('/:id/materias', ctrl.registrarMateria);
-router.delete('/:id/materias/:materiaNombre', ctrl.eliminarMateria);
-router.get('/:id/materias/periodo', auth, ctrl.verMateriasPorPeriodo); // /periodo?periodo=2024-1
+router.get('/mis-materias', auth, async (req, res) => {
+	try {
+		const alumno = await require('../models/Alumno').findById(req.user.id);
+		if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+		res.json(alumno.materias);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
 
-// Unidades
-router.patch('/:id/materias/:materiaNombre/unidades/:numUnidad', ctrl.modificarCalificacion);
-// Visualizar calificaciones de una materia (todas las unidades)
-router.get('/:id/materias/:materiaNombre/calificaciones', auth, ctrl.verCalificacionesMateria);
+router.get('/mis-materias/:materiaNombre/calificaciones', auth, async (req, res) => {
+	try {
+		const alumno = await require('../models/Alumno').findById(req.user.id);
+		if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+		const materia = alumno.materias.find(m => m.nombre === req.params.materiaNombre);
+		if (!materia) return res.status(404).json({ error: 'Materia no encontrada' });
+		res.json(materia.unidades.map(u => ({ numero: u.numero, calificacion: u.calificacion })));
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
 
 module.exports = router;

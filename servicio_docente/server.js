@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+
 const docenteRoutes = require('./src/routes/docenteRoutes');
+const alumnoProxyRoutes = require('./src/routes/alumnoProxyRoutes');
 
 const app = express();
 
@@ -15,7 +17,9 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error('❌ Error de conexión:', err));
 
 // 3. Rutas
+
 app.use('/api/docentes', docenteRoutes);
+app.use('/api/alumnos', alumnoProxyRoutes);
 
 // 4. Encendido del servidor
 const PORT = process.env.PORT || 3002;

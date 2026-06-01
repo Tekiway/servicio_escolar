@@ -5,6 +5,7 @@ const DocenteSchema = new mongoose.Schema({
     numeroEmpleado: { type: String, required: true, unique: true },
     especialidad: { type: String, required: true },
     email: { type: String, required: true },
+    password: { type: String, required: true },
     fechaIngreso: { type: Date, default: Date.now }
 });
 
