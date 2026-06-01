@@ -2,7 +2,8 @@ function cargarModulo(nombre) {
     const contenedor = document.getElementById('vista-dinamica');
     
     // Ruta corregida según tu estructura de carpetas
-    const ruta = `./src/modules/Admin/${nombre}.php`; 
+    const nombreArchivo = nombre.charAt(0).toLowerCase() + nombre.slice(1);
+    const ruta = `./${nombreArchivo}.php`; 
 
     fetch(ruta)
         .then(response => {
@@ -19,7 +20,7 @@ function cargarModulo(nombre) {
 
                 const nuevoScript = document.createElement('script');
                 nuevoScript.id = 'script-modulo';
-                nuevoScript.src = `./src/modules/Admin/js/carreras.js?v=${new Date().getTime()}`;
+                nuevoScript.src = `./js/carreras.js?v=${new Date().getTime()}`;
                 document.body.appendChild(nuevoScript);
             }
         })

@@ -1,0 +1,182 @@
+/* Variables específicas del portal docente - Sincronizadas con el dashboard principal */
+:root {
+    --docente-primary: #6366f1; /* Indigo vibrante */
+    --docente-secondary: #a855f7; /* Morado suave */
+    --docente-accent: #0ea5e9; /* Cian eléctrico */
+    --docente-bg: #f1f5f9;
+    --docente-card-bg: rgba(255, 255, 255, 0.8);
+    --text-primary: #1e1b4b;
+    --text-secondary: #64748b;
+}
+
+/* Modificaciones de la barra lateral para el docente */
+.docente-sidebar {
+    /* Mantenemos el efecto cristal de dashboard.css pero con toques específicos si se desea */
+    background: rgba(255, 255, 255, 0.7) !important;
+}
+
+.docente-sidebar .logo {
+    background: linear-gradient(to right, var(--docente-primary), var(--docente-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+}
+
+.docente-sidebar .nav-menu a:hover,
+.docente-sidebar .nav-menu a.active {
+    background: white !important;
+    color: var(--docente-primary) !important;
+    border-left: none; /* Estilo de pastilla sin borde lateral */
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+}
+
+.docente-sidebar .nav-menu a:hover i,
+.docente-sidebar .nav-menu a.active i {
+    color: var(--docente-primary) !important;
+}
+
+/* Estilos de la cabecera */
+.docente-header {
+    background: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.docente-header .user-welcome strong {
+    color: var(--docente-primary);
+}
+
+/* Contenido del módulo inicio.php */
+.docente-welcome-banner {
+    background: linear-gradient(135deg, var(--docente-primary) 0%, var(--docente-secondary) 100%);
+    border-radius: 30px;
+    padding: 40px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+}
+
+.docente-welcome-banner h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.docente-welcome-banner p {
+    opacity: 0.9;
+    font-size: 1.1rem;
+    max-width: 600px;
+}
+
+.docente-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.docente-stat-card {
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.docente-stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+.docente-stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.icon-blue { background: #e0e7ff; color: #6366f1; }
+.icon-green { background: #dcfce7; color: #22c55e; }
+.icon-amber { background: #fef3c7; color: #f59e0b; }
+
+.docente-stat-data h4 {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.docente-stat-data p {
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+/* Agenda del día */
+.docente-agenda {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
+    padding: 30px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.docente-agenda h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+}
+
+.agenda-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.agenda-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 18px;
+    border-left: 4px solid var(--docente-primary);
+    transition: transform 0.2s ease;
+}
+
+.agenda-item:hover {
+    transform: translateX(5px);
+}
+
+.agenda-time {
+    font-weight: 800;
+    color: var(--docente-primary);
+    min-width: 110px;
+}
+
+.agenda-details h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.agenda-details p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+

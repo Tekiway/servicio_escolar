@@ -1,3 +1,30 @@
+<?php
+$jsonFile = __DIR__ . '/../../../services/carreras.json';
+
+// Si el archivo no existe, inicializarlo
+if (!file_exists($jsonFile)) {
+    $servicesDir = __DIR__ . '/../../../services';
+    if (!is_dir($servicesDir)) {
+        mkdir($servicesDir, 0777, true);
+    }
+    $initialData = [
+        [
+            "id" => "1",
+            "nombre" => "Ingeniería en TICs",
+            "clave" => "ITIC-2010-225",
+            "modalidad" => "Escolarizada",
+            "duracion" => "9",
+            "estado" => "Activa",
+            "objetivo" => "Formar profesionales líderes en tecnologías de información y comunicaciones.",
+            "ingreso" => "Habilidades lógicas, de análisis y gusto por la tecnología.",
+            "egreso" => "Competencias en desarrollo de software, redes y gestión de TI."
+        ]
+    ];
+    file_put_contents($jsonFile, json_encode($initialData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
+$carrerasData = json_decode(file_get_contents($jsonFile), true);
+?>
 
 <div class="modulo-carreras">
     <header class="carreras-header">
@@ -93,35 +120,41 @@
                         </tr>
                     </thead>
                     <tbody id="tabla-carreras-body">
+                        <?php foreach ($carrerasData as $c) : ?>
                         <tr>
-                            <td><b>Ingeniería en TICs</b></td>
-                            <td>ITIC-2010-225</td>
-                            <td>Escolarizada</td>
-                            <td>9 Sem.</td>
-                            <td><span class="status-pill active">Activa</span></td>
+                            <td><b><?php echo htmlspecialchars($c['nombre']); ?></b></td>
+                            <td><?php echo htmlspecialchars($c['clave']); ?></td>
+                            <td><?php echo htmlspecialchars($c['modalidad']); ?></td>
+                            <td><?php echo htmlspecialchars($c['duracion']); ?> Sem.</td>
+                            <td>
+                                <span class="status-pill <?php echo strtolower($c['estado']) === 'activa' ? 'active' : 'inactive'; ?>">
+                                    <?php echo htmlspecialchars($c['estado']); ?>
+                                </span>
+                            </td>
                             <td>
                                 <div class="acciones-group">
                                     <button class="btn-action-view" onclick="abrirModalCarrera({
-                                        id: '1',
-                                        nombre: 'Ingeniería en TICs',
-                                        clave: 'ITIC-2010-225',
-                                        modalidad: 'Escolarizada',
-                                        duracion: '9',
-                                        estado: 'Activa',
-                                        objetivo: 'Formar profesionales...',
-                                        ingreso: 'Habilidades lógicas...',
-                                        egreso: 'Competencias...',
+                                        id: '<?php echo htmlspecialchars($c['id']); ?>',
+                                        nombre: '<?php echo addslashes($c['nombre']); ?>',
+                                        clave: '<?php echo addslashes($c['clave']); ?>',
+                                        modalidad: '<?php echo addslashes($c['modalidad']); ?>',
+                                        duracion: '<?php echo addslashes($c['duracion']); ?>',
+                                        estado: '<?php echo addslashes($c['estado']); ?>',
+                                        objetivo: '<?php echo addslashes($c['objetivo']); ?>',
+                                        ingreso: '<?php echo addslashes($c['ingreso']); ?>',
+                                        egreso: '<?php echo addslashes($c['egreso']); ?>'
                                     })">
                                         <i class='bx bxs-file-find'></i> Detalles
                                     </button>
 
                                     <button type="button" class="btn-action-delete" title="Eliminar Carrera" 
-                                        onclick="eliminarCarrera('1', 'Ingeniería en TICs')">
+                                        onclick="eliminarCarrera('<?php echo htmlspecialchars($c['id']); ?>', '<?php echo addslashes($c['nombre']); ?>')">
                                         <i class='bx bx-trash'></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

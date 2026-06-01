@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="./src/styles/Dashboard.css">
-<link rel="stylesheet" href="./src/styles/Inicio.css">
+<link rel="stylesheet" href="../../styles/inicio.css">
 
 <div class="inicio-container">
     <div class="welcome-banner">
@@ -16,7 +15,7 @@
     </div>
 
     <div class="quick-cards">
-        <div class="card clickable" onclick="cargarModulo('Horarios')">
+        <div class="card clickable" onclick="cargarModulo('Curso')">
             <div class="card-icon blue"><i class='bx bxs-calendar'></i></div>
             <h3>Horario</h3>
             <p>Próxima clase: 09:00 AM</p>
@@ -43,7 +42,7 @@
         </div>
         <div class="news-item">
             <span class="news-date">20 Abr</span>
-            <p>Mantenimiento programado de la plataformas.</p>
+            <p>Mantenimiento programado de la plataforma del Sistema de Control Escolar.</p>
         </div>
     </div>
 </div>
