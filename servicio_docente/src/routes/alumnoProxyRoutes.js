@@ -6,6 +6,19 @@ const docenteAuth = require('../middlewares/docenteAuth'); // Middleware de aute
 // URL base del microservicio de alumnos (ajusta el puerto si es necesario)
 const ALUMNOS_URL = process.env.ALUMNOS_URL || 'http://servicio_alumnos:3000';
 
+// Modificar calificación de una unidad de un alumno
+router.patch('/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad', docenteAuth, async (req, res) => {
+  try {
+    const response = await axios.patch(
+      `${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias/${req.params.materiaNombre}/unidades/${req.params.numUnidad}`,
+      req.body
+    );
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    res.status(error.response?.status || 500).json({ error: error.message });
+  }
+});
+
 // Obtener todos los alumnos (solo info personal)
 router.get('/alumnos', docenteAuth, async (req, res) => {
   try {

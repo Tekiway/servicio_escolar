@@ -3,9 +3,27 @@ const router = express.Router();
 const ctrl = require('../controllers/alumnoController');
 const auth = require('../middlewares/auth');
 
-// Alumnos
+// 
+// Obtener mapa curricular del alumno
+router.get('/:id/mapa-curricular', async (req, res) => {
+	const Alumno = require('../models/Alumno');
+	try {
+		const alumno = await Alumno.findById(req.params.id);
+		if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
 
+		// Construir mapa curricular solo con las materias inscritas hasta ahora
+		const mapa = alumno.materias.map(m => ({
+			nombre: m.nombre,
+			periodo: m.periodo,
+			unidades: m.unidades,
+			estado: m.unidades.every(u => u.calificacion >= 6) ? 'Aprobada' : 'Inscrita'
+		}));
 
+		res.json({ carrera: alumno.carrera, materias: mapa });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
 
 // Registro de alumno (solo para uso interno desde el microservicio de docente)
 router.post('/', ctrl.registrarAlumno);
