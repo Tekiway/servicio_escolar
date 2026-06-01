@@ -81,7 +81,7 @@ window.enviarEdicionModal = function() {
     btnGuardar.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
     btnGuardar.disabled = true;
 
-    fetch('../../services/registrar_carrera.php', {
+    fetch('./services/registrar_carrera.php', {
         method: 'POST',
         body: formData
     })
@@ -109,7 +109,7 @@ window.eliminarCarrera = function(id, nombre) {
         const datos = new FormData();
         datos.append('id_eliminar', id);
 
-        fetch('../../services/eliminar_carrera.php', {
+        fetch('./services/eliminar_carrera.php', {
             method: 'POST',
             body: datos
         })
@@ -125,3 +125,38 @@ window.eliminarCarrera = function(id, nombre) {
         .catch(err => console.error("Error en la petición:", err));
     }
 };
+
+// --- 5. ENVIAR FORMULARIO DE REGISTRO PRINCIPAL ---
+document.addEventListener('submit', function(e) {
+    if (e.target && e.target.id === 'form-registrar-carrera') {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        const btnGuardar = e.target.querySelector('.btn-guardar-carrera');
+        const originalHTML = btnGuardar.innerHTML;
+        btnGuardar.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
+        btnGuardar.disabled = true;
+
+        fetch('./services/registrar_carrera.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                alert("¡Carrera registrada con éxito!");
+                location.reload();
+            } else {
+                alert("Error al registrar: " + data.message);
+                btnGuardar.innerHTML = originalHTML;
+                btnGuardar.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Error crítico de conexión.");
+            btnGuardar.innerHTML = originalHTML;
+            btnGuardar.disabled = false;
+        });
+    }
+});

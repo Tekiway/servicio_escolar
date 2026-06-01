@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./src/styles/agregarMateria.css">
     <link rel="stylesheet" href="./src/styles/asignarMateria.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -93,6 +94,20 @@
                         activeLink.classList.add('active');
                         activeLink.parentElement.classList.add('active');
                     }
+
+                    // Remover script dinámico anterior si existe
+                    const scriptExistente = document.getElementById('script-modulo');
+                    if (scriptExistente) scriptExistente.remove();
+
+                    // Cargar el script correspondiente al módulo de forma dinámica
+                    const nuevoScript = document.createElement('script');
+                    nuevoScript.id = 'script-modulo';
+                    nuevoScript.src = `./src/modules/Admin/js/${nombreArchivo}.js?v=${new Date().getTime()}`;
+                    nuevoScript.onerror = () => {
+                        console.log(`Módulo ${nombre} cargado sin archivo JS específico.`);
+                        nuevoScript.remove();
+                    };
+                    document.body.appendChild(nuevoScript);
                 })
                 .catch(err => {
                     contenedor.innerHTML = `

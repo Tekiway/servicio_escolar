@@ -47,7 +47,7 @@
                 <i class='bx bxs-user-plus'></i>
                 <span>Alta de Docente</span>
             </div>
-            <div class="action-btn-card" onclick="cargarModulo('AsignarMaestro')">
+            <div class="action-btn-card" onclick="cargarModulo('AsignarMateria')">
                 <i class='bx bxs-building-house'></i>
                 <span>Asignar Materia</span>
             </div>
