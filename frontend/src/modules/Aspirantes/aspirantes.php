@@ -66,6 +66,21 @@
                             <i class='bx bxs-edit-location'></i> Trámite de Ficha
                         </a>
                     </li>
+                    <li>
+                        <a href="#" onclick="cargarModulo('Pago')">
+                            <i class='bx bxs-credit-card'></i> Pago de Ficha
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="cargarModulo('Guia')">
+                            <i class='bx bxs-book-open'></i> Guía y Simulador
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="cargarModulo('Pase')">
+                            <i class='bx bxs-coupon'></i> Pase de Examen
+                        </a>
+                    </li>
                 </ul>
 
                 <p class="menu-label">Salida</p>
@@ -116,6 +131,15 @@
                         activeLink.classList.add('active');
                         activeLink.parentElement.classList.add('active');
                     }
+
+                    // Forzar ejecución de scripts inyectados dinámicamente
+                    const scripts = contenedor.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
                 })
                 .catch(err => {
                     contenedor.innerHTML = `
