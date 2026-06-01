@@ -2,197 +2,239 @@
     <!-- Encabezado -->
     <div class="module-header" style="margin-bottom: 5px;">
         <h2 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-            <i class='bx bxs-credit-card' style="color: var(--primary);"></i> Pago de Ficha de Admisión
+            <i class='bx bxs-credit-card' style="color: var(--primary); font-size: 2rem;"></i> Formato y Pago del Examen de Admisión
         </h2>
-        <p style="color: #64748b;">Descarga tu formato referenciado y reporta tu comprobante para activar tu pase de examen.</p>
+        <p style="color: #64748b;">Descarga tu formato para depósito bancario o liquida en línea mediante pago express seguro.</p>
     </div>
 
-    <!-- Si NO ha tramitado la ficha -->
-    <div id="pago-bloqueado" style="display: none; background: var(--bg-glass); border: 1px solid var(--border-glass); padding: 40px; border-radius: 16px; text-align: center; backdrop-filter: blur(10px);">
-        <i class='bx bxs-lock-alt' style="font-size: 4rem; color: #94a3b8; margin-bottom: 15px;"></i>
-        <h3 style="color: #1e293b; font-weight: 800; margin: 0 0 10px 0;">Paso Bloqueado</h3>
-        <p style="color: #64748b; max-width: 500px; margin: 0 auto 20px auto; font-size: 0.9rem;">
-            Antes de realizar el pago, debes completar tu registro escolar y selección de carrera en el módulo de <strong>Trámite de Ficha</strong>.
+    <!-- Blocker de Validación -->
+    <div id="pago-blocker-message" style="display: none; background: #fff; border: 1px solid rgba(0,0,0,0.05); padding: 40px; text-align: center; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+        <i class='bx bx-lock-alt' style="font-size: 4.5rem; color: #ef4444; margin-bottom: 15px;"></i>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: #1e293b;">Módulo Bloqueado</h3>
+        <p style="color: #64748b; margin-top: 5px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;" id="pago-blocker-text">
+            Antes de proceder al pago, debes tramitar tu <strong>Ficha de Examen</strong> y subir tus <strong>Documentos Oficiales</strong> para validación escolar.
         </p>
-        <button class="btn-finance-action" onclick="cargarModulo('Ficha')" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; margin: 0 auto;">
-            Ir a Trámite de Ficha <i class='bx bx-right-arrow-alt'></i>
+        <button id="pago-blocker-btn" class="btn-finance-action" style="margin-top: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" onclick="cargarModulo('Ficha')">
+            <i class='bx bxs-edit-location'></i> Completar Trámites Previos
         </button>
     </div>
 
-    <!-- Contenido de Pago -->
-    <div id="pago-activo" style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 25px;">
+    <!-- Interfaz de Pago General -->
+    <div id="pago-container" style="background: var(--bg-glass); border: 1px solid var(--border-glass); padding: 30px; border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
         
-        <!-- Columna Izquierda: Detalles del Pago -->
-        <div style="background: var(--bg-glass); border: 1px solid var(--border-glass); padding: 25px; border-radius: 16px; backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 20px;">
-            <h3 style="margin: 0; color: #1e293b; font-weight: 800;">Detalles del Depósito</h3>
-            
-            <div style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.15); padding: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px;">
-                <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">CONCEPTO DE PAGO</span>
-                <span style="font-size: 1.1rem; font-weight: 800; color: #1e293b;">Derecho a Examen de Admisión</span>
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 5px;">
-                    <span style="font-size: 0.8rem; color: #64748b;">Monto oficial:</span>
-                    <span style="font-size: 1.5rem; font-weight: 900; color: var(--primary-dark);">$850.00 MXN</span>
-                </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem; color: #64748b;">
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
-                    <strong>Banco Receptor:</strong>
-                    <span>BBVA Bancomer</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
-                    <strong>Convenio CIE:</strong>
-                    <span>1882931</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
-                    <strong>Referencia Personal:</strong>
-                    <span id="pago-referencia" style="font-family: monospace; font-weight: 700; color: #1e293b;">ASP2026-0918-A</span>
-                </div>
-            </div>
-
-            <button class="btn-finance-action secondary" onclick="descargarOrdenPago()" style="width: 100%; justify-content: center;">
-                <i class='bx bxs-file-pdf'></i> Descargar Orden de Pago PDF
+        <!-- Pestañas de Pago -->
+        <div style="display: flex; gap: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 25px;">
+            <button class="tab-btn active" id="tab-btn-banco" onclick="switchPagoTab('banco')" style="padding: 10px 20px; font-weight: 800; border: none; background: none; border-bottom: 3px solid var(--primary); color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bxs-bank'></i> Pago en Ventanilla (Banco)
+            </button>
+            <button class="tab-btn" id="tab-btn-tarjeta" onclick="switchPagoTab('tarjeta')" style="padding: 10px 20px; font-weight: 800; border: none; background: none; color: #64748b; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bxs-credit-card-front'></i> Pago Express en Línea
             </button>
         </div>
 
-        <!-- Columna Derecha: Subir Comprobante -->
-        <div style="background: var(--bg-glass); border: 1px solid var(--border-glass); padding: 25px; border-radius: 16px; backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 20px;">
-            <h3 style="margin: 0; color: #1e293b; font-weight: 800;">Reportar Comprobante</h3>
+        <!-- Opción 1: Banco Ficha de Depósito -->
+        <div id="pago-tab-banco" style="display: block;">
+            <div style="background: white; border: 2px dashed #9333ea; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.01);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 6px;"><i class='bx bxs-institution' style="color:var(--primary);"></i> ORDEN DE PAGO REFERENCIADA</span>
+                    <span style="color: #64748b; font-size: 0.8rem; font-weight: 700;">Emisión: 2026</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; color: #475569; margin-bottom: 25px;">
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <span><strong>Establecimiento/Banco:</strong> BBVA Bancomer</span>
+                        <span><strong>Convenio CIE:</strong> #8392102</span>
+                        <span><strong>Concepto:</strong> Examen de Admisión Nuevo Ingreso</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <span><strong>Referencia Única:</strong> <span style="font-family: monospace; font-weight: 800; color:var(--primary-dark);">REF2026ADM0881392A</span></span>
+                        <span><strong>Importe Total:</strong> <strong style="color: #059669; font-size: 1.25rem;">$850.00 MXN</strong></span>
+                        <span><strong>Vencimiento:</strong> 20 de Junio, 2026</span>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px dashed #cbd5e1; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.8rem; color: #94a3b8; max-width: 60%;"><i class='bx bx-info-circle'></i> Una vez realizado tu depósito bancario, el pago se validará automáticamente en un plazo de 24 a 48 horas escolares.</span>
+                    <button class="btn-finance-action" onclick="alert('Descargando PDF de Referencia CIE_BBVA_8392.pdf...')">
+                        <i class='bx bxs-download'></i> Descargar Ficha CIE
+                    </button>
+                </div>
+            </div>
             
-            <!-- Estado 1: Pendiente de Subir -->
-            <div id="pago-estado-subir" style="display: flex; flex-direction: column; gap: 15px;">
-                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">
-                    Una vez realizado el depósito bancario o transferencia, escribe los datos de la transacción y adjunta una captura legible de tu comprobante.
-                </p>
+            <div style="margin-top: 25px; text-align: center;">
+                <p style="font-size: 0.85rem; color: #64748b;">¿Prefieres no ir al banco? Puedes pagar al instante y validar tu examen de inmediato:</p>
+                <button class="btn-finance-action" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; margin-top: 10px; display: inline-flex;" onclick="switchPagoTab('tarjeta')">
+                    <i class='bx bxs-bolt' style="font-size: 1.1rem;"></i> Usar Pago Express Seguro
+                </button>
+            </div>
+        </div>
 
-                <form id="form-reportar-pago" onsubmit="enviarComprobantePago(event)" style="display: flex; flex-direction: column; gap: 15px;">
+        <!-- Opción 2: Tarjeta en Línea Express -->
+        <div id="pago-tab-tarjeta" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: center;">
+                <!-- Mock Card Visual -->
+                <div style="background: linear-gradient(135deg, #1e1b4b, #4338ca); color: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.25); height: 210px; display: flex; flex-direction: column; justify-content: space-between; font-family: monospace; letter-spacing: 1px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-style: italic; font-weight: bold; font-size: 1.1rem;">EXPRESS CARD</span>
+                        <i class='bx bxl-visa' style="font-size: 3rem; line-height: 0;"></i>
+                    </div>
+                    
+                    <div>
+                        <div style="background: #e2e8f0; width: 45px; height: 35px; border-radius: 6px; margin-bottom: 15px; opacity: 0.8;"></div>
+                        <span id="visual-card-number" style="font-size: 1.2rem; display: block; font-weight: bold;">•••• •••• •••• ••••</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
+                        <div>
+                            <small style="opacity: 0.6; display: block; font-size: 0.6rem;">CARDHOLDER</small>
+                            <span id="visual-card-name" style="text-transform: uppercase;">TU NOMBRE</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <small style="opacity: 0.6; display: block; font-size: 0.6rem;">EXPIRES</small>
+                            <span id="visual-card-expiry">MM/AA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <form id="form-pago-express" onsubmit="procesarPagoExpress(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">NOMBRE EN LA TARJETA</label>
+                        <input type="text" id="card-name" required placeholder="Ej. Diana Karen Santos Reyes" oninput="updateCardVisual()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-transform: uppercase;">
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">NÚMERO DE TARJETA</label>
+                        <input type="text" id="card-number" required placeholder="4000 1234 5678 9010" maxlength="19" oninput="formatCardNumber(); updateCardVisual();" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">FOLIO DE OPERACIÓN / AUTORIZACIÓN</label>
-                            <input type="text" id="pago-transaccion" required placeholder="Ej. 182749" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">VENCIMIENTO</label>
+                            <input type="text" id="card-expiry" required placeholder="MM/AA" maxlength="5" oninput="formatExpiry(); updateCardVisual();" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-align: center;">
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">FECHA DE PAGO</label>
-                            <input type="date" id="pago-fecha" required style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">CVC / CVV</label>
+                            <input type="password" id="card-cvv" required placeholder="•••" maxlength="3" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-align: center;">
                         </div>
                     </div>
 
-                    <!-- Drag and Drop Mock -->
-                    <div style="border: 2px dashed rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.02); padding: 30px; border-radius: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;" onclick="document.getElementById('pago-archivo').click()">
-                        <i class='bx bx-cloud-upload' style="font-size: 3rem; color: var(--primary);"></i>
-                        <span style="font-weight: 700; color: #1e293b; font-size: 0.9rem;">Haz clic para seleccionar tu comprobante</span>
-                        <span style="font-size: 0.75rem; color: #94a3b8;">Formatos permitidos: JPG, PNG o PDF (Máx 5MB)</span>
-                        <input type="file" id="pago-archivo" style="display: none;" required onchange="actualizarNombreArchivo(this)">
-                        <span id="nombre-archivo-cargado" style="font-size: 0.8rem; font-weight: 700; color: #059669; display: none;"></span>
-                    </div>
-
-                    <button class="btn-finance-action" type="submit" style="justify-content: center; width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;">
-                        <i class='bx bx-send'></i> ENVIAR COMPROBANTE A VALIDACIÓN
+                    <button class="btn-finance-action" type="submit" style="margin-top: 10px; justify-content: center; width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" id="btn-pay-action">
+                        <i class='bx bx-check-shield' style="font-size:1.1rem;"></i> PAGAR CON PASARELA SEGURA ($850.00)
                     </button>
                 </form>
             </div>
-
-            <!-- Estado 2: Comprobante Enviado / Validado -->
-            <div id="pago-estado-validado" style="display: none; text-align: center; padding: 20px 0; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                <div style="background: rgba(5,150,105,0.1); color: #059669; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 4px 15px rgba(5,150,105,0.2);">
-                    <i class='bx bx-check-shield'></i>
-                </div>
-                <div>
-                    <h4 style="color: #1e293b; font-size: 1.2rem; font-weight: 800; margin: 0 0 5px 0;">Comprobante de Pago Validado</h4>
-                    <p style="color: #64748b; font-size: 0.9rem; max-width: 400px; margin: 0;">
-                        Tu pago ha sido registrado e integrado con éxito al Sistema de Control Escolar. Se ha habilitado la descarga de tu guía de estudio y tu pase de examen.
-                    </p>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; width: 100%; max-width: 400px; text-align: left; font-size: 0.85rem; color: #64748b; display: flex; flex-direction: column; gap: 8px;">
-                    <div><strong>Folio Transacción:</strong> <span id="val-transaccion" style="color:#1e293b; font-weight:700;">#9981273</span></div>
-                    <div><strong>Fecha Reporte:</strong> <span id="val-fecha" style="color:#1e293b; font-weight:700;">01 de Junio de 2026</span></div>
-                    <div><strong>Estado:</strong> <span class="badge" style="background:#rgba(5,150,105,0.1); color:#059669; font-weight:700; padding:2px 8px; border-radius:10px;">Aprobado</span></div>
-                </div>
-
-                <button class="btn-finance-action secondary" onclick="cancelarPagoReportado()" style="margin-top: 10px;">
-                    <i class='bx bx-undo'></i> Reportar Otro Comprobante
-                </button>
-            </div>
-
         </div>
+
     </div>
 </div>
 
 <script>
     (function() {
         const storedFicha = localStorage.getItem('aspirante_ficha');
+        const storedDocs = localStorage.getItem('aspirante_documentos');
+        const blocker = document.getElementById('pago-blocker-message');
+        const blockerText = document.getElementById('pago-blocker-text');
+        const blockerBtn = document.getElementById('pago-blocker-btn');
+        const content = document.getElementById('pago-container');
+
         if (!storedFicha) {
-            document.getElementById('pago-bloqueado').style.display = 'block';
-            document.getElementById('pago-activo').style.display = 'none';
+            blocker.style.display = 'block';
+            content.style.display = 'none';
+            blockerText.innerHTML = "Antes de proceder al pago, debes completar tu <strong>Trámite de Ficha de Examen</strong> para registrar tus datos escolares.";
+            blockerBtn.innerHTML = "<i class='bx bxs-edit-location'></i> Tramitar Ficha de Examen";
+            blockerBtn.setAttribute("onclick", "cargarModulo('Ficha')");
             return;
         }
 
-        // Generar referencia en base al CURP
-        const dataFicha = JSON.parse(storedFicha);
-        if (dataFicha.curp) {
-            const curpCorto = dataFicha.curp.substring(0, 10).toUpperCase();
-            document.getElementById('pago-referencia').textContent = `ASP-${curpCorto}-2026`;
+        if (!storedDocs) {
+            blocker.style.display = 'block';
+            content.style.display = 'none';
+            blockerText.innerHTML = "Tu ficha está registrada, pero aún debes realizar la <strong>Carga de Documentos</strong> oficiales de tu expediente escolar para poder pagar.";
+            blockerBtn.innerHTML = "<i class='bx bxs-cloud-upload'></i> Subir Documentos Oficiales";
+            blockerBtn.setAttribute("onclick", "cargarModulo('Documentos')");
+            return;
         }
 
-        // Verificar si ya reportó su pago
-        const storedPago = localStorage.getItem('aspirante_pago');
-        if (storedPago) {
-            const dataPago = JSON.parse(storedPago);
-            mostrarPagoValidado(dataPago);
-        } else {
-            document.getElementById('pago-estado-subir').style.display = 'flex';
-            document.getElementById('pago-estado-validado').style.display = 'none';
-        }
+        // Cargar nombre del aspirante predeterminado si existe
+        const data = JSON.parse(storedFicha);
+        document.getElementById('card-name').value = data.nombre.toUpperCase();
+        updateCardVisual();
     })();
 
-    function actualizarNombreArchivo(input) {
-        const nombreArchivoSpan = document.getElementById('nombre-archivo-cargado');
-        if (input.files && input.files[0]) {
-            nombreArchivoSpan.textContent = `✓ Archivo seleccionado: ${input.files[0].name}`;
-            nombreArchivoSpan.style.display = 'block';
+    function switchPagoTab(tab) {
+        const btnBanco = document.getElementById('tab-btn-banco');
+        const btnTarjeta = document.getElementById('tab-btn-tarjeta');
+        const tabBanco = document.getElementById('pago-tab-banco');
+        const tabTarjeta = document.getElementById('pago-tab-tarjeta');
+
+        if (tab === 'banco') {
+            btnBanco.className = 'tab-btn active';
+            btnBanco.style.borderBottom = '3px solid var(--primary)';
+            btnBanco.style.color = 'var(--primary)';
+            
+            btnTarjeta.className = 'tab-btn';
+            btnTarjeta.style.borderBottom = 'none';
+            btnTarjeta.style.color = '#64748b';
+            
+            tabBanco.style.display = 'block';
+            tabTarjeta.style.display = 'none';
         } else {
-            nombreArchivoSpan.style.display = 'none';
+            btnTarjeta.className = 'tab-btn active';
+            btnTarjeta.style.borderBottom = '3px solid var(--primary)';
+            btnTarjeta.style.color = 'var(--primary)';
+            
+            btnBanco.className = 'tab-btn';
+            btnBanco.style.borderBottom = 'none';
+            btnBanco.style.color = '#64748b';
+            
+            tabTarjeta.style.display = 'block';
+            tabBanco.style.display = 'none';
         }
     }
 
-    function mostrarPagoValidado(data) {
-        document.getElementById('val-transaccion').textContent = '#' + data.transaccion;
-        
-        // Formatear fecha bonita
-        const dateParts = data.fecha.split('-');
-        const dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('val-fecha').textContent = dateObj.toLocaleDateString('es-MX', options);
+    // Actualizador visual de tarjeta
+    function updateCardVisual() {
+        const nameVal = document.getElementById('card-name').value.trim();
+        const numVal = document.getElementById('card-number').value.trim();
+        const expVal = document.getElementById('card-expiry').value.trim();
 
-        document.getElementById('pago-estado-subir').style.display = 'none';
-        document.getElementById('pago-estado-validado').style.display = 'flex';
+        document.getElementById('visual-card-name').textContent = nameVal ? nameVal : 'TU NOMBRE';
+        document.getElementById('visual-card-number').textContent = numVal ? numVal : '•••• •••• •••• ••••';
+        document.getElementById('visual-card-expiry').textContent = expVal ? expVal : 'MM/AA';
     }
 
-    function enviarComprobantePago(event) {
+    function formatCardNumber() {
+        let input = document.getElementById('card-number');
+        let val = input.value.replace(/\D/g, '');
+        let formatted = '';
+        for (let i = 0; i < val.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += val[i];
+        }
+        input.value = formatted;
+    }
+
+    function formatExpiry() {
+        let input = document.getElementById('card-expiry');
+        let val = input.value.replace(/\D/g, '');
+        if (val.length >= 2) {
+            input.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+        } else {
+            input.value = val;
+        }
+    }
+
+    function procesarPagoExpress(event) {
         event.preventDefault();
-        const transaccion = document.getElementById('pago-transaccion').value;
-        const fecha = document.getElementById('pago-fecha').value;
+        const btn = document.getElementById('btn-pay-action');
+        btn.disabled = true;
+        btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Autorizando Transacción con Banco...";
 
-        const data = { transaccion, fecha };
-        localStorage.setItem('aspirante_pago', JSON.stringify(data));
-
-        alert("¡Comprobante de pago recibido!\n\nEl sistema validó automáticamente tu transacción en ventanilla CIE. Se han desbloqueado los pasos de Admisión.");
-        mostrarPagoValidado(data);
-        
-        // Disparar refresco de header si es necesario
-        cargarModulo('Pago');
-    }
-
-    function cancelarPagoReportado() {
-        if (confirm("¿Seguro que deseas reportar un comprobante diferente? Esto invalidará tu pase actual temporalmente.")) {
-            localStorage.removeItem('aspirante_pago');
-            document.getElementById('pago-estado-validado').style.display = 'none';
-            document.getElementById('pago-estado-subir').style.display = 'flex';
-        }
-    }
-
-    function descargarOrdenPago() {
-        alert("Generando orden de pago referenciada en formato PDF...\n\nConvenio CIE: 1882931\nConcepto: Examen Admisión 2026\nGuardado en Descargas.");
+        setTimeout(() => {
+            alert("¡Pago Aprobado exitosamente!\nReferencia de transacción: #TXN-9381-BBVA.\n\nFicha activada para examen.");
+            localStorage.setItem('aspirante_pago', 'true');
+            cargarModulo('Inicio');
+        }, 2000);
     }
 </script>

@@ -58,7 +58,7 @@
                 <ul>
                     <li>
                         <a href="#" onclick="cargarModulo('Inicio')">
-                            <i class='bx bxs-home-circle'></i> Inicio
+                            <i class='bx bxs-home-circle'></i> Panel Inicio
                         </a>
                     </li>
                     <li>
@@ -67,18 +67,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="#" onclick="cargarModulo('Documentos')">
+                            <i class='bx bxs-cloud-upload'></i> Carga de Documentos
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" onclick="cargarModulo('Pago')">
-                            <i class='bx bxs-credit-card'></i> Pago de Ficha
+                            <i class='bx bxs-credit-card'></i> Formato y Pago
                         </a>
                     </li>
                     <li>
-                        <a href="#" onclick="cargarModulo('Guia')">
-                            <i class='bx bxs-book-open'></i> Guía y Simulador
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" onclick="cargarModulo('Pase')">
-                            <i class='bx bxs-coupon'></i> Pase de Examen
+                        <a href="#" onclick="cargarModulo('Examen')">
+                            <i class='bx bxs-graduation'></i> Examen y Simulador
                         </a>
                     </li>
                 </ul>
@@ -118,6 +118,19 @@
                 .then(html => {
                     contenedor.innerHTML = html;
                     
+                    // Forzar ejecución de scripts inyectados para habilitar interactividad
+                    const scripts = contenedor.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const nuevoScript = document.createElement('script');
+                        if (script.src) {
+                            nuevoScript.src = script.src;
+                        } else {
+                            nuevoScript.textContent = script.textContent;
+                        }
+                        document.body.appendChild(nuevoScript);
+                        nuevoScript.remove(); // Mantener limpio el DOM
+                    });
+                    
                     // Actualizar clase activa en el menú lateral
                     const links = document.querySelectorAll('.nav-menu li');
                     links.forEach(li => li.classList.remove('active'));
@@ -131,15 +144,6 @@
                         activeLink.classList.add('active');
                         activeLink.parentElement.classList.add('active');
                     }
-
-                    // Forzar ejecución de scripts inyectados dinámicamente
-                    const scripts = contenedor.querySelectorAll('script');
-                    scripts.forEach(oldScript => {
-                        const newScript = document.createElement('script');
-                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                    });
                 })
                 .catch(err => {
                     contenedor.innerHTML = `

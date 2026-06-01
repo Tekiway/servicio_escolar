@@ -42,6 +42,33 @@
 
 <script>
     (function() {
+        const storedEval = localStorage.getItem('alumno_evaluacion_docente');
+        if (!storedEval) {
+            const container = document.querySelector('.animate__animated');
+            container.innerHTML = `
+                <div class="module-header" style="margin-bottom: 5px;">
+                    <h2 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bxs-spreadsheet' style="color: var(--primary);"></i> Mi Boleta de Calificaciones
+                    </h2>
+                    <p style="color: #64748b;">Monitorea tus resultados y evaluaciones académicas por cada unidad de aprendizaje.</p>
+                </div>
+
+                <div style="background: #fff; border: 1px solid rgba(0,0,0,0.05); padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); max-width: 650px; margin: 30px auto; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 5px;">
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; font-family: 'Outfit', sans-serif; margin: 0;">Boleta Bloqueada Temporalmente</h3>
+                    <p style="color: #64748b; line-height: 1.6; font-size: 0.95rem; margin: 0; max-width: 500px;">
+                        Estimado alumno, por disposición oficial debes completar la <strong>Evaluación Docente Semestral Obligatoria</strong> de tus profesores antes de poder consultar tus calificaciones parciales y finales.
+                    </p>
+                    <button class="btn-finance-action" style="margin-top: 10px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; display: inline-flex;" onclick="cargarModulo('Examen')">
+                        <i class='bx bxs-face' style="font-size: 1.15rem;"></i> Responder Evaluación Docente
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
         // Inicializar materias y calificaciones en localStorage si no existen
         let dbMaterias = localStorage.getItem('alumno_materias');
         if (!dbMaterias) {

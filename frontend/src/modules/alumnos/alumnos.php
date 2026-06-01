@@ -70,9 +70,11 @@
                     <li><a href="#" onclick="cargarModulo('Evaluaciones')"><i class='bx bxs-spreadsheet'></i> Calificaciones</a></li>
                 </ul>
 
-                <p class="menu-label">Servicios</p>
+                <p class="menu-label">Trámites y Servicios</p>
                 <ul>
-                    <li><a href="#" onclick="cargarModulo('Boletos')"><i class='bx bxs-credit-card-front'></i> Mis Boletos</a></li>
+                    <li><a href="#" onclick="cargarModulo('Documentos')"><i class='bx bxs-cloud-upload'></i> Subir Expediente</a></li>
+                    <li><a href="#" onclick="cargarModulo('Pago')"><i class='bx bxs-credit-card'></i> Pago de Colegiatura</a></li>
+                    <li><a href="#" onclick="cargarModulo('Examen')"><i class='bx bxs-face'></i> Evaluación Docente</a></li>
                 </ul>
 
                 <p class="menu-label">Salida</p>
@@ -111,6 +113,19 @@
                 .then(html => {
                     contenedor.innerHTML = html;
                     
+                    // Forzar ejecución de scripts inyectados para habilitar interactividad
+                    const scripts = contenedor.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const nuevoScript = document.createElement('script');
+                        if (script.src) {
+                            nuevoScript.src = script.src;
+                        } else {
+                            nuevoScript.textContent = script.textContent;
+                        }
+                        document.body.appendChild(nuevoScript);
+                        nuevoScript.remove(); // Mantener limpio el DOM
+                    });
+
                     // Actualizar clase activa en el menú lateral
                     const links = document.querySelectorAll('.nav-menu li');
                     links.forEach(li => li.classList.remove('active'));

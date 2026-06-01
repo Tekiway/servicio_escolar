@@ -96,6 +96,19 @@
                 .then(html => {
                     contenedor.innerHTML = html;
                     
+                    // Forzar ejecución de scripts inyectados para habilitar interactividad
+                    const scripts = contenedor.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const nuevoScript = document.createElement('script');
+                        if (script.src) {
+                            nuevoScript.src = script.src;
+                        } else {
+                            nuevoScript.textContent = script.textContent;
+                        }
+                        document.body.appendChild(nuevoScript);
+                        nuevoScript.remove(); // Mantener limpio el DOM
+                    });
+                    
                     // Actualizar estado activo en la barra lateral
                     const links = document.querySelectorAll('.nav-menu li');
                     links.forEach(li => li.classList.remove('active'));
