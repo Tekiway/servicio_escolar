@@ -8,30 +8,77 @@ services:
       - ./servicio_alumnos:/app
       - /app/node_modules
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/escuela_db
+      - MONGO_URI=mongodb://mongo-alumnos:27017/alumnos_db
       - PORT=3001
+      - JWT_SECRET=secreto
+      - DOCENTES_URL=http://docente-service:3002
     depends_on:
-      - mongodb
+      - mongo-alumnos
 
   docente-service:
-    build: ./servicio_docente
+    build:
+      context: ./servicio_docente
+      dockerfile: dockerfile
     ports:
       - "3002:3002"
     volumes:
       - ./servicio_docente:/app
       - /app/node_modules
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/escuela_db
+      - MONGO_URI=mongodb://mongo-docentes:27017/docentes_db
       - PORT=3002
+      - JWT_SECRET=secreto
+      - ALUMNOS_URL=http://alumno-service:3001
     depends_on:
-      - mongodb
+      - mongo-docentes
 
-  mongodb:
+  directivo-service:
+    build: ./servicio_directivo
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./servicio_directivo:/app
+      - /app/node_modules
+    environment:
+      - MONGO_URI=mongodb://mongo-directivos:27017/directivos_db
+      - PORT=3003
+      - JWT_SECRET=secreto
+    depends_on:
+      - mongo-directivos
+
+  frontend-service:
+    image: php:8.2-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/var/www/html
+    depends_on:
+      - alumno-service
+      - docente-service
+      - directivo-service
+
+  mongo-alumnos:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongo-alumnos-data:/data/db
+
+  mongo-docentes:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-docentes-data:/data/db
+
+  mongo-directivos:
+    image: mongo:latest
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo-directivos-data:/data/db
 
 volumes:
-  mongo-data:
+  mongo-alumnos-data:
+  mongo-docentes-data:
+  mongo-directivos-data:

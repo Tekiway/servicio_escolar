@@ -1,0 +1,228 @@
+GUIA DE USO DE MICROSERVICIOS - SERVICIO ESCOLAR
+
+1) ARQUITECTURA ACTUAL
+
+- Frontend: http://localhost:8080
+- Microservicio Alumnos: http://localhost:3001
+- Microservicio Docentes: http://localhost:3002
+- Microservicio Directivos: http://localhost:3003
+
+Bases de datos separadas:
+- Alumnos -> mongo-alumnos -> alumnos_db
+- Docentes -> mongo-docentes -> docentes_db
+- Directivos -> mongo-directivos -> directivos_db
+
+
+2) LEVANTAR TODO EL SISTEMA
+
+Desde la carpeta raiz del proyecto (donde esta docker-compose.yml):
+
+docker compose up --build
+
+En segundo plano:
+
+docker compose up --build -d
+
+Ver estado:
+
+docker compose ps
+
+Ver logs:
+
+docker compose logs -f
+
+Detener:
+
+docker compose down
+
+
+3) REGLAS DE AUTENTICACION IMPORTANTES
+
+- Las rutas de Docentes estan protegidas por token de Directivo.
+- Para usar rutas proxy de alumnos desde Docente, necesitas token de Docente.
+- Las rutas protegidas de Alumnos aceptan token de Docente o Directivo (segun la ruta).
+- Un Alumno tambien puede iniciar sesion y consultar solo su propia informacion.
+
+
+4) FLUJO RECOMENDADO PASO A PASO
+
+PASO 1: Registrar un Directivo
+
+POST http://localhost:3003/api/directivos
+Content-Type: application/json
+
+Body sugerido:
+{
+	"nombre": "Laura",
+	"apellidoPaterno": "Ramirez",
+	"apellidoMaterno": "Soto",
+	"username": "laura.rh",
+	"email": "laura.rh@escuela.edu.mx",
+	"password": "Admin1234",
+	"numeroEmpleado": "DIR-2026-001",
+	"telefono": "5512345678",
+	"cargo": "Jefa de Recursos Humanos",
+	"area": "Recursos Humanos",
+	"departamento": "Administracion",
+	"tipoContrato": "Confianza",
+	"turno": "Matutino",
+	"fechaIngreso": "2026-01-15",
+	"estatus": "Activo",
+	"permisos": {
+		"gestionarAlumnos": true,
+		"gestionarDocentes": true,
+		"generarReportes": true,
+		"administrarUsuarios": true
+	}
+}
+
+PASO 2: Login de Directivo (obtener token)
+
+POST http://localhost:3003/api/directivos/login
+Content-Type: application/json
+
+Body por email:
+{
+	"email": "laura.rh@escuela.edu.mx",
+	"password": "Admin1234"
+}
+
+Body por username:
+{
+	"username": "laura.rh",
+	"password": "Admin1234"
+}
+
+Guardar token en variable: TOKEN_DIRECTIVO
+
+PASO 3: Registrar Docente (requiere TOKEN_DIRECTIVO)
+
+POST http://localhost:3002/api/docentes
+Authorization: Bearer TOKEN_DIRECTIVO
+Content-Type: application/json
+
+Body ejemplo:
+{
+	"nombre": "Carlos Mendoza",
+	"username": "cmendoza",
+	"numeroEmpleado": "DOC-001",
+	"especialidad": "Matematicas",
+	"email": "carlos@escuela.edu.mx",
+	"password": "Docente123"
+}
+
+PASO 4: Login de Docente (tambien requiere TOKEN_DIRECTIVO)
+
+POST http://localhost:3002/api/docentes/login
+Authorization: Bearer TOKEN_DIRECTIVO
+Content-Type: application/json
+
+Body por email:
+{
+	"email": "carlos@escuela.edu.mx",
+	"password": "Docente123"
+}
+
+Body por username:
+{
+	"username": "cmendoza",
+	"password": "Docente123"
+}
+
+Guardar token en variable: TOKEN_DOCENTE
+
+PASO 5: Registrar Alumno desde Docente (proxy)
+
+POST http://localhost:3002/api/alumnos/alumnos
+Authorization: Bearer TOKEN_DOCENTE
+Content-Type: application/json
+
+Body ejemplo:
+{
+	"nombre": "Juan Perez",
+	"username": "juanp",
+	"matricula": "A12345",
+	"email": "juan@escuela.edu.mx",
+	"password": "Alumno123",
+	"carrera": "Sistemas"
+}
+
+PASO 6: Operaciones de Alumnos desde Docente o Directivo
+
+Con TOKEN_DOCENTE (o TOKEN_DIRECTIVO en rutas permitidas):
+
+- GET http://localhost:3002/api/alumnos/alumnos
+- GET http://localhost:3002/api/alumnos/alumnos/buscar?query=Juan
+- GET http://localhost:3002/api/alumnos/alumnos/{alumnoId}/materias
+- GET http://localhost:3002/api/alumnos/alumnos/{alumnoId}/materias?periodo=2026-1
+- GET http://localhost:3002/api/alumnos/alumnos/{alumnoId}/materias/{materia}/calificaciones
+- POST http://localhost:3002/api/alumnos/alumnos/{alumnoId}/materias
+- PUT http://localhost:3002/api/alumnos/alumnos/{alumnoId}/carrera
+- PATCH http://localhost:3002/api/alumnos/alumnos/{alumnoId}/materias/{materia}/unidades/{numUnidad}
+
+Ejemplo PATCH calificacion:
+{
+	"calificacion": 9.5
+}
+
+
+5) RUTAS POR MICROSERVICIO
+
+5.1) DIRECTIVOS (3003)
+
+- GET /api/directivos
+- GET /api/directivos/:id
+- POST /api/directivos
+- POST /api/directivos/login
+
+5.2) DOCENTES (3002) - protegidas por directivo
+
+- POST /api/docentes
+- POST /api/docentes/login
+- GET /api/docentes
+- GET /api/docentes/buscar?filtro=...
+- PUT /api/docentes/:id
+- DELETE /api/docentes/:id
+
+5.3) ALUMNOS (3001)
+
+Publicas:
+- POST /api/alumnos
+- POST /api/alumnos/login
+
+Protegidas para docente/directivo:
+- GET /api/alumnos/solo-info
+- GET /api/alumnos/buscar?query=...
+- PUT /api/alumnos/:id/carrera
+- POST /api/alumnos/:id/materias
+- GET /api/alumnos/:id/materias
+- GET /api/alumnos/:id/materias/:materiaNombre/calificaciones
+- PATCH /api/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad
+
+Protegidas para alumno autenticado:
+- GET /api/alumnos/mi-info
+- GET /api/alumnos/mis-materias
+- GET /api/alumnos/mis-materias/:materiaNombre/calificaciones
+
+Adicional:
+- GET /api/alumnos/:id/mapa-curricular
+
+
+6) PRUEBA RAPIDA MINIMA
+
+1. Levantar docker compose.
+2. Registrar directivo.
+3. Login directivo y copiar TOKEN_DIRECTIVO.
+4. Registrar docente con TOKEN_DIRECTIVO.
+5. Login docente con TOKEN_DIRECTIVO y copiar TOKEN_DOCENTE.
+6. Registrar alumno con TOKEN_DOCENTE.
+7. Consultar alumnos con TOKEN_DOCENTE.
+
+
+7) ERRORES COMUNES
+
+- 401 Token no proporcionado: falta Authorization Bearer <token>.
+- 403 Acceso denegado: token de rol incorrecto para esa ruta.
+- 404 en proxy de alumnos: revisar que ALUMNOS_URL y rutas /api/alumnos esten correctas.
+- ECONNREFUSED o ENOTFOUND: revisar que servicios Docker esten arriba y en la misma red.
+

@@ -20,13 +20,16 @@ const jwt = require('jsonwebtoken');
 exports.autenticarAlumno = async (req, res) => {
     const { email, username, password } = req.body;
     try {
+        if ((!email && !username) || !password) {
+            return res.status(400).json({ error: 'Debes enviar usuario o email y contrasena' });
+        }
+
+        const filtros = [];
+        if (email) filtros.push({ email });
+        if (username) filtros.push({ username });
+
         // Buscar por email o username
-        const alumno = await Alumno.findOne({
-            $or: [
-                { email },
-                { username }
-            ]
-        });
+        const alumno = await Alumno.findOne({ $or: filtros });
         if (!alumno) {
             return res.status(404).json({ error: 'Alumno no encontrado' });
         }

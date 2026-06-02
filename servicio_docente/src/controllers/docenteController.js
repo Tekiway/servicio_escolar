@@ -4,11 +4,25 @@ const Docente = require('../models/Docente');
 const bcrypt = require('bcryptjs');
 exports.registrarDocente = async (req, res) => {
     try {
-        const { password, ...resto } = req.body;
+        const { password, username, email, ...resto } = req.body;
         if (!password) return res.status(400).json({ error: 'La contraseña es obligatoria' });
+        if (!email) return res.status(400).json({ error: 'El email es obligatorio' });
+
+        const baseUsername = (username || email.split('@')[0] || '').toLowerCase().trim();
+        if (!baseUsername) {
+            return res.status(400).json({ error: 'El usuario es obligatorio' });
+        }
+
+        let usernameFinal = baseUsername;
+        let intento = 0;
+        while (await Docente.exists({ username: usernameFinal })) {
+            intento += 1;
+            usernameFinal = `${baseUsername}${intento}`;
+        }
+
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
-        const nuevoDocente = new Docente({ ...resto, password: passwordHash });
+        const nuevoDocente = new Docente({ ...resto, email, username: usernameFinal, password: passwordHash });
         await nuevoDocente.save();
         res.status(201).json(nuevoDocente);
     } catch (error) {

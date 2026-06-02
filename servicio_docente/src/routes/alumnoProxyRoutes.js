@@ -11,7 +11,12 @@ router.patch('/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad', docente
   try {
     const response = await axios.patch(
       `${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias/${req.params.materiaNombre}/unidades/${req.params.numUnidad}`,
-      req.body
+      req.body,
+      {
+        headers: {
+          Authorization: req.headers.authorization
+        }
+      }
     );
     res.status(response.status).json(response.data);
   } catch (error) {
@@ -22,7 +27,9 @@ router.patch('/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad', docente
 // Obtener todos los alumnos (solo info personal)
 router.get('/alumnos', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/solo-info`);
+    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/solo-info`, {
+      headers: { Authorization: req.headers.authorization }
+    });
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -32,7 +39,10 @@ router.get('/alumnos', docenteAuth, async (req, res) => {
 // Buscar alumnos
 router.get('/alumnos/buscar', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/buscar`, { params: req.query });
+    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/buscar`, {
+      params: req.query,
+      headers: { Authorization: req.headers.authorization }
+    });
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -42,7 +52,10 @@ router.get('/alumnos/buscar', docenteAuth, async (req, res) => {
 // Ver materias de un alumno por periodo
 router.get('/alumnos/:id/materias', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias`, { params: req.query });
+    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias`, {
+      params: req.query,
+      headers: { Authorization: req.headers.authorization }
+    });
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -52,7 +65,9 @@ router.get('/alumnos/:id/materias', docenteAuth, async (req, res) => {
 // Ver calificaciones de una materia de un alumno
 router.get('/alumnos/:id/materias/:materiaNombre/calificaciones', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias/${req.params.materiaNombre}/calificaciones`);
+    const response = await axios.get(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias/${req.params.materiaNombre}/calificaciones`, {
+      headers: { Authorization: req.headers.authorization }
+    });
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -62,7 +77,9 @@ router.get('/alumnos/:id/materias/:materiaNombre/calificaciones', docenteAuth, a
 // Registrar alumno (proxy)
 router.post('/alumnos', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.post(`${ALUMNOS_URL}/api/alumnos`, req.body);
+    const response = await axios.post(`${ALUMNOS_URL}/api/alumnos`, req.body, {
+      headers: { Authorization: req.headers.authorization }
+    });
     res.status(response.status).json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -72,7 +89,9 @@ router.post('/alumnos', docenteAuth, async (req, res) => {
 // Actualizar carrera de un alumno
 router.put('/alumnos/:id/carrera', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.put(`${ALUMNOS_URL}/alumnos/${req.params.id}/carrera`, req.body);
+    const response = await axios.put(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/carrera`, req.body, {
+      headers: { Authorization: req.headers.authorization }
+    });
     res.json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
@@ -82,7 +101,9 @@ router.put('/alumnos/:id/carrera', docenteAuth, async (req, res) => {
 // Registrar materia a un alumno
 router.post('/alumnos/:id/materias', docenteAuth, async (req, res) => {
   try {
-    const response = await axios.post(`${ALUMNOS_URL}/alumnos/${req.params.id}/materias`, req.body);
+    const response = await axios.post(`${ALUMNOS_URL}/api/alumnos/${req.params.id}/materias`, req.body, {
+      headers: { Authorization: req.headers.authorization }
+    });
     res.status(response.status).json(response.data);
   } catch (error) {
     res.status(error.response?.status || 500).json({ error: error.message });
