@@ -84,8 +84,8 @@
                 </div>
             </div>
             
-            <button class="btn-finance-action" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" onclick="cargarModulo('Boletos')">
-                <i class='bx bx-qr-scan'></i> Ver Comprobantes
+            <button class="btn-finance-action" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" onclick="cargarModulo('Pago')">
+                <i class='bx bxs-credit-card'></i> Gestionar Pago en Línea
             </button>
         </div>
     </div>

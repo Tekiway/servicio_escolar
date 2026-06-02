@@ -28,6 +28,7 @@
                         <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-layout'></i> Carga Base</a></li>
                         <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
                         <li><a href="#" onclick="cargarModulo('AsignarMateria')"><i class='bx bxs-user-check'></i> Asignar a Materia</a></li>
+                        <li><a href="#" onclick="cargarModulo('Carreras')"><i class='bx bxs-graduation'></i> Gestionar Carreras</a></li>
                     </ul>
                                     
                 <p class="menu-label">Portales del Sistema</p>
