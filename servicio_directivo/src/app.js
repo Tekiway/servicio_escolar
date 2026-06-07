@@ -1,6 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const nodeCrypto = require('crypto');
 const { obtenerDirectivos, obtenerDirectivoPorId, crearDirectivo, loginDirectivo } = require('./controllers/directivosControllers');
+const directivoAuth = require('./middlewares/directivoAuth');
+
+// Compatibilidad para entornos donde globalThis.crypto no existe
+if (!globalThis.crypto) {
+    globalThis.crypto = nodeCrypto.webcrypto;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -14,10 +21,10 @@ mongoose.connect(MONGO_URI)
     .catch(err => console.error('❌ Error al conectar a MongoDB:', err));
 
 // Rutas asociadas a los nuevos controladores
-app.get('/api/directivos', obtenerDirectivos);
-app.get('/api/directivos/:id', obtenerDirectivoPorId);
-app.post('/api/directivos', crearDirectivo);
 app.post('/api/directivos/login', loginDirectivo);
+app.get('/api/directivos', directivoAuth, obtenerDirectivos);
+app.get('/api/directivos/:id', directivoAuth, obtenerDirectivoPorId);
+app.post('/api/directivos', directivoAuth, crearDirectivo);
 
 app.listen(PORT, () => {
     console.log(`🚀 Microservicio corriendo en http://localhost:${PORT}`);

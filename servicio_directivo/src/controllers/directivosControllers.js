@@ -109,6 +109,24 @@ const crearDirectivo = async (req, res) => {
             permisos: guardado.permisos
         });
     } catch (error) {
+        // Duplicados por indices unicos (email, numeroEmpleado, username)
+        if (error && error.code === 11000) {
+            const campo = Object.keys(error.keyPattern || {})[0] || 'campo unico';
+            return res.status(409).json({
+                mensaje: `Ya existe un directivo con el valor de ${campo}`,
+                campo,
+                detalle: error.message
+            });
+        }
+
+        // Validaciones de esquema (enum, requeridos, formato fecha, etc.)
+        if (error && error.name === 'ValidationError') {
+            return res.status(400).json({
+                mensaje: 'Datos invalidos para registrar directivo',
+                detalle: error.message
+            });
+        }
+
         res.status(500).json({ mensaje: "Error al guardar el directivo", error: error.message });
     }
 };
@@ -121,12 +139,17 @@ const loginDirectivo = async (req, res) => {
         }
 
         const filtros = [];
-        if (email) filtros.push({ email });
-        if (username) filtros.push({ username });
+        if (email) filtros.push({ email: String(email).toLowerCase().trim() });
+        if (username) filtros.push({ username: String(username).toLowerCase().trim() });
 
         const directivo = await Directivo.findOne({ $or: filtros }).select('+password');
         if (!directivo) {
             return res.status(404).json({ mensaje: 'Directivo no encontrado' });
+        }
+
+        // Compatibilidad con registros legacy que no tengan password almacenada
+        if (!directivo.password) {
+            return res.status(401).json({ mensaje: 'Cuenta sin credenciales de acceso configuradas' });
         }
 
         const valido = await bcrypt.compare(password, directivo.password);

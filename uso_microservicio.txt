@@ -36,47 +36,50 @@ Detener:
 docker compose down
 
 
+2.1) BOOTSTRAP INICIAL DE DIRECTIVO (SOLO PRIMERA VEZ)
+
+Como las rutas de Directivos (excepto login) estan protegidas, primero debes crear un directivo semilla una sola vez.
+
+En una terminal, dentro de servicio_directivo:
+
+npm run seed:directivo
+
+Comportamiento:
+- Si no hay directivos, crea 1 directivo semilla.
+- Si ya existe al menos 1 directivo, no crea otro.
+
+Datos por defecto de la semilla:
+- username: admin.directivo
+- email: admin.directivo@escuela.edu.mx
+- password: Admin1234
+
+Despues de esto, usa login de directivo y continua con el flujo normal.
+
+
 3) REGLAS DE AUTENTICACION IMPORTANTES
 
+- En Directivos, solo el login es publico.
+- GET /api/directivos, GET /api/directivos/:id y POST /api/directivos requieren token de directivo.
 - Las rutas de Docentes estan protegidas por token de Directivo.
 - Para usar rutas proxy de alumnos desde Docente, necesitas token de Docente.
 - Las rutas protegidas de Alumnos aceptan token de Docente o Directivo (segun la ruta).
 - Un Alumno tambien puede iniciar sesion y consultar solo su propia informacion.
 
 
+3.1) NOTA DE BOOTSTRAP (PRIMERA EJECUCION)
+
+Como POST /api/directivos ahora esta protegido, debes tener al menos 1 directivo semilla ya creado.
+
+Opciones para primera vez:
+- Opcion A (recomendada): insertar un directivo semilla directamente en Mongo con password hasheada.
+- Opcion B (temporal): quitar middleware de auth en POST /api/directivos, crear 1 directivo, volver a proteger la ruta.
+
+Una vez exista el directivo semilla, toda la administracion se hace por API con login.
+
+
 4) FLUJO RECOMENDADO PASO A PASO
 
-PASO 1: Registrar un Directivo
-
-POST http://localhost:3003/api/directivos
-Content-Type: application/json
-
-Body sugerido:
-{
-	"nombre": "Laura",
-	"apellidoPaterno": "Ramirez",
-	"apellidoMaterno": "Soto",
-	"username": "laura.rh",
-	"email": "laura.rh@escuela.edu.mx",
-	"password": "Admin1234",
-	"numeroEmpleado": "DIR-2026-001",
-	"telefono": "5512345678",
-	"cargo": "Jefa de Recursos Humanos",
-	"area": "Recursos Humanos",
-	"departamento": "Administracion",
-	"tipoContrato": "Confianza",
-	"turno": "Matutino",
-	"fechaIngreso": "2026-01-15",
-	"estatus": "Activo",
-	"permisos": {
-		"gestionarAlumnos": true,
-		"gestionarDocentes": true,
-		"generarReportes": true,
-		"administrarUsuarios": true
-	}
-}
-
-PASO 2: Login de Directivo (obtener token)
+PASO 1: Login de Directivo semilla (obtener token)
 
 POST http://localhost:3003/api/directivos/login
 Content-Type: application/json
@@ -94,6 +97,31 @@ Body por username:
 }
 
 Guardar token en variable: TOKEN_DIRECTIVO
+
+PASO 2: (Opcional) Registrar un nuevo Directivo (requiere TOKEN_DIRECTIVO)
+
+POST http://localhost:3003/api/directivos
+Authorization: Bearer TOKEN_DIRECTIVO
+Content-Type: application/json
+
+Body sugerido:
+{
+	"nombre": "Laura",
+	"apellidoPaterno": "Ramirez",
+	"apellidoMaterno": "Soto",
+	"username": "laura.rh2",
+	"email": "laura2.rh@escuela.edu.mx",
+	"password": "Admin1234",
+	"numeroEmpleado": "DIR-2026-002",
+	"telefono": "5512345678",
+	"cargo": "Jefa de Recursos Humanos",
+	"area": "Recursos Humanos",
+	"departamento": "Administracion",
+	"tipoContrato": "Confianza",
+	"turno": "Matutino",
+	"fechaIngreso": "2026-01-15",
+	"estatus": "Activo"
+}
 
 PASO 3: Registrar Docente (requiere TOKEN_DIRECTIVO)
 
@@ -170,10 +198,10 @@ Ejemplo PATCH calificacion:
 
 5.1) DIRECTIVOS (3003)
 
-- GET /api/directivos
-- GET /api/directivos/:id
-- POST /api/directivos
-- POST /api/directivos/login
+- POST /api/directivos/login (publica)
+- GET /api/directivos (protegida)
+- GET /api/directivos/:id (protegida)
+- POST /api/directivos (protegida)
 
 5.2) DOCENTES (3002) - protegidas por directivo
 
@@ -211,12 +239,11 @@ Adicional:
 6) PRUEBA RAPIDA MINIMA
 
 1. Levantar docker compose.
-2. Registrar directivo.
-3. Login directivo y copiar TOKEN_DIRECTIVO.
-4. Registrar docente con TOKEN_DIRECTIVO.
-5. Login docente con TOKEN_DIRECTIVO y copiar TOKEN_DOCENTE.
-6. Registrar alumno con TOKEN_DOCENTE.
-7. Consultar alumnos con TOKEN_DOCENTE.
+2. Login directivo semilla y copiar TOKEN_DIRECTIVO.
+3. Registrar docente con TOKEN_DIRECTIVO.
+4. Login docente con TOKEN_DIRECTIVO y copiar TOKEN_DOCENTE.
+5. Registrar alumno con TOKEN_DOCENTE.
+6. Consultar alumnos con TOKEN_DOCENTE.
 
 
 7) ERRORES COMUNES
@@ -225,4 +252,261 @@ Adicional:
 - 403 Acceso denegado: token de rol incorrecto para esa ruta.
 - 404 en proxy de alumnos: revisar que ALUMNOS_URL y rutas /api/alumnos esten correctas.
 - ECONNREFUSED o ENOTFOUND: revisar que servicios Docker esten arriba y en la misma red.
+
+
+8) PRUEBAS AUTOMATIZADAS CON POSTMAN (COLLECTION RUNNER)
+
+Precondicion obligatoria:
+- Ya ejecutaste la semilla una vez con: npm run seed:directivo (en servicio_directivo).
+- Debe existir el usuario semilla para login:
+	username: admin.directivo
+	email: admin.directivo@escuela.edu.mx
+	password: Admin1234
+
+8.1) CREAR ENVIRONMENT EN POSTMAN
+
+Nombre sugerido: Local Escolar
+
+Variables:
+- directivo_url = http://localhost:3003
+- docente_url = http://localhost:3002
+- alumno_url = http://localhost:3001
+- seed_directivo_email = admin.directivo@escuela.edu.mx
+- seed_directivo_password = Admin1234
+- token_directivo =
+- token_docente =
+- alumno_id =
+
+
+8.2) CREAR COLLECTION
+
+Nombre sugerido: Integracion Sistema Escolar
+
+Orden de requests recomendado:
+
+01) Login directivo
+POST {{directivo_url}}/api/directivos/login
+
+Body:
+{
+	"email": "{{seed_directivo_email}}",
+	"password": "{{seed_directivo_password}}"
+}
+
+Tests:
+pm.test("Login directivo OK", function () {
+	pm.response.to.have.status(200);
+});
+const loginDir = pm.response.json();
+pm.test("Token directivo presente", function () {
+	pm.expect(loginDir.token).to.be.a("string").and.not.empty;
+});
+if (loginDir.token) {
+	pm.environment.set("token_directivo", loginDir.token);
+} else {
+	throw new Error("No se obtuvo token_directivo. Revisa login directivo.");
+}
+
+
+02) (Opcional) Crear directivo (protegida)
+POST {{directivo_url}}/api/directivos
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"nombre": "Laura",
+	"apellidoPaterno": "Ramirez",
+	"apellidoMaterno": "Soto",
+	"username": "laura.rh2",
+	"email": "laura2.rh@escuela.edu.mx",
+	"password": "Admin1234",
+	"numeroEmpleado": "DIR-2026-002",
+	"telefono": "5512345678",
+	"cargo": "Jefa de Recursos Humanos",
+	"area": "Recursos Humanos",
+	"departamento": "Administracion",
+	"tipoContrato": "Confianza",
+	"turno": "Matutino",
+	"fechaIngreso": "2026-01-15",
+	"estatus": "Activo"
+}
+
+Tests:
+pm.test("Crear directivo protegido", function () {
+	pm.expect(pm.response.code).to.be.oneOf([201, 400, 409]);
+});
+
+
+03) Crear docente (protegida)
+POST {{docente_url}}/api/docentes
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"nombre": "Carlos Mendoza",
+	"username": "cmendoza",
+	"numeroEmpleado": "DOC-001",
+	"especialidad": "Matematicas",
+	"email": "carlos@escuela.edu.mx",
+	"password": "Docente123"
+}
+
+Tests:
+pm.test("Crear docente", function () {
+	pm.expect(pm.response.code).to.be.oneOf([201, 400, 409]);
+});
+
+
+04) Login docente (protegida)
+POST {{docente_url}}/api/docentes/login
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"username": "cmendoza",
+	"password": "Docente123"
+}
+
+Tests:
+pm.test("Login docente OK", function () {
+	pm.response.to.have.status(200);
+});
+const loginDoc = pm.response.json();
+pm.test("Token docente presente", function () {
+	pm.expect(loginDoc.token).to.be.a("string").and.not.empty;
+});
+if (loginDoc.token) {
+	pm.environment.set("token_docente", loginDoc.token);
+} else {
+	throw new Error("No se obtuvo token_docente. Revisa login docente.");
+}
+
+
+05) Registrar alumno desde proxy docente
+POST {{docente_url}}/api/alumnos/alumnos
+Header: Authorization: Bearer {{token_docente}}
+
+Body:
+{
+	"nombre": "Juan Perez",
+	"username": "juanp",
+	"matricula": "A12345",
+	"email": "juan@escuela.edu.mx",
+	"password": "Alumno123",
+	"carrera": "Sistemas"
+}
+
+Tests:
+pm.test("Registrar alumno", function () {
+	pm.expect(pm.response.code).to.be.oneOf([201, 400, 409]);
+});
+const alumnoData = pm.response.json();
+if (alumnoData && (alumnoData._id || alumnoData.id)) {
+	pm.environment.set("alumno_id", alumnoData._id || alumnoData.id);
+} else {
+	throw new Error("No se obtuvo alumno_id en el registro de alumno.");
+}
+
+
+06) Listar alumnos
+GET {{docente_url}}/api/alumnos/alumnos
+Header: Authorization: Bearer {{token_docente}}
+
+Tests:
+pm.test("Lista alumnos OK", function () {
+	pm.response.to.have.status(200);
+});
+pm.test("Respuesta arreglo", function () {
+	pm.expect(pm.response.json()).to.be.an("array");
+});
+
+
+07) Registrar materia al alumno
+POST {{docente_url}}/api/alumnos/alumnos/{{alumno_id}}/materias
+Header: Authorization: Bearer {{token_docente}}
+
+Body:
+{
+	"nombre": "Matematicas",
+	"periodo": "2026-1",
+	"cantidadUnidades": 3
+}
+
+Tests:
+pm.test("Registrar materia", function () {
+	pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+});
+
+
+08) Modificar calificacion
+PATCH {{docente_url}}/api/alumnos/alumnos/{{alumno_id}}/materias/Matematicas/unidades/1
+Header: Authorization: Bearer {{token_docente}}
+
+Body:
+{
+	"calificacion": 9.5
+}
+
+Tests:
+pm.test("Modificar calificacion", function () {
+	pm.response.to.have.status(200);
+});
+
+
+09) Ver calificaciones
+GET {{docente_url}}/api/alumnos/alumnos/{{alumno_id}}/materias/Matematicas/calificaciones
+Header: Authorization: Bearer {{token_docente}}
+
+Tests:
+pm.test("Ver calificaciones OK", function () {
+	pm.response.to.have.status(200);
+});
+pm.test("Tiene al menos una unidad", function () {
+	const body = pm.response.json();
+	pm.expect(body.length).to.be.greaterThan(0);
+});
+
+
+8.3) PRUEBAS DE SEGURIDAD (NEGATIVAS)
+
+10) Sin token en ruta protegida de directivos (debe fallar)
+GET {{directivo_url}}/api/directivos
+
+Tests:
+pm.test("Debe rechazar sin token (directivos)", function () {
+	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
+});
+
+11) Sin token en ruta protegida de docentes (debe fallar)
+GET {{docente_url}}/api/docentes
+
+Tests:
+pm.test("Debe rechazar sin token", function () {
+	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
+});
+
+12) Token invalido (debe fallar)
+GET {{docente_url}}/api/docentes
+Header: Authorization: Bearer token_invalido
+
+Tests:
+pm.test("Debe rechazar token invalido", function () {
+	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
+});
+
+
+8.4) EJECUTAR AUTOMATICAMENTE
+
+0. Limpia variables token_directivo, token_docente y alumno_id en el Environment antes de correr.
+0.1 Verifica que el directivo semilla exista (si no, ejecuta npm run seed:directivo).
+1. Abre la Collection en Postman.
+2. Click en Run collection.
+3. Selecciona environment: Local Escolar.
+4. Ejecuta en orden 01 -> 12.
+5. Todo en verde = flujo correcto.
+
+
+8.5) RECOMENDACION
+
+Para evitar colisiones en pruebas repetidas, cambia valores como email/matricula/numeroEmpleado con un sufijo de fecha u hora.
 
