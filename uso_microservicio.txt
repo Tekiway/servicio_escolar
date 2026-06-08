@@ -7,12 +7,14 @@ GUIA DE USO DE MICROSERVICIOS - SERVICIO ESCOLAR
 - Microservicio Docentes: http://localhost:3002
 - Microservicio Directivos: http://localhost:3003
 - Microservicio Finanzas: http://localhost:3004
+- Microservicio Aspirantes: http://localhost:3005
 
 Bases de datos separadas:
 - Alumnos -> mongo-alumnos -> alumnos_db
 - Docentes -> mongo-docentes -> docentes_db
 - Directivos -> mongo-directivos -> directivos_db
 - Finanzas -> mongo-finanzas -> finanzas_db
+- Aspirantes -> mongo-aspirantes -> aspirantes_db
 
 
 2) LEVANTAR TODO EL SISTEMA
@@ -81,6 +83,7 @@ Despues de esto, usa login de directivo y continua con el flujo normal.
 - GET /api/directivos, GET /api/directivos/:id y POST /api/directivos requieren token de directivo.
 - Las rutas de Docentes estan protegidas por token de Directivo.
 - Las rutas de Finanzas estan protegidas por token de Directivo.
+- Las rutas de Aspirantes estan protegidas por token de Directivo.
 - Para usar rutas proxy de alumnos desde Docente, necesitas token de Docente.
 - Las rutas protegidas de Alumnos aceptan token de Docente o Directivo (segun la ruta).
 - Un Alumno tambien puede iniciar sesion y consultar solo su propia informacion.
@@ -282,6 +285,22 @@ Adicional:
 - PATCH /api/finance/tuitions/:id/pay
 - GET /api/finance/tuitions/student/:studentId
 
+5.5) ASPIRANTES (3005) - protegidas por directivo
+
+- POST /api/aspirantes/register
+- PATCH /api/aspirantes/:id/exam
+- GET /api/aspirantes
+- GET /api/aspirantes/pendientes
+- GET /api/aspirantes/aceptados
+- PATCH /api/aspirantes/:id/accept
+
+Flujo de aceptacion de aspirantes:
+- El administrativo/directivo consulta GET /api/aspirantes/pendientes.
+- Selecciona un aspirante y envía PATCH /api/aspirantes/:id/accept.
+- El microservicio de aspirantes crea automaticamente el alumno en el microservicio de alumnos.
+- El aspirante queda marcado como TRANSFERIDO y se guarda el alumno creado.
+- La respuesta incluye los datos de sincronizacion para que el frontend muestre el resultado.
+
 
 6) PRUEBA RAPIDA MINIMA
 
@@ -321,12 +340,14 @@ Variables:
 - docente_url = http://localhost:3002
 - alumno_url = http://localhost:3001
 - finance_url = http://localhost:3004
+- aspirante_url = http://localhost:3005
 - seed_directivo_email = admin.directivo@escuela.edu.mx
 - seed_directivo_password = Admin1234
 - token_directivo =
 - token_docente =
 - alumno_id =
 - tuition_id =
+- applicant_id =
 
 
 8.2) CREAR COLLECTION
@@ -570,9 +591,84 @@ pm.test("Estado pagado", function () {
 });
 
 
+13) Crear aspirante
+POST {{aspirante_url}}/api/aspirantes/register
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"firstName": "Maria",
+	"lastName": "Lopez",
+	"email": "maria.lopez@correo.com",
+	"phoneNumber": "5551234567",
+	"targetGrade": "1er Semestre"
+}
+
+Tests:
+pm.test("Crear aspirante", function () {
+	pm.response.to.have.status(201);
+});
+const applicantCreated = pm.response.json();
+if (applicantCreated && applicantCreated.data && (applicantCreated.data._id || applicantCreated.data.id)) {
+	pm.environment.set("applicant_id", applicantCreated.data._id || applicantCreated.data.id);
+} else {
+	throw new Error("No se obtuvo applicant_id al crear el aspirante.");
+}
+
+
+14) Ver aspirantes pendientes
+GET {{aspirante_url}}/api/aspirantes/pendientes
+Header: Authorization: Bearer {{token_directivo}}
+
+Tests:
+pm.test("Listar pendientes OK", function () {
+	pm.response.to.have.status(200);
+});
+pm.test("Respuesta arreglo", function () {
+	const body = pm.response.json();
+	pm.expect(body.data).to.be.an("array");
+});
+
+
+15) Aceptar aspirante y transferir a alumnos
+PATCH {{aspirante_url}}/api/aspirantes/{{applicant_id}}/accept
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"carrera": "Sistemas"
+}
+
+Tests:
+pm.test("Aceptar aspirante", function () {
+	pm.response.to.have.status(200);
+});
+const acceptedApplicant = pm.response.json();
+pm.test("Aspirante transferido", function () {
+	pm.expect(acceptedApplicant.data.status).to.equal("TRANSFERIDO");
+});
+pm.test("Alumno creado", function () {
+	pm.expect(acceptedApplicant.data.studentId).to.be.a("string").and.not.empty;
+});
+
+
+16) Ver aspirantes aceptados
+GET {{aspirante_url}}/api/aspirantes/aceptados
+Header: Authorization: Bearer {{token_directivo}}
+
+Tests:
+pm.test("Listar aceptados OK", function () {
+	pm.response.to.have.status(200);
+});
+pm.test("Respuesta arreglo aceptados", function () {
+	const body = pm.response.json();
+	pm.expect(body.data).to.be.an("array");
+});
+
+
 8.3) PRUEBAS DE SEGURIDAD (NEGATIVAS)
 
-13) Sin token en ruta protegida de directivos (debe fallar)
+17) Sin token en ruta protegida de directivos (debe fallar)
 GET {{directivo_url}}/api/directivos
 
 Tests:
@@ -580,7 +676,7 @@ pm.test("Debe rechazar sin token (directivos)", function () {
 	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
 });
 
-14) Sin token en ruta protegida de docentes (debe fallar)
+18) Sin token en ruta protegida de docentes (debe fallar)
 GET {{docente_url}}/api/docentes
 
 Tests:
@@ -588,7 +684,7 @@ pm.test("Debe rechazar sin token", function () {
 	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
 });
 
-15) Token invalido (debe fallar)
+19) Token invalido (debe fallar)
 GET {{docente_url}}/api/docentes
 Header: Authorization: Bearer token_invalido
 
@@ -605,7 +701,7 @@ pm.test("Debe rechazar token invalido", function () {
 1. Abre la Collection en Postman.
 2. Click en Run collection.
 3. Selecciona environment: Local Escolar.
-4. Ejecuta en orden 01 -> 15.
+4. Ejecuta en orden 01 -> 19.
 5. Todo en verde = flujo correcto.
 
 
@@ -616,4 +712,5 @@ Para evitar colisiones en pruebas repetidas, cambia valores como email/matricula
 Nota de Finanzas:
 - Las pruebas de finanzas reutilizan TOKEN_DIRECTIVO, porque el microservicio solo acepta usuarios con rol directivo.
 - Si `tuition_id` no se obtiene, revisa que la respuesta de `POST /api/finance/tuitions` devuelva `_id` o `id`.
+- Si `applicant_id` no se obtiene, revisa que `POST /api/aspirantes/register` regrese `data._id` o `data.id`.
 

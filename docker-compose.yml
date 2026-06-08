@@ -111,6 +111,33 @@ services:
     depends_on:
       - mongo-finanzas
 
+  aspirante-service:
+    build: ./servicio_aspirantes
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./servicio_aspirantes:/app
+      - /app/node_modules
+    environment:
+      MONGO_URI: mongodb://mongo-aspirantes:27017/aspirantes_db
+      PORT: 3005
+      JWT_SECRET: secreto
+      ALUMNOS_URL: http://alumno-service:3001
+    develop:
+      watch:
+        - action: sync
+          path: ./servicio_aspirantes
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./servicio_aspirantes/package.json
+        - action: rebuild
+          path: ./servicio_aspirantes/package-lock.json
+    depends_on:
+      - mongo-aspirantes
+
   frontend-service:
     image: php:8.2-apache
     ports:
@@ -122,6 +149,7 @@ services:
       - docente-service
       - directivo-service
       - finance-service
+      - aspirante-service
 
   mongo-alumnos:
     image: mongo:latest
@@ -151,9 +179,17 @@ services:
     volumes:
       - mongo-finanzas-data:/data/db
 
+  mongo-aspirantes:
+    image: mongo:latest
+    ports:
+      - "27021:27017"
+    volumes:
+      - mongo-aspirantes-data:/data/db
+
 volumes:
   mongo-alumnos-data:
   mongo-docentes-data:
   mongo-directivos-data:
   mongo-finanzas-data:
+  mongo-aspirantes-data:
   
