@@ -714,3 +714,130 @@ Nota de Finanzas:
 - Si `tuition_id` no se obtiene, revisa que la respuesta de `POST /api/finance/tuitions` devuelva `_id` o `id`.
 - Si `applicant_id` no se obtiene, revisa que `POST /api/aspirantes/register` regrese `data._id` o `data.id`.
 
+
+9) IMPLEMENTACION EN APLICACION WEB
+
+Esta guia ya cubre el uso manual y automatizado, pero para una aplicacion web el flujo recomendado es el siguiente:
+
+9.1) ESTRUCTURA SUGERIDA DEL FRONTEND
+
+- Pantalla de login de directivo.
+- Panel administrativo principal.
+- Modulo de docentes.
+- Modulo de alumnos.
+- Modulo de finanzas.
+- Modulo de aspirantes.
+- Vista de aceptacion de aspirantes.
+
+9.2) MANEJO DE TOKENS
+
+Despues de iniciar sesion como directivo, guarda el token en una variable global de sesion del frontend.
+
+Ejemplo de estrategia:
+- localStorage para persistencia simple.
+- sessionStorage si quieres que se cierre al salir del navegador.
+
+Regla principal:
+- Cada request protegida debe enviar Authorization: Bearer <token>.
+- Si el token expira o falla, regresar al login.
+
+9.3) FLUJO WEB RECOMENDADO PARA EL ADMINISTRATIVO
+
+1. El directivo inicia sesion.
+2. El frontend carga el panel con accesos a docentes, finanzas y aspirantes.
+3. En aspirantes, el frontend muestra primero GET /api/aspirantes/pendientes.
+4. El administrativo revisa el expediente del aspirante.
+5. Si lo aprueba, el frontend llama PATCH /api/aspirantes/:id/accept.
+6. El microservicio de aspirantes crea automaticamente el alumno en el microservicio de alumnos.
+7. El frontend refresca pendientes y aceptados para mostrar el cambio.
+8. Si el aspirante ya entro a alumnos, el modulo de alumnos puede consultarlo normalmente.
+
+9.4) CONSUMO DESDE FRONTEND
+
+Ejemplo con fetch:
+
+```js
+const token = localStorage.getItem('token_directivo');
+
+const response = await fetch('http://localhost:3005/api/aspirantes/pendientes', {
+	headers: {
+		Authorization: `Bearer ${token}`,
+	},
+});
+
+const data = await response.json();
+```
+
+Ejemplo con axios:
+
+```js
+import axios from 'axios';
+
+const api = axios.create({
+	baseURL: 'http://localhost:3005',
+});
+
+api.interceptors.request.use((config) => {
+	const token = localStorage.getItem('token_directivo');
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
+});
+
+const response = await api.get('/api/aspirantes/pendientes');
+```
+
+9.5) IMPLEMENTACION ESPECIFICA DE ASPIRANTES EN WEB
+
+La vista de aspirantes debe mostrar como minimo:
+- Nombre completo.
+- Correo.
+- Telefono.
+- Grado objetivo.
+- Estado actual.
+- Fecha de registro.
+
+Botones utiles:
+- Ver pendientes.
+- Ver aceptados.
+- Aceptar y transferir.
+- Rechazar o marcar como no aprobado.
+
+El boton de aceptar debe:
+- Llamar a PATCH /api/aspirantes/:id/accept.
+- Mostrar el alumno creado.
+- Refrescar automaticamente la lista de pendientes.
+
+9.6) IMPLEMENTACION ESPECIFICA DE ALUMNOS EN WEB
+
+Cuando un aspirante ya fue transferido:
+- El modulo de alumnos debe poder buscarlo por nombre o matricula.
+- Debe aparecer como alumno normal en GET /api/alumnos/alumnos.
+- El frontend puede abrir su ficha y seguir con materias, calificaciones y carrera.
+
+9.7) IMPLEMENTACION ESPECIFICA DE FINANZAS EN WEB
+
+Una vez que el alumno existe, el modulo de finanzas puede:
+- Crear colegiaturas.
+- Consultar historial financiero por alumno.
+- Marcar pagos.
+
+9.8) REGLAS DE NEGOCIO RESUMIDAS
+
+- Solo el directivo administra aspirantes, docentes y finanzas.
+- Los aspirantes solo pasan a alumnos cuando son aceptados.
+- El frontend no debe crear alumnos manualmente desde la pantalla de aspirantes; debe usar la transferencia automatica.
+- El listado de aspirantes pendientes es la entrada principal para la aprobacion.
+
+9.9) RESPUESTA MINIMA QUE DEBERIA USAR EL FRONTEND
+
+Para facilitar el consumo, el frontend debe depender de estas respuestas:
+
+- Aspirantes pendientes: { success, count, data }
+- Aspirantes aceptados: { success, count, data }
+- Aceptacion de aspirante: { success, data }
+- Registro de alumno: objeto creado del alumno o respuesta proxy equivalente
+
+Con esto, la aplicacion web puede pintar listas, ejecutar aprobaciones y refrescar estados sin logica extra compleja.
+
