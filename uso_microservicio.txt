@@ -6,11 +6,13 @@ GUIA DE USO DE MICROSERVICIOS - SERVICIO ESCOLAR
 - Microservicio Alumnos: http://localhost:3001
 - Microservicio Docentes: http://localhost:3002
 - Microservicio Directivos: http://localhost:3003
+- Microservicio Finanzas: http://localhost:3004
 
 Bases de datos separadas:
 - Alumnos -> mongo-alumnos -> alumnos_db
 - Docentes -> mongo-docentes -> docentes_db
 - Directivos -> mongo-directivos -> directivos_db
+- Finanzas -> mongo-finanzas -> finanzas_db
 
 
 2) LEVANTAR TODO EL SISTEMA
@@ -18,6 +20,14 @@ Bases de datos separadas:
 Desde la carpeta raiz del proyecto (donde esta docker-compose.yml):
 
 docker compose up --build
+
+Modo recomendado para desarrollo automatico (codigo y dependencias):
+
+Terminal 1:
+docker compose up -d
+
+Terminal 2:
+docker compose watch
 
 En segundo plano:
 
@@ -31,9 +41,18 @@ Ver logs:
 
 docker compose logs -f
 
+Ver logs de un servicio especifico (ejemplo finanzas):
+
+docker compose logs -f finance-service
+
 Detener:
 
 docker compose down
+
+Notas de actualizacion automatica:
+- Cambios en codigo fuente se sincronizan automaticamente al contenedor.
+- Cambios en package.json o package-lock.json disparan rebuild automatico del servicio afectado.
+- Ya no necesitas borrar contenedores manualmente para ver cambios.
 
 
 2.1) BOOTSTRAP INICIAL DE DIRECTIVO (SOLO PRIMERA VEZ)
@@ -61,6 +80,7 @@ Despues de esto, usa login de directivo y continua con el flujo normal.
 - En Directivos, solo el login es publico.
 - GET /api/directivos, GET /api/directivos/:id y POST /api/directivos requieren token de directivo.
 - Las rutas de Docentes estan protegidas por token de Directivo.
+- Las rutas de Finanzas estan protegidas por token de Directivo.
 - Para usar rutas proxy de alumnos desde Docente, necesitas token de Docente.
 - Las rutas protegidas de Alumnos aceptan token de Docente o Directivo (segun la ruta).
 - Un Alumno tambien puede iniciar sesion y consultar solo su propia informacion.
@@ -193,6 +213,27 @@ Ejemplo PATCH calificacion:
 	"calificacion": 9.5
 }
 
+PASO 7: Operaciones de Finanzas (requiere TOKEN_DIRECTIVO)
+
+POST http://localhost:3004/api/finance/tuitions
+Authorization: Bearer TOKEN_DIRECTIVO
+Content-Type: application/json
+
+Body ejemplo:
+{
+	"studentId": "A12345",
+	"studentName": "Juan Perez",
+	"grade": "1er Semestre",
+	"amount": 2500,
+	"dueDate": "2026-02-15"
+}
+
+PATCH http://localhost:3004/api/finance/tuitions/{tuitionId}/pay
+Authorization: Bearer TOKEN_DIRECTIVO
+
+GET http://localhost:3004/api/finance/tuitions/student/{studentId}
+Authorization: Bearer TOKEN_DIRECTIVO
+
 
 5) RUTAS POR MICROSERVICIO
 
@@ -235,6 +276,12 @@ Protegidas para alumno autenticado:
 Adicional:
 - GET /api/alumnos/:id/mapa-curricular
 
+5.4) FINANZAS (3004) - protegidas por directivo
+
+- POST /api/finance/tuitions
+- PATCH /api/finance/tuitions/:id/pay
+- GET /api/finance/tuitions/student/:studentId
+
 
 6) PRUEBA RAPIDA MINIMA
 
@@ -244,6 +291,8 @@ Adicional:
 4. Login docente con TOKEN_DIRECTIVO y copiar TOKEN_DOCENTE.
 5. Registrar alumno con TOKEN_DOCENTE.
 6. Consultar alumnos con TOKEN_DOCENTE.
+7. Crear una colegiatura en Finanzas con TOKEN_DIRECTIVO.
+8. Marcar esa colegiatura como pagada con TOKEN_DIRECTIVO.
 
 
 7) ERRORES COMUNES
@@ -271,11 +320,13 @@ Variables:
 - directivo_url = http://localhost:3003
 - docente_url = http://localhost:3002
 - alumno_url = http://localhost:3001
+- finance_url = http://localhost:3004
 - seed_directivo_email = admin.directivo@escuela.edu.mx
 - seed_directivo_password = Admin1234
 - token_directivo =
 - token_docente =
 - alumno_id =
+- tuition_id =
 
 
 8.2) CREAR COLLECTION
@@ -467,9 +518,61 @@ pm.test("Tiene al menos una unidad", function () {
 });
 
 
+10) Crear colegiatura en Finanzas
+POST {{finance_url}}/api/finance/tuitions
+Header: Authorization: Bearer {{token_directivo}}
+
+Body:
+{
+	"studentId": "{{alumno_id}}",
+	"studentName": "Juan Perez",
+	"grade": "1er Semestre",
+	"amount": 2500,
+	"dueDate": "2026-02-15"
+}
+
+Tests:
+pm.test("Crear colegiatura", function () {
+	pm.response.to.have.status(201);
+});
+const tuitionCreated = pm.response.json();
+if (tuitionCreated && (tuitionCreated._id || tuitionCreated.id)) {
+	pm.environment.set("tuition_id", tuitionCreated._id || tuitionCreated.id);
+} else {
+	throw new Error("No se obtuvo tuition_id al crear la colegiatura. Verifica Body JSON y token directivo.");
+}
+
+
+11) Consultar colegiaturas del alumno en Finanzas
+GET {{finance_url}}/api/finance/tuitions/student/{{alumno_id}}
+Header: Authorization: Bearer {{token_directivo}}
+
+Tests:
+pm.test("Consultar historial financiero", function () {
+	pm.response.to.have.status(200);
+});
+pm.test("Respuesta arreglo", function () {
+	pm.expect(pm.response.json()).to.be.an("array");
+});
+
+
+12) Marcar colegiatura como pagada
+PATCH {{finance_url}}/api/finance/tuitions/{{tuition_id}}/pay
+Header: Authorization: Bearer {{token_directivo}}
+
+Tests:
+pm.test("Pagar colegiatura", function () {
+	pm.response.to.have.status(200);
+});
+const tuitionPaid = pm.response.json();
+pm.test("Estado pagado", function () {
+	pm.expect(tuitionPaid.data.status || tuitionPaid.status).to.equal("PAGADO");
+});
+
+
 8.3) PRUEBAS DE SEGURIDAD (NEGATIVAS)
 
-10) Sin token en ruta protegida de directivos (debe fallar)
+13) Sin token en ruta protegida de directivos (debe fallar)
 GET {{directivo_url}}/api/directivos
 
 Tests:
@@ -477,7 +580,7 @@ pm.test("Debe rechazar sin token (directivos)", function () {
 	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
 });
 
-11) Sin token en ruta protegida de docentes (debe fallar)
+14) Sin token en ruta protegida de docentes (debe fallar)
 GET {{docente_url}}/api/docentes
 
 Tests:
@@ -485,7 +588,7 @@ pm.test("Debe rechazar sin token", function () {
 	pm.expect(pm.response.code).to.be.oneOf([401, 403]);
 });
 
-12) Token invalido (debe fallar)
+15) Token invalido (debe fallar)
 GET {{docente_url}}/api/docentes
 Header: Authorization: Bearer token_invalido
 
@@ -502,11 +605,15 @@ pm.test("Debe rechazar token invalido", function () {
 1. Abre la Collection en Postman.
 2. Click en Run collection.
 3. Selecciona environment: Local Escolar.
-4. Ejecuta en orden 01 -> 12.
+4. Ejecuta en orden 01 -> 15.
 5. Todo en verde = flujo correcto.
 
 
 8.5) RECOMENDACION
 
 Para evitar colisiones en pruebas repetidas, cambia valores como email/matricula/numeroEmpleado con un sufijo de fecha u hora.
+
+Nota de Finanzas:
+- Las pruebas de finanzas reutilizan TOKEN_DIRECTIVO, porque el microservicio solo acepta usuarios con rol directivo.
+- Si `tuition_id` no se obtiene, revisa que la respuesta de `POST /api/finance/tuitions` devuelva `_id` o `id`.
 
