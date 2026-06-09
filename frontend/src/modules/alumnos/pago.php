@@ -25,7 +25,7 @@
             <div style="background: white; border: 2px dashed #6366f1; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.01);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <span style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 6px;"><i class='bx bxs-institution' style="color:var(--primary);"></i> ORDEN DE PAGO SEMESTRAL / MENSUAL</span>
-                    <span style="color: #64748b; font-size: 0.8rem; font-weight: 700;">Mayo 2026</span>
+                    <span style="color: #64748b; font-size: 0.8rem; font-weight: 700;">---</span>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; color: #475569; margin-bottom: 25px;">
@@ -35,15 +35,15 @@
                         <span><strong>Concepto:</strong> Pago de Colegiatura Mensual</span>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <span><strong>Referencia Única:</strong> <span style="font-family: monospace; font-weight: 800; color:var(--primary-dark);">REF2026ESTU8821X90B</span></span>
-                        <span><strong>Importe Total:</strong> <strong style="color: #059669; font-size: 1.25rem;">$3,500.00 MXN</strong></span>
-                        <span><strong>Vencimiento:</strong> 15 de Junio, 2026</span>
+                        <span><strong>Referencia Única:</strong> <span style="font-family: monospace; font-weight: 800; color:var(--primary-dark);">---</span></span>
+                        <span><strong>Importe Total:</strong> <strong style="color: #059669; font-size: 1.25rem;">$0.00 MXN</strong></span>
+                        <span><strong>Vencimiento:</strong> ---</span>
                     </div>
                 </div>
 
                 <div style="border-top: 1px dashed #cbd5e1; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.8rem; color: #94a3b8; max-width: 60%;"><i class='bx bx-info-circle'></i> Recuerda guardar tu ticket de banco. La dispersión del pago tarda de 24 a 48 horas escolares en reflejarse.</span>
-                    <button class="btn-finance-action" onclick="alert('Descargando PDF de Referencia Colegiatura_Mayo.pdf...')">
+                    <button class="btn-finance-action" onclick="alert('Generando Referencia...')">
                         <i class='bx bxs-download'></i> Descargar Ficha CIE
                     </button>
                 </div>
@@ -75,7 +75,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
                         <div>
                             <small style="opacity: 0.6; display: block; font-size: 0.6rem;">CARDHOLDER</small>
-                            <span id="stud-visual-card-name" style="text-transform: uppercase;">HEBER CASTAÑEDA</span>
+                            <span id="stud-visual-card-name" style="text-transform: uppercase;">---</span>
                         </div>
                         <div style="text-align: right;">
                             <small style="opacity: 0.6; display: block; font-size: 0.6rem;">EXPIRES</small>
@@ -88,7 +88,7 @@
                 <form id="form-stud-pago-express" onsubmit="procesarStudentPago(event)" style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">NOMBRE DEL TITULAR</label>
-                        <input type="text" id="stud-card-name" required placeholder="Ej. Heber Castañeda Flores" oninput="updateStudentCardVisual()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-transform: uppercase;">
+                        <input type="text" id="stud-card-name" required placeholder="Ej. Nombre Apellido" oninput="updateStudentCardVisual()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-transform: uppercase;">
                     </div>
                     
                     <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -108,7 +108,7 @@
                     </div>
 
                     <button class="btn-finance-action" type="submit" style="margin-top: 10px; justify-content: center; width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" id="btn-stud-pay-action">
-                        <i class='bx bx-check-shield' style="font-size:1.1rem;"></i> AUTORIZAR PAGO COLEGIO ($3,500.00)
+                        <i class='bx bx-check-shield' style="font-size:1.1rem;"></i> AUTORIZAR PAGO COLEGIO ($0.00)
                     </button>
                 </form>
             </div>
@@ -163,7 +163,7 @@
         const numVal = document.getElementById('stud-card-number').value.trim();
         const expVal = document.getElementById('stud-card-expiry').value.trim();
 
-        document.getElementById('stud-visual-card-name').textContent = nameVal ? nameVal : 'HEBER CASTAÑEDA';
+        document.getElementById('stud-visual-card-name').textContent = nameVal ? nameVal : '---';
         document.getElementById('stud-visual-card-number').textContent = numVal ? numVal : '•••• •••• •••• ••••';
         document.getElementById('stud-visual-card-expiry').textContent = expVal ? expVal : 'MM/AA';
     }

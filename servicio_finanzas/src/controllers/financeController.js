@@ -32,3 +32,11 @@ exports.getStudentAccount = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+exports.getAllTuitions = async (req, res) => {
+    try {
+        const tuitions = await Tuition.find().sort({ createdAt: -1 });
+        res.status(200).json({ success: true, count: tuitions.length, data: tuitions });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};

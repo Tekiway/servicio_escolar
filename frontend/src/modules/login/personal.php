@@ -31,14 +31,16 @@
                     <i class="bx bxs-institution"></i>
                 </div>
                 <h2>Acceso Personal</h2>
-                <p>Ingresa al área administrativa o docente</p>
+                <p>Directivos, Finanzas, Recursos Humanos, Docentes</p>
             </div>
 
             <form id="form-login-personal" onsubmit="validarPersonal(event)">
+
+
                 <div class="form-group">
                     <label>Usuario o RFC</label>
                     <div class="input-wrapper">
-                        <input type="text" id="usuario" placeholder="Ej. admin o docente" required autocomplete="off">
+                        <input type="text" id="usuario" placeholder="Ej. prueba" required autocomplete="off">
                         <i class="bx bx-user"></i>
                     </div>
                 </div>
@@ -58,39 +60,58 @@
             </form>
 
             <div class="login-footer" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                <a href="../alumnos/alumnos.php"><i class="bx bxs-graduation"></i> Portal de Estudiantes</a>
-                <a href="../Aspirantes/aspirantes.php" style="color: #a855f7;"><i class="bx bxs-user-plus"></i> Portal de Aspirantes</a>
+                <a href="estudiantes.php" style="color: var(--primary); font-size: 0.95rem;"><i class="bx bxs-graduation"></i> Acceso para Estudiantes (Alumnos / Aspirantes)</a>
             </div>
         </div>
     </div>
 
+    <!-- Módulo central de comunicación con el API Gateway -->
+    <script src="../../js/apiGateway.js"></script>
     <script>
-        function validarPersonal(event) {
+        const GATEWAY = 'http://localhost:3000/api';
+
+        async function validarPersonal(event) {
             event.preventDefault();
-            const usuarioVal = document.getElementById('usuario').value.trim().toLowerCase();
-            const alertBox = document.getElementById('alert-message');
+
+            const usuario   = document.getElementById('usuario').value.trim();
+            const password  = document.getElementById('password').value.trim();
+            const alertBox  = document.getElementById('alert-message');
             const alertText = document.getElementById('alert-text');
-            const infoBox = document.getElementById('info-message');
+            const infoBox   = document.getElementById('info-message');
+            const btnSubmit = document.querySelector('.btn-submit');
 
-            infoBox.style.display = 'none';
+            infoBox.style.display  = 'none';
+            alertBox.style.display = 'none';
+            btnSubmit.disabled     = true;
+            btnSubmit.innerHTML    = "<i class='bx bx-loader-alt bx-spin'></i> Autenticando...";
 
-            // Validaciones mock inteligentes y fallback de redirección
-            if (usuarioVal === 'admin') {
-                // Redirigir a Panel de Administrador en frontend/index.php
-                window.location.href = '../../../index.php';
-            } else if (usuarioVal === 'docente') {
-                // Redirigir a Portal Docente
-                window.location.href = '../Docente/docente.php';
-            } else {
-                // Mostrar alerta animada de error
-                alertText.textContent = "Usuario de prueba no válido. Usa 'admin' o 'docente'.";
+            const mostrarError = (msg) => {
+                alertText.textContent  = msg;
                 alertBox.style.display = 'flex';
-                
-                // Reiniciar animación shake si se vuelve a fallar
                 alertBox.style.animation = 'none';
-                void alertBox.offsetWidth; // Trigger reflow
+                void alertBox.offsetWidth;
                 alertBox.style.animation = 'shake 0.4s ease-in-out';
-            }
+                btnSubmit.disabled  = false;
+                btnSubmit.innerHTML = "Ingresar al Portal <i class='bx bx-right-arrow-alt'></i>";
+            };
+
+            try {
+                const res = await fetch(`${GATEWAY}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.status === 'success') {
+                    localStorage.setItem('user_role', data.data.role);
+                    if(data.data.token) localStorage.setItem('token', data.data.token);
+                    window.location.href = data.data.redirectUrl;
+                    return;
+                }
+            } catch (_) {}
+
+            mostrarError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
         }
     </script>
 </body>

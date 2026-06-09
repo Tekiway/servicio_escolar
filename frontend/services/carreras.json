@@ -1,0 +1,13 @@
+[
+    {
+        "id": "2",
+        "nombre": "Ingeniería Mecatrónica",
+        "clave": "IMEC-2015-101",
+        "modalidad": "Escolarizada",
+        "duracion": "9",
+        "estado": "Activa",
+        "objetivo": "",
+        "ingreso": "",
+        "egreso": ""
+    }
+]

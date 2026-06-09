@@ -14,72 +14,80 @@
                 <i class='bx bx-folder-open' style="color: var(--secondary); font-size: 1.4rem;"></i> Expediente de Servicios del Estudiante
             </h3>
             <span style="font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; background: rgba(99, 102, 241, 0.1); color: var(--primary); font-weight: 800;" id="docs-alumnos-progress">
-                Progreso: 0 de 4 subidos
+                Progreso: -- / --
             </span>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <!-- Documento 1: NSS / Vigencia IMSS -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;" class="doc-row">
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 45px; height: 45px; border-radius: 10px; background: rgba(99, 102, 241, 0.1); color: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class='bx bxs-file-pdf'></i></div>
+        <div style="display: flex; flex-direction: column; gap: 20px;" id="docs-list-container">
+            <!-- Documento 1 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(226,232,240,0.8); padding-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(99,102,241,0.1); color: var(--primary); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class='bx bxs-file-pdf'></i>
+                    </div>
                     <div>
-                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">Vigencia de Derechos IMSS</h4>
-                        <p style="margin: 0; font-size: 0.78rem; color: #94a3b8;">Documento PDF descargado del portal IMSS Digital.</p>
+                        <strong style="color: #1e293b; display: block; font-size: 0.95rem;">Acta de Nacimiento</strong>
+                        <span style="font-size: 0.75rem; color: #64748b;">Formato PDF. Máximo 2MB.</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <span id="badge-stud-doc-1" style="font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; color: #64748b; font-weight: 700;">Pendiente</span>
                     <input type="file" id="file-stud-doc-1" style="display:none;" onchange="simulateStudentUpload(1)">
-                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-1" onclick="document.getElementById('file-stud-doc-1').click()"><i class='bx bx-upload'></i> Subir</button>
+                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-1" onclick="document.getElementById('file-stud-doc-1').click()"><i class='bx bx-upload'></i> Subir Archivo</button>
                 </div>
             </div>
 
-            <!-- Documento 2: SS Constancia -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;" class="doc-row">
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 45px; height: 45px; border-radius: 10px; background: rgba(168, 85, 247, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class='bx bxs-award'></i></div>
+            <!-- Documento 2 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(226,232,240,0.8); padding-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(14,165,233,0.1); color: var(--accent); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class='bx bxs-file-image'></i>
+                    </div>
                     <div>
-                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">Carta de Presentación de Servicio Social</h4>
-                        <p style="margin: 0; font-size: 0.78rem; color: #94a3b8;">Carta de asignación debidamente firmada y sellada por la dependencia (PDF).</p>
+                        <strong style="color: #1e293b; display: block; font-size: 0.95rem;">CURP Actualizado</strong>
+                        <span style="font-size: 0.75rem; color: #64748b;">Formato PDF descargado de RENAPO.</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <span id="badge-stud-doc-2" style="font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; color: #64748b; font-weight: 700;">Pendiente</span>
                     <input type="file" id="file-stud-doc-2" style="display:none;" onchange="simulateStudentUpload(2)">
-                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-2" onclick="document.getElementById('file-stud-doc-2').click()"><i class='bx bx-upload'></i> Subir</button>
+                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-2" onclick="document.getElementById('file-stud-doc-2').click()"><i class='bx bx-upload'></i> Subir Archivo</button>
                 </div>
             </div>
 
-            <!-- Documento 3: Actividades Complementarias -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;" class="doc-row">
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 45px; height: 45px; border-radius: 10px; background: rgba(14, 165, 233, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class='bx bxs-id-card'></i></div>
+            <!-- Documento 3 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(226,232,240,0.8); padding-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(168,85,247,0.1); color: var(--secondary); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class='bx bxs-file-archive'></i>
+                    </div>
                     <div>
-                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">Liberación de Actividades Complementarias</h4>
-                        <p style="margin: 0; font-size: 0.78rem; color: #94a3b8;">Formatos deportivos, culturales o cívicos aprobados (PDF).</p>
+                        <strong style="color: #1e293b; display: block; font-size: 0.95rem;">Certificado de Bachillerato</strong>
+                        <span style="font-size: 0.75rem; color: #64748b;">Escaneo legible en PDF a color.</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <span id="badge-stud-doc-3" style="font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; color: #64748b; font-weight: 700;">Pendiente</span>
                     <input type="file" id="file-stud-doc-3" style="display:none;" onchange="simulateStudentUpload(3)">
-                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-3" onclick="document.getElementById('file-stud-doc-3').click()"><i class='bx bx-upload'></i> Subir</button>
+                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-3" onclick="document.getElementById('file-stud-doc-3').click()"><i class='bx bx-upload'></i> Subir Archivo</button>
                 </div>
             </div>
 
-            <!-- Documento 4: Foto para Credencial -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.4); border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;" class="doc-row">
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 45px; height: 45px; border-radius: 10px; background: rgba(236, 72, 153, 0.1); color: #ec4899; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class='bx bxs-user-detail'></i></div>
+            <!-- Documento 4 -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(234,179,8,0.1); color: #ca8a04; width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class='bx bxs-file-blank'></i>
+                    </div>
                     <div>
-                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">Fotografía de Re-afiliación Credencial</h4>
-                        <p style="margin: 0; font-size: 0.78rem; color: #94a3b8;">Fondo blanco liso, frente despejada, ropa formal (JPG).</p>
+                        <strong style="color: #1e293b; display: block; font-size: 0.95rem;">Comprobante de Domicilio</strong>
+                        <span style="font-size: 0.75rem; color: #64748b;">No mayor a 3 meses. (Luz, Agua, Teléfono)</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <span id="badge-stud-doc-4" style="font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; color: #64748b; font-weight: 700;">Pendiente</span>
                     <input type="file" id="file-stud-doc-4" style="display:none;" onchange="simulateStudentUpload(4)">
-                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-4" onclick="document.getElementById('file-stud-doc-4').click()"><i class='bx bx-upload'></i> Subir</button>
+                    <button class="btn-finance-action" style="padding: 8px 16px; font-size: 0.85rem;" id="btn-stud-upload-4" onclick="document.getElementById('file-stud-doc-4').click()"><i class='bx bx-upload'></i> Subir Archivo</button>
                 </div>
             </div>
         </div>

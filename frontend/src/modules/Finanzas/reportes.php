@@ -117,8 +117,8 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-reporte-conceptos">
-                    <!-- Conceptos calculados dinámicamente -->
-                </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
             </table>
         </div>
     </div>

@@ -48,7 +48,7 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                         <span><strong>Referencia Única:</strong> <span style="font-family: monospace; font-weight: 800; color:var(--primary-dark);">REF2026ADM0881392A</span></span>
-                        <span><strong>Importe Total:</strong> <strong style="color: #059669; font-size: 1.25rem;">$850.00 MXN</strong></span>
+                        <span><strong>Importe Total:</strong> <strong style="color: #059669; font-size: 1.25rem;">--- MXN</strong></span>
                         <span><strong>Vencimiento:</strong> 20 de Junio, 2026</span>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                     </div>
 
                     <button class="btn-finance-action" type="submit" style="margin-top: 10px; justify-content: center; width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" id="btn-pay-action">
-                        <i class='bx bx-check-shield' style="font-size:1.1rem;"></i> PAGAR CON PASARELA SEGURA ($850.00)
+                        <i class='bx bx-check-shield' style="font-size:1.1rem;"></i> PAGAR CON PASARELA SEGURA (---)
                     </button>
                 </form>
             </div>
@@ -133,19 +133,7 @@
     (function() {
         const storedFicha = localStorage.getItem('aspirante_ficha');
         const storedDocs = localStorage.getItem('aspirante_documentos');
-        const blocker = document.getElementById('pago-blocker-message');
-        const blockerText = document.getElementById('pago-blocker-text');
-        const blockerBtn = document.getElementById('pago-blocker-btn');
-        const content = document.getElementById('pago-container');
-
-        if (!storedFicha) {
-            blocker.style.display = 'block';
-            content.style.display = 'none';
-            blockerText.innerHTML = "Antes de proceder al pago, debes completar tu <strong>Trámite de Ficha de Examen</strong> para registrar tus datos escolares.";
-            blockerBtn.innerHTML = "<i class='bx bxs-edit-location'></i> Tramitar Ficha de Examen";
-            blockerBtn.setAttribute("onclick", "cargarModulo('Ficha')");
-            return;
-        }
+        // Bloqueos removidos.
 
         if (!storedDocs) {
             blocker.style.display = 'block';

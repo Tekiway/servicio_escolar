@@ -1,0 +1,13 @@
+[
+    {
+        "id": "asig_6a25014fc85603.23014995",
+        "materia": "Robótica Avanzada",
+        "clave": "ROB-999",
+        "docente": "Alberto Torres",
+        "docenteId": "mock-docente-1",
+        "grupo": "A",
+        "aula": "Lab Cómputo A",
+        "horario": "09:00 - 11:00",
+        "fecha": "2026-06-07 07:27:43"
+    }
+]

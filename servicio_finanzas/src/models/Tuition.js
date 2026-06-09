@@ -1,18 +1,20 @@
-// models/Tuition.js
 const mongoose = require('mongoose');
 
 const TuitionSchema = new mongoose.Schema({
-    studentId: { type: String, required: true }, // ID del estudiante (puede venir de otro microservicio)
+    studentId: { type: String }, 
+    matricula: { type: String, required: true },
     studentName: { type: String, required: true },
-    grade: { type: String, required: true },       // Grado/Año escolar
-    amount: { type: Number, required: true },      // Monto a pagar
+    carrera: { type: String, required: true },
+    grade: { type: String },       
+    mes: { type: String, required: true },
+    amount: { type: Number, required: true },      
     status: { 
         type: String, 
-        enum: ['PENDIENTE', 'PAGADO', 'ATRASADO'], 
-        default: 'PENDIENTE' 
+        enum: ['Pendiente', 'Pagado', 'Atrasado', 'PENDIENTE', 'PAGADO', 'ATRASADO'], 
+        default: 'Pendiente' 
     },
-    dueDate: { type: Date, required: true },       // Fecha límite de pago
-    paymentDate: { type: Date }                    // Fecha en la que realmente pagó
+    dueDate: { type: Date },       
+    paymentDate: { type: Date }                    
 }, { timestamps: true });
 
 module.exports = mongoose.model('Tuition', TuitionSchema);

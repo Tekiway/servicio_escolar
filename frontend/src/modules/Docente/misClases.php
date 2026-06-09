@@ -3,7 +3,7 @@
         <h2 style="color: var(--text-primary); font-size: 1.8rem; font-weight: 800;">
             <i class='bx bxs-chalkboard' style="color: var(--docente-primary);"></i> Mis Clases Asignadas
         </h2>
-        <p style="color: var(--text-secondary);">Ciclo Escolar: 2024-2025 | Periodo: Otoño</p>
+        <p style="color: var(--text-secondary);">Ciclo Escolar: - | Periodo: -</p>
     </div>
 
     <style>
@@ -75,82 +75,6 @@
     </style>
 
     <div class="classes-grid">
-        <!-- Clase 1 -->
-        <div class="class-card">
-            <div class="class-header">
-                <h3>Matemáticas Avanzadas I</h3>
-                <span>ID: MAT-101 | Semestre: 4°</span>
-            </div>
-            <div class="class-body">
-                <div class="class-info">
-                    <i class='bx bxs-user-account'></i>
-                    <span>Grupo: <strong>402-A</strong></span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-time'></i>
-                    <span>Lunes, Miércoles | 08:00 - 10:00</span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-map'></i>
-                    <span>Edificio B - Salón 105</span>
-                </div>
-            </div>
-            <div class="class-footer">
-                <span style="color: var(--text-secondary); font-size: 0.9rem;">32 Alumnos</span>
-                <a href="#" class="btn-view">Gestionar</a>
-            </div>
-        </div>
-
-        <!-- Clase 2 -->
-        <div class="class-card">
-            <div class="class-header" style="background: linear-gradient(135deg, var(--docente-secondary) 0%, #d8b4fe 100%);">
-                <h3>Cálculo Diferencial</h3>
-                <span>ID: CAL-202 | Semestre: 2°</span>
-            </div>
-            <div class="class-body">
-                <div class="class-info">
-                    <i class='bx bxs-user-account'></i>
-                    <span>Grupo: <strong>201-B</strong></span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-time'></i>
-                    <span>Martes, Jueves | 10:30 - 12:30</span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-map'></i>
-                    <span>Edificio A - Salón 202</span>
-                </div>
-            </div>
-            <div class="class-footer">
-                <span style="color: var(--text-secondary); font-size: 0.9rem;">28 Alumnos</span>
-                <a href="#" class="btn-view">Gestionar</a>
-            </div>
-        </div>
-
-        <!-- Clase 3 -->
-        <div class="class-card">
-            <div class="class-header" style="background: linear-gradient(135deg, var(--docente-accent) 0%, #7dd3fc 100%);">
-                <h3>Álgebra Lineal</h3>
-                <span>ID: ALG-303 | Semestre: 1°</span>
-            </div>
-            <div class="class-body">
-                <div class="class-info">
-                    <i class='bx bxs-user-account'></i>
-                    <span>Grupo: <strong>105-C</strong></span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-time'></i>
-                    <span>Viernes | 07:00 - 11:00</span>
-                </div>
-                <div class="class-info">
-                    <i class='bx bxs-map'></i>
-                    <span>Edificio C - Auditorio</span>
-                </div>
-            </div>
-            <div class="class-footer">
-                <span style="color: var(--text-secondary); font-size: 0.9rem;">45 Alumnos</span>
-                <a href="#" class="btn-view">Gestionar</a>
-            </div>
-        </div>
+        <!-- JS: Inyectar tarjetas de clases aquí -->
     </div>
 </div>

@@ -9,8 +9,7 @@
         </div>
         <div>
             <select id="eval-clase-select" onchange="cambiarClaseCalificaciones()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; color: #475569;">
-                <option value="T4A">Programación Web I (T4A)</option>
-                <option value="T6B">Bases de Datos Avanzadas II (T6B)</option>
+                <option value="" disabled selected>Cargando grupos...</option>
             </select>
         </div>
     </div>
@@ -44,11 +43,11 @@
             </div>
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 10px;">
                 <span style="font-size: 0.72rem; font-weight: bold; color: #64748b;">TOTAL ACUMULADO</span>
-                <strong id="rubros-total-badge" style="font-size: 1.25rem; color: #059669;">100%</strong>
+                <strong id="rubros-total-badge" style="font-size: 1.25rem; color: #059669;">0%</strong>
             </div>
         </div>
         <p id="rubros-alert" style="color: #ef4444; font-size: 0.75rem; font-weight: 700; margin: 10px 0 0 0; display: none;">
-            <i class='bx bx-error-alt'></i> La suma de las ponderaciones debe ser exactamente 100% para realizar cálculos correctos.
+            <i class='bx bx-error-alt'></i> La suma de las ponderaciones debe ser exactamente 0% para realizar cálculos correctos.
         </p>
     </div>
 
@@ -69,7 +68,7 @@
         </div>
 
         <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <table style="width: 0%; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr style="border-bottom: 2px solid #e2e8f0;">
                         <th style="padding: 12px 10px; font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Matrícula</th>
@@ -82,30 +81,15 @@
                     </tr>
                 </thead>
                 <tbody id="calif-tabla-rows">
-                    <!-- Filas inyectadas por JS -->
-                </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    const alumnosCalificacionesData = {
-        "T4A": [
-            { matricula: "2026001", nombre: "Heber Castañeda Flores", tareas: 9.5, examen: 9.0, proyecto: 10.0 },
-            { matricula: "2026002", nombre: "Brenda González Ortiz", tareas: 9.0, examen: 8.8, proyecto: 9.5 },
-            { matricula: "2026003", nombre: "Carlos Domínguez Rojas", tareas: 7.5, examen: 7.0, proyecto: 8.0 },
-            { matricula: "2026004", nombre: "Diana Peralta Mendiola", tareas: 10.0, examen: 9.5, proyecto: 10.0 },
-            { matricula: "2026005", nombre: "Esteban Cruz Velasco", tareas: 8.5, examen: 8.0, proyecto: 9.0 },
-            { matricula: "2026006", nombre: "Fabiola Juárez Montes", tareas: 6.5, examen: 6.8, proyecto: 7.0 }
-        ],
-        "T6B": [
-            { matricula: "2024101", nombre: "Alejandro Mendoza López", tareas: 8.8, examen: 8.5, proyecto: 9.2 },
-            { matricula: "2024102", nombre: "Beatriz Solís Medina", tareas: 9.2, examen: 9.0, proyecto: 9.2 },
-            { matricula: "2024103", nombre: "Guillermo Pineda Pérez", tareas: 8.0, examen: 7.8, proyecto: 8.5 },
-            { matricula: "2024104", nombre: "Irene Vázquez Ramos", tareas: 6.0, examen: 5.5, proyecto: 6.5 }
-        ]
-    };
+    const alumnosCalificacionesData = {};
 
     function cambiarClaseCalificaciones() {
         renderTablaCalificaciones();
@@ -134,7 +118,7 @@
                     <input type="number" min="0" max="10" step="0.1" id="proyecto-${index}" value="${al.proyecto}" oninput="calcularPromedioFila(${index})" style="width: 75px; padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: 700;">
                 </td>
                 <td style="padding: 12px 10px; text-align: center;">
-                    <strong id="final-${index}" style="font-size: 1rem; color: var(--primary-dark);">0.00</strong>
+                    <strong id="final-${index}" style="font-size: 1rem; color: var(--primary-dark);">-</strong>
                 </td>
                 <td style="padding: 12px 10px; text-align: center;" id="estatus-${index}">
                     <!-- Badge de aprobado/reprobado -->

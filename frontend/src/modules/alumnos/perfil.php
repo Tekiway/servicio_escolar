@@ -15,14 +15,14 @@
                 <i class='bx bxs-user'></i>
             </div>
             
-            <h3 style="margin: 0 0 5px 0; color: #1e293b; font-weight: 800;" id="perfil-card-nombre">Heber Castañeda Flores</h3>
-            <span style="font-size: 0.85rem; color: #64748b; font-weight: 700; display: block;" id="perfil-card-matricula">Matrícula: 2026001</span>
+            <h3 style="margin: 0 0 5px 0; color: #1e293b; font-weight: 800;" id="perfil-card-nombre">---</h3>
+            <span style="font-size: 0.85rem; color: #64748b; font-weight: 700; display: block;" id="perfil-card-matricula">Matrícula: ---</span>
             
             <hr style="border: 0; border-top: 1px solid rgba(226, 232, 240, 0.8); margin: 20px 0;">
             
             <div style="text-align: left; font-size: 0.85rem; color: #64748b; display: flex; flex-direction: column; gap: 8px;">
                 <span><strong>Estatus:</strong> <span style="color: #059669; font-weight: 700;">Activo</span></span>
-                <span><strong>Periodo Ingreso:</strong> Septiembre 2024</span>
+                <span><strong>Periodo Ingreso:</strong> ---</span>
                 <span><strong>Tipo Alumno:</strong> Regular</span>
             </div>
         </div>
@@ -86,7 +86,7 @@
         }
     })();
 
-    function guardarPerfilCambios(event) {
+    async function guardarPerfilCambios(event) {
         event.preventDefault();
         const nombre = document.getElementById('perfil-nombre').value;
         const matricula = document.getElementById('perfil-matricula').value;
@@ -94,8 +94,31 @@
         const email = document.getElementById('perfil-email').value;
         const carrera = document.getElementById('perfil-carrera').value;
 
-        const data = { nombre, matricula, username, email, carrera };
-        localStorage.setItem('alumno_perfil', JSON.stringify(data));
+        const payload = { nombre, username, email, carrera };
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('http://localhost:3000/api/alumnos/mi-info', {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const dataRes = await res.json();
+            if(res.ok) {
+                const data = { nombre, matricula, username, email, carrera };
+                localStorage.setItem('alumno_perfil', JSON.stringify(data));
+                alert("Perfil actualizado correctamente en el servidor.");
+            } else {
+                throw new Error(dataRes.error || dataRes.message || 'Error al actualizar');
+            }
+        } catch(e) {
+            alert("Error: " + e.message);
+            return;
+        }
         
         // Actualizar card
         document.getElementById('perfil-card-nombre').textContent = nombre;

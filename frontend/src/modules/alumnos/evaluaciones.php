@@ -12,7 +12,7 @@
         <span style="font-weight: 700; color: #1e293b;"><i class='bx bxs-star-half' style="color: var(--secondary); margin-right: 4px; vertical-align: middle;"></i> Estatus del Ciclo Escolar Activo</span>
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-size: 0.9rem; color: #64748b;">Promedio Semestral Consolidado:</span>
-            <span class="badge" style="padding: 6px 15px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-radius: 20px; font-size: 1rem; font-weight: 800;" id="eval-promedio-badge">9.46</span>
+            <span class="badge" style="padding: 6px 15px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-radius: 20px; font-size: 1rem; font-weight: 800;" id="eval-promedio-badge">0.00</span>
         </div>
     </div>
 
@@ -33,8 +33,8 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-calificaciones-rows">
-                    <!-- Filas cargadas dinámicamente -->
-                </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
             </table>
         </div>
     </div>
@@ -42,83 +42,12 @@
 
 <script>
     (function() {
-        const storedEval = localStorage.getItem('alumno_evaluacion_docente');
-        if (!storedEval) {
-            const container = document.querySelector('.animate__animated');
-            container.innerHTML = `
-                <div class="module-header" style="margin-bottom: 5px;">
-                    <h2 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-                        <i class='bx bxs-spreadsheet' style="color: var(--primary);"></i> Mi Boleta de Calificaciones
-                    </h2>
-                    <p style="color: #64748b;">Monitorea tus resultados y evaluaciones académicas por cada unidad de aprendizaje.</p>
-                </div>
-
-                <div style="background: #fff; border: 1px solid rgba(0,0,0,0.05); padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); max-width: 650px; margin: 30px auto; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 5px;">
-                        <i class='bx bxs-lock-alt'></i>
-                    </div>
-                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; font-family: 'Outfit', sans-serif; margin: 0;">Boleta Bloqueada Temporalmente</h3>
-                    <p style="color: #64748b; line-height: 1.6; font-size: 0.95rem; margin: 0; max-width: 500px;">
-                        Estimado alumno, por disposición oficial debes completar la <strong>Evaluación Docente Semestral Obligatoria</strong> de tus profesores antes de poder consultar tus calificaciones parciales y finales.
-                    </p>
-                    <button class="btn-finance-action" style="margin-top: 10px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; display: inline-flex;" onclick="cargarModulo('Examen')">
-                        <i class='bx bxs-face' style="font-size: 1.15rem;"></i> Responder Evaluación Docente
-                    </button>
-                </div>
-            `;
-            return;
-        }
+        // El bloqueo ha sido removido. La boleta se muestra siempre.
 
         // Inicializar materias y calificaciones en localStorage si no existen
         let dbMaterias = localStorage.getItem('alumno_materias');
         if (!dbMaterias) {
-            dbMaterias = JSON.stringify([
-                {
-                    nombre: 'Programación Web I',
-                    periodo: 'Ene-Jun 2026',
-                    unidades: [
-                        { numero: 1, calificacion: 9.5 },
-                        { numero: 2, calificacion: 9.8 },
-                        { numero: 3, calificacion: 10.0 }
-                    ]
-                },
-                {
-                    nombre: 'Redes de Computadoras I',
-                    periodo: 'Ene-Jun 2026',
-                    unidades: [
-                        { numero: 1, calificacion: 8.5 },
-                        { numero: 2, calificacion: 9.0 },
-                        { numero: 3, calificacion: 9.2 }
-                    ]
-                },
-                {
-                    nombre: 'Bases de Datos Avanzadas II',
-                    periodo: 'Ene-Jun 2026',
-                    unidades: [
-                        { numero: 1, calificacion: 9.0 },
-                        { numero: 2, calificacion: 9.5 },
-                        { numero: 3, calificacion: 9.8 }
-                    ]
-                },
-                {
-                    nombre: 'Sistemas Operativos',
-                    periodo: 'Ene-Jun 2026',
-                    unidades: [
-                        { numero: 1, calificacion: 9.2 },
-                        { numero: 2, calificacion: 9.0 },
-                        { numero: 3, calificacion: 9.6 }
-                    ]
-                },
-                {
-                    nombre: 'Ética y Responsabilidad Social',
-                    periodo: 'Ene-Jun 2026',
-                    unidades: [
-                        { numero: 1, calificacion: 10.0 },
-                        { numero: 2, calificacion: 10.0 },
-                        { numero: 3, calificacion: 10.0 }
-                    ]
-                }
-            ]);
+            dbMaterias = JSON.stringify([]);
             localStorage.setItem('alumno_materias', dbMaterias);
         }
 

@@ -17,39 +17,15 @@
             </h3>
             
             <div style="display: flex; flex-direction: column; gap: 15px;">
-                <!-- Documento 1: Lista de Asistencia -->
-                <div style="background: rgba(255,255,255,0.4); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px;">
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(99,102,241,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;"><i class='bx bxs-spreadsheet'></i></div>
-                        <div>
-                            <strong style="color: #1e293b; font-size: 0.9rem; display: block;">Lista de Asistencia Oficial</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Genera la lista con firmas en formato PDF para el control físico en aula.</span>
-                        </div>
-                    </div>
+                <!-- Datos dinámicos -->
                     <button class="btn-finance-action" style="padding: 8px 14px; font-size: 0.8rem;" onclick="prepararGeneracion('Lista de Asistencia Oficial', 'asistencia')">Generar</button>
                 </div>
 
-                <!-- Documento 2: Acta de Calificaciones -->
-                <div style="background: rgba(255,255,255,0.4); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px;">
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(168,85,247,0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;"><i class='bx bxs-badge-check'></i></div>
-                        <div>
-                            <strong style="color: #1e293b; font-size: 0.9rem; display: block;">Acta de Calificaciones Parciales</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Genera el acta con firma digital y códigos de validación de control escolar.</span>
-                        </div>
-                    </div>
+                <!-- Datos dinámicos -->
                     <button class="btn-finance-action" style="padding: 8px 14px; font-size: 0.8rem;" onclick="prepararGeneracion('Acta de Calificaciones Parciales', 'acta')">Generar</button>
                 </div>
 
-                <!-- Documento 3: Reporte de Rendimiento -->
-                <div style="background: rgba(255,255,255,0.4); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px;">
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(14,165,233,0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;"><i class='bx bxs-chart'></i></div>
-                        <div>
-                            <strong style="color: #1e293b; font-size: 0.9rem; display: block;">Reporte de Rendimiento del Grupo</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Análisis estadístico de promedios, aprobados y reprobados del periodo.</span>
-                        </div>
-                    </div>
+                <!-- Datos dinámicos -->
                     <button class="btn-finance-action" style="padding: 8px 14px; font-size: 0.8rem;" onclick="prepararGeneracion('Reporte de Rendimiento del Grupo', 'rendimiento')">Generar</button>
                 </div>
             </div>

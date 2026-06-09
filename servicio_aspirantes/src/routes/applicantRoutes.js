@@ -4,7 +4,7 @@ const applicantController = require('../controllers/applicantController');
 const validateApplicant = require('../middlewares/validateApplicant');
 const directivoAuth = require('../middlewares/directivoAuth');
 
-router.post('/register', directivoAuth, validateApplicant, applicantController.createApplicant);
+router.post('/register', validateApplicant, applicantController.createApplicant);
 router.patch('/:id/exam', directivoAuth, applicantController.submitExam);
 router.get('/', directivoAuth, applicantController.listApplicants);
 router.get('/pendientes', directivoAuth, applicantController.listPendingApplicants);
