@@ -1,0 +1,35 @@
+[
+    {
+        "id": "mat_6a24f1c41d29d4.90424781",
+        "nombre": "Robótica Avanzada",
+        "clave": "ROB-999",
+        "carrera": "Ingeniería Mecatrónica",
+        "semestre": "5",
+        "creditos": "5",
+        "objetivo": "Aprender robótica",
+        "caracteristicas": "Práctico",
+        "unidades": [],
+        "fechaRegistro": "2026-06-07 06:21:24"
+    },
+    {
+        "id": "mat_6a24f7cf861ca3.74239880",
+        "nombre": "wdwdqwdqwd",
+        "clave": "qwd23",
+        "carrera": "Ingeniería Mecatrónica",
+        "semestre": "2",
+        "creditos": "34",
+        "objetivo": "sdad",
+        "caracteristicas": "7",
+        "unidades": [
+            {
+                "nombre": "cascsacaca",
+                "objetivo": "scascasc"
+            },
+            {
+                "nombre": "asac",
+                "objetivo": "ascasc"
+            }
+        ],
+        "fechaRegistro": "2026-06-07 06:47:11"
+    }
+]

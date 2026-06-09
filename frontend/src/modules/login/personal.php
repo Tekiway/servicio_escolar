@@ -64,33 +64,89 @@
         </div>
     </div>
 
+    <!-- Módulo central de comunicación con el API Gateway -->
+    <script src="../../js/apiGateway.js"></script>
     <script>
-        function validarPersonal(event) {
+        const GATEWAY = 'http://localhost:3000/api';
+
+        async function validarPersonal(event) {
             event.preventDefault();
-            const usuarioVal = document.getElementById('usuario').value.trim().toLowerCase();
-            const alertBox = document.getElementById('alert-message');
+
+            const usuario   = document.getElementById('usuario').value.trim();
+            const password  = document.getElementById('password').value.trim();
+            const alertBox  = document.getElementById('alert-message');
             const alertText = document.getElementById('alert-text');
-            const infoBox = document.getElementById('info-message');
+            const infoBox   = document.getElementById('info-message');
+            const btnSubmit = document.querySelector('.btn-submit');
 
-            infoBox.style.display = 'none';
+            infoBox.style.display  = 'none';
+            alertBox.style.display = 'none';
+            btnSubmit.disabled     = true;
+            btnSubmit.innerHTML    = "<i class='bx bx-loader-alt bx-spin'></i> Autenticando...";
 
-            // Validaciones mock inteligentes y fallback de redirección
-            if (usuarioVal === 'admin') {
-                // Redirigir a Panel de Administrador en frontend/index.php
-                window.location.href = '../../../index.php';
-            } else if (usuarioVal === 'docente') {
-                // Redirigir a Portal Docente
-                window.location.href = '../Docente/docente.php';
-            } else {
-                // Mostrar alerta animada de error
-                alertText.textContent = "Usuario de prueba no válido. Usa 'admin' o 'docente'.";
+            const mostrarError = (msg) => {
+                alertText.textContent  = msg;
                 alertBox.style.display = 'flex';
-                
-                // Reiniciar animación shake si se vuelve a fallar
                 alertBox.style.animation = 'none';
-                void alertBox.offsetWidth; // Trigger reflow
+                void alertBox.offsetWidth;
                 alertBox.style.animation = 'shake 0.4s ease-in-out';
-            }
+                btnSubmit.disabled  = false;
+                btnSubmit.innerHTML = "Ingresar al Portal <i class='bx bx-right-arrow-alt'></i>";
+            };
+
+            // 1. Intentar login mock centralizado (admin / directivo)
+            try {
+                const res = await fetch(`${GATEWAY}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password, portal: 'personal' })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.status === 'success') {
+                    localStorage.setItem('user_role', data.data.role);
+                    window.location.href = data.data.redirectUrl;
+                    return;
+                }
+            } catch (_) { /* Gateway sin respuesta, intentar directivo */ }
+
+            // 2. Intentar login como directivo real
+            try {
+                const res = await fetch(`${GATEWAY}/directivos/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usuario, email: usuario, password })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    localStorage.setItem('token',     data.token);
+                    localStorage.setItem('user_role', 'directivo');
+                    localStorage.setItem('user_data', JSON.stringify({ nombre: data.nombre, rol: 'directivo' }));
+                    window.location.href = '../../../../index.php';
+                    return;
+                }
+            } catch (_) { /* continuar */ }
+
+            // 3. Intentar login como docente real
+            try {
+                const res = await fetch(`${GATEWAY}/docentes/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usuario, email: usuario, password })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    localStorage.setItem('token',     data.token);
+                    localStorage.setItem('user_role', 'docente');
+                    localStorage.setItem('user_data', JSON.stringify(data.docente || {}));
+                    window.location.href = '../Docente/docente.php';
+                    return;
+                }
+            } catch (_) { /* continuar */ }
+
+            mostrarError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
         }
     </script>
 </body>

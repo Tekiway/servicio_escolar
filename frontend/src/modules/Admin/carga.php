@@ -8,6 +8,8 @@
     </div>
 
     <div class="body-carga">
+
+        <!-- ── SECCIÓN: REGISTRO DE DOCENTE ── -->
         <div class="section-container">
             <div class="section-title" onclick="toggleSeccion('form-reg', 'ico-reg')">
                 <div class="header-left">
@@ -18,25 +20,69 @@
             </div>
             <div id="form-reg" class="seccion-colapsable">
                 <form id="form-registrar-docente" class="form-carga-grid">
+
+                    <!-- Fila 1: Nombre -->
                     <div class="carga-input-group">
                         <label>NOMBRE COMPLETO DEL DOCENTE</label>
-                        <input type="text" name="nombre_docente" placeholder="Ej. Juan Pérez García" required>
+                        <input type="text" id="reg-nombre" name="nombre_docente"
+                               placeholder="Ej. Juan Pérez García" required>
                     </div>
+
+                    <!-- Fila 2: Email + Username -->
+                    <div class="carga-row-2col">
+                        <div class="carga-input-group">
+                            <label>CORREO ELECTRÓNICO</label>
+                            <input type="email" id="reg-email" name="email_docente"
+                                   placeholder="Ej. juan.perez@escuela.edu.mx" required>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>USUARIO (username)</label>
+                            <input type="text" id="reg-username" name="username_docente"
+                                   placeholder="Ej. juan.perez">
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: RFC + Contraseña -->
                     <div class="carga-row-2col">
                         <div class="carga-input-group">
                             <label>NÚMERO DE EMPLEADO / RFC</label>
-                            <input type="text" name="rfc_docente" placeholder="RFC o Clave" required>
+                            <input type="text" id="reg-numero-empleado" name="rfc_docente"
+                                   placeholder="RFC o Clave de empleado" required>
                         </div>
                         <div class="carga-input-group">
-                            <label>SELECCIONAR CARRERA</label>
-                            <select name="id_carrera" required>
+                            <label>CONTRASEÑA INICIAL</label>
+                            <input type="password" id="reg-password" name="password_docente"
+                                   placeholder="Contraseña de acceso" required>
+                        </div>
+                    </div>
+
+                    <!-- Fila 4: Especialidad + Carrera -->
+                    <div class="carga-row-2col">
+                        <div class="carga-input-group">
+                            <label>ESPECIALIDAD / ÁREA</label>
+                            <input type="text" id="reg-especialidad" name="especialidad_docente"
+                                   placeholder="Ej. Matemáticas, Programación...">
+                        </div>
+                        <div class="carga-input-group">
+                            <label>CARRERA ASIGNADA</label>
+                            <select id="reg-carrera" name="id_carrera" required>
                                 <option value="" disabled selected>Seleccionar Carrera...</option>
-                                <option value="1">Ingeniería en TICs</option>
+                                <option value="Ingeniería en TICs">Ingeniería en TICs</option>
+                                <option value="Administración">Administración</option>
+                                <option value="Contaduría">Contaduría</option>
+                                <option value="Gastronomía">Gastronomía</option>
                             </select>
                         </div>
                     </div>
+
+                    <!-- Feedback de error -->
+                    <div id="reg-error" style="display:none; color:#dc2626; font-size:0.85rem;
+                         padding:10px 14px; background:rgba(220,38,38,.08);
+                         border-radius:8px; border-left:4px solid #dc2626;">
+                    </div>
+
                     <div class="carga-actions">
-                        <button type="submit" class="btn-registrar-docente">
+                        <button type="submit" id="btn-registrar-docente" class="btn-registrar-docente">
                             <i class='bx bx-save'></i> Registrar Docente
                         </button>
                     </div>
@@ -44,6 +90,7 @@
             </div>
         </div>
 
+        <!-- ── SECCIÓN: TABLA DE DOCENTES ── -->
         <div class="section-container" style="margin-top: 25px;">
             <div class="section-title" onclick="toggleSeccion('tabla-doc', 'ico-tab')">
                 <div class="header-left">
@@ -58,25 +105,17 @@
                         <thead>
                             <tr>
                                 <th>NOMBRE DEL DOCENTE</th>
+                                <th>EMAIL</th>
+                                <th>USUARIO</th>
                                 <th>RFC / CLAVE</th>
-                                <th>CARRERA ASIGNADA</th>
+                                <th>ESPECIALIDAD</th>
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tabla-docentes-body">
                             <tr>
-                                <td><b>Juan Pérez García</b></td>
-                                <td>RFC12345678</td>
-                                <td>Ingeniería en TICs</td>
-                                <td class="acciones-celda-fija">
-                                    <div class="acciones-group-flex">
-                                        <button class="btn-action-view" onclick="abrirModalEditar({id:'1', nombre:'Juan Pérez García', rfc:'RFC12345678', carrera:'1'})">
-                                            <i class='bx bx-edit-alt'></i>
-                                        </button>
-                                        <button class="btn-action-delete" onclick="eliminarDocente('1', 'Juan Pérez García')">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </div>
+                                <td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">
+                                    <i class='bx bx-loader-alt bx-spin'></i> Cargando docentes...
                                 </td>
                             </tr>
                         </tbody>
@@ -84,9 +123,11 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
+    </div><!-- /body-carga -->
+</div><!-- /main-card-carga -->
+
+<!-- ── MODAL EDITAR DOCENTE ── -->
 <div id="modal-editar-docente" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -106,22 +147,24 @@
                 <input type="text" id="edit-nombre">
             </div>
             <div class="modal-form-row">
+                <label>Email</label>
+                <input type="email" id="edit-email">
+            </div>
+            <div class="modal-form-row">
                 <label>RFC / No. Empleado</label>
                 <input type="text" id="edit-rfc">
             </div>
             <div class="modal-form-row">
-                <label>Carrera Asignada</label>
-                <select id="edit-carrera">
-                    <option value="1">Ingeniería en TICs</option>
-                </select>
+                <label>Especialidad / Carrera Asignada</label>
+                <input type="text" id="edit-carrera">
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn-guardar-cambios" onclick="guardarCambios()">
+            <button id="btn-guardar-edicion" class="btn-guardar-cambios" onclick="guardarCambios()">
                 <i class='bx bx-check-double'></i> Guardar Cambios
             </button>
             <button class="btn-aceptar-modal" onclick="cerrarModalEditar()">
-                <i class='bx bx-check'></i> Aceptar
+                <i class='bx bx-x'></i> Cancelar
             </button>
         </div>
     </div>

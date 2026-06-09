@@ -85,7 +85,7 @@
 
                 <p class="menu-label">Salida</p>
                 <ul>
-                    <li><a href="../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
                 </ul>
             </nav>
         </aside>

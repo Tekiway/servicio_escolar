@@ -19,7 +19,8 @@
     flex-direction: column;
     gap: 25px;
     padding: 20px;
-    max-width: 900px;
+    max-width: 100%; /* Expandir al máximo */
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -27,7 +28,8 @@
 .main-card-materias {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(15px);
-    max-width: 850px;
+    max-width: 100%; /* Expandir al máximo */
+    width: 100%;
     margin: 0 auto;
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -104,8 +106,9 @@
 }
 
 .accordion-content.open {
-    max-height: 2500px; /* Suficiente para el formulario largo */
+    max-height: 15000px; /* Extremadamente alto para evitar cortes con muchas unidades */
     border-top: 1px solid var(--border-color);
+    overflow: visible; /* Asegura que el botón nunca quede oculto si se sobrepasa */
 }
 
 .body-materias {
@@ -221,18 +224,21 @@
 
 /* BOTÓN GUARDAR */
 .materia-actions {
-    margin-top: 20px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btn-guardar-materia {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     color: white;
     border: none;
-    width: 100%;
-    padding: 16px;
+    width: auto;
+    min-width: 250px;
+    padding: 16px 40px;
     border-radius: 12px;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -249,6 +255,10 @@
 }
 
 /* TABLA DE REGISTROS */
+.table-body-materias {
+    padding: 0 !important;
+}
+
 .table-responsive {
     overflow-x: auto;
 }
@@ -260,7 +270,7 @@
 
 .materia-custom-table th {
     text-align: left;
-    padding: 15px;
+    padding: 18px 30px;
     background: var(--bg-light);
     color: var(--text-muted);
     font-size: 0.75rem;
@@ -269,7 +279,7 @@
 }
 
 .materia-custom-table td {
-    padding: 15px;
+    padding: 18px 30px;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-main);
     font-size: 0.9rem;

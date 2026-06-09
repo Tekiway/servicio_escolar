@@ -1,5 +1,4 @@
 <?php
-// Redirigir al panel de administración del frontend
-header("Location: frontend/index.php");
-exit;
+// Cargar el panel de administración principal desde su nueva ubicación
+include __DIR__ . '/frontend/src/modules/Admin/admin.php';
 ?>
