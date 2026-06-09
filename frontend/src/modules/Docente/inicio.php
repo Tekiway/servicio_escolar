@@ -2,7 +2,7 @@
     <!-- Banner de Bienvenida -->
     <div class="docente-welcome-banner">
         <div class="banner-text">
-            <h1>¡Hola, Profesor Juan Pérez!</h1>
+            <h1>¡Hola, Profesor!</h1>
             <p>Es un gusto verte de nuevo. Aquí tienes un resumen de tus actividades para el día de hoy y el estado de tus clases.</p>
         </div>
         <div class="banner-illustration">
@@ -18,7 +18,7 @@
             </div>
             <div class="docente-stat-data">
                 <h4>Clases Hoy</h4>
-                <p>4 Sesiones</p>
+                <p>0 Sesiones</p>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
             </div>
             <div class="docente-stat-data">
                 <h4>Total Alumnos</h4>
-                <p>124 Estudiantes</p>
+                <p>0 Estudiantes</p>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
             </div>
             <div class="docente-stat-data">
                 <h4>Pendientes</h4>
-                <p>2 Calificaciones</p>
+                <p>0 Calificaciones</p>
             </div>
         </div>
     </div>
@@ -47,29 +47,7 @@
     <div class="docente-agenda">
         <h3><i class='bx bxs-calendar-event'></i> Agenda del Día</h3>
         <div class="agenda-list">
-            <div class="agenda-item">
-                <div class="agenda-time">08:00 AM</div>
-                <div class="agenda-details">
-                    <h4>Matemáticas Avanzadas I</h4>
-                    <p>Grupo: 402-A | Salón: B-105</p>
-                </div>
-            </div>
-
-            <div class="agenda-item" style="border-left-color: var(--docente-secondary);">
-                <div class="agenda-time">10:30 AM</div>
-                <div class="agenda-details">
-                    <h4>Cálculo Diferencial</h4>
-                    <p>Grupo: 201-B | Salón: A-202</p>
-                </div>
-            </div>
-
-            <div class="agenda-item" style="border-left-color: var(--docente-accent);">
-                <div class="agenda-time">12:00 PM</div>
-                <div class="agenda-details">
-                    <h4>Reunión de Academia</h4>
-                    <p>Sala de Juntas Principal</p>
-                </div>
-            </div>
+            <!-- Datos dinámicos -->
         </div>
     </div>
 </div>

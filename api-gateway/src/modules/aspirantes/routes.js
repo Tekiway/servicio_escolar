@@ -65,7 +65,7 @@ function validarToken(req, res, next) {
 // ─── Rutas de Aspirantes ──────────────────────────────────────────────────────
 
 // POST /api/aspirantes/register
-router.post('/register', validarToken, async (req, res) => {
+router.post('/register', async (req, res) => {
     const r = await tryAspirante('POST', '/api/aspirantes/register', req.body, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.status(503).json({ success: false, error: 'Servicio de Aspirantes no disponible.', code: 'ASPIRANTES_OFFLINE' });

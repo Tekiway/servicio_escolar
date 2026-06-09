@@ -58,7 +58,8 @@
 
                 <p class="menu-label">Salida</p>
                 <ul>
-                    <li><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li id="btn-volver-admin" style="display: none;"><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li><a href="../login/personal.php" onclick="localStorage.clear()"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
@@ -135,12 +136,19 @@
         }
 
         // Cargar el Dashboard de Inicio por defecto al iniciar de forma robusta
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                cargarModulo('Inicio');
-            });
-        } else {
+        const initFinanzas = () => {
+            const role = localStorage.getItem('user_role');
+            if (role === 'admin' || role === 'directivo') {
+                const btn = document.getElementById('btn-volver-admin');
+                if (btn) btn.style.display = 'block';
+            }
             cargarModulo('Inicio');
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFinanzas);
+        } else {
+            initFinanzas();
         }
     </script>
 </body>

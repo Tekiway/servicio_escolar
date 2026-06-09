@@ -62,6 +62,14 @@ function validarToken(req, res, next) {
 // ─── Rutas de Finanzas ────────────────────────────────────────────────────────
 
 // POST /api/finanzas/tuitions
+
+// GET /api/finanzas/tuitions
+router.get('/tuitions', validarToken, async (req, res) => {
+    const r = await tryFinanzas('GET', '/api/finanzas/tuitions', null, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Finanzas no disponible.' });
+});
+
 router.post('/tuitions', validarToken, async (req, res) => {
     const r = await tryFinanzas('POST', '/api/finanzas/tuitions', req.body, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);

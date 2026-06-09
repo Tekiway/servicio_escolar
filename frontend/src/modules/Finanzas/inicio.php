@@ -77,8 +77,8 @@
                         </tr>
                     </thead>
                     <tbody id="dash-transacciones-rows">
-                        <!-- Transacciones dinámicas -->
-                    </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
                 </table>
             </div>
         </div>

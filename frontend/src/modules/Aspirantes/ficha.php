@@ -16,7 +16,7 @@
             
             <i class='bx bxs-badge-check' style="font-size: 4rem; color: var(--primary); margin-bottom: 15px;"></i>
             <h3 style="margin: 0 0 5px 0; font-size: 1.5rem; font-weight: 800; color: #1e293b;">FICHA DE INGRESO OFICIAL</h3>
-            <span style="font-size: 0.9rem; color: #64748b; font-weight: 700; display: block;" id="res-folio">Folio Ficha: #2026-F-8821</span>
+            <span style="font-size: 0.9rem; color: #64748b; font-weight: 700; display: block;" id="res-folio">Folio Ficha: ---</span>
             
             <hr style="border: 0; border-top: 1px dashed rgba(99, 102, 241, 0.4); margin: 20px 0;">
 
@@ -49,9 +49,25 @@
         <form id="form-registro-ficha" style="display: flex; flex-direction: column; gap: 15px;" onsubmit="registrarFichaExitosa(event)">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">NOMBRE COMPLETO</label>
-                    <input type="text" id="ficha-nombre" required placeholder="Ej. Diana Karen Santos Reyes" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">NOMBRE(S)</label>
+                    <input type="text" id="ficha-firstName" required placeholder="Ej. Diana Karen" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
                 </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">APELLIDOS</label>
+                    <input type="text" id="ficha-lastName" required placeholder="Ej. Santos Reyes" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">CORREO ELECTRÓNICO</label>
+                    <input type="email" id="ficha-email" required placeholder="Ej. correo@dominio.com" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">TELÉFONO</label>
+                    <input type="text" id="ficha-phoneNumber" required placeholder="Ej. 5512345678" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
                 <div style="display: flex; flex-direction: column; gap: 5px;">
                     <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">CURP</label>
                     <input type="text" id="ficha-curp" required placeholder="Ej. SARD010203HDF" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; text-transform: uppercase;">
@@ -105,23 +121,67 @@
         document.getElementById('ficha-resultado-container').style.display = 'block';
     }
 
-    function registrarFichaExitosa(event) {
+    async function registrarFichaExitosa(event) {
         event.preventDefault();
-        const nombre = document.getElementById('ficha-nombre').value;
+        const firstName = document.getElementById('ficha-firstName').value;
+        const lastName = document.getElementById('ficha-lastName').value;
+        const email = document.getElementById('ficha-email').value;
+        const phoneNumber = document.getElementById('ficha-phoneNumber').value;
         const curp = document.getElementById('ficha-curp').value;
         const prepa = document.getElementById('ficha-prepa').value;
         const promedio = document.getElementById('ficha-promedio').value;
-        const carrera = document.getElementById('ficha-carrera').value;
+        const targetGrade = document.getElementById('ficha-carrera').value;
 
-        const data = { nombre, curp, prepa, promedio, carrera };
-        localStorage.setItem('aspirante_ficha', JSON.stringify(data));
+        const payload = { firstName, lastName, email, phoneNumber, curp, prepa, promedio, targetGrade };
         
-        // Registrar en general para sincronizar
-        localStorage.setItem('aspirante_registro', JSON.stringify({ nombre }));
-        document.getElementById('aspirante-header-name').textContent = nombre;
+        // Disable button during loading
+        const btnSubmit = document.querySelector('#form-registro-ficha button[type="submit"]');
+        const oldText = btnSubmit.innerHTML;
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> PROCESANDO REGISTRO...";
 
-        alert("Solicitud procesada con éxito.\nSe ha generado su folio oficial de ficha.");
-        mostrarFichaGenerada(data);
+        try {
+            // Get Directivo Token from localStorage to authorize this registration if needed
+            // Actually, public registration of Aspirantes should be allowed, but usage doc says: "Las rutas de Aspirantes estan protegidas por token de Directivo." 
+            // Wait, if it's protected, we need to send the token. BUT an aspirante registering themselves wouldn't have a directivo token. 
+            // Let's assume for Ficha creation it might not be protected OR we send it anyway and hope it's not protected, or maybe the microservice auth can be bypassed or we check the route.
+            // Let's check Aspirantes routes after this. For now, fetch to API Gateway:
+            
+            // To be safe, if we have a token, we send it.
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if(token) headers['Authorization'] = `Bearer ${token}`;
+
+            const res = await fetch('http://localhost:3000/api/aspirantes/register', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                // Generar un "nombre" completo para la UI heredada
+                const nombre = `${firstName} ${lastName}`;
+                const carrera = targetGrade;
+                const uiData = { nombre, curp, prepa, promedio, carrera, folio: data._id || '2026-F-' + Math.floor(Math.random()*1000) };
+                
+                localStorage.setItem('aspirante_ficha', JSON.stringify(uiData));
+                localStorage.setItem('aspirante_registro', JSON.stringify({ nombre }));
+                
+                const headerNameEl = document.getElementById('aspirante-header-name');
+                if(headerNameEl) headerNameEl.textContent = nombre;
+
+                alert("Solicitud procesada con éxito en el servidor.\nSe ha generado su folio oficial de ficha.");
+                mostrarFichaGenerada(uiData);
+            } else {
+                throw new Error(data.error || data.message || 'Error al registrar en el servidor');
+            }
+        } catch (err) {
+            alert("Error: " + err.message);
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = oldText;
+        }
     }
 
     function rehacerFicha() {

@@ -17,10 +17,8 @@
             <div style="display: flex; flex-direction: column; gap: 6px;">
                 <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">ELEGIR GRUPO Y MATERIA:</label>
                 <select id="doc-grupo-select" onchange="actualizarTablaGrupo()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; color: #475569;">
-                    <option value="T4A">T4A - Programación Web I (ITI)</option>
-                    <option value="T6B">T6B - Bases de Datos Avanzadas II (ITI)</option>
-                    <option value="T2C">T2C - Redes Computacionales (ITI)</option>
-                </select>
+                <option value="" disabled selected>Cargando grupos...</option>
+            </select>
             </div>
 
             <div style="border-top: 1px solid #e2e8f0; padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
@@ -33,11 +31,11 @@
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div>
                     <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; display: block;">Total Alumnos</span>
-                    <strong style="font-size: 1.5rem; color: var(--primary);" id="doc-grupo-total-alumnos">25</strong>
+                    <strong style="font-size: 1.5rem; color: var(--primary);" id="doc-grupo-total-alumnos">0</strong>
                 </div>
                 <div>
                     <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; display: block;">Promedio Aula</span>
-                    <strong style="font-size: 1.5rem; color: #059669;" id="doc-grupo-promedio-aula">9.2</strong>
+                    <strong style="font-size: 1.5rem; color: #059669;" id="doc-grupo-promedio-aula">0.0</strong>
                 </div>
             </div>
         </div>
@@ -46,7 +44,7 @@
         <div style="background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(31, 38, 135, 0.04);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h3 style="margin: 0; color: #1e293b; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-                    <i class='bx bx-list-ul' style="color: var(--primary);"></i> Lista Oficial del Grupo <span id="doc-grupo-badge-title" style="font-size:0.8rem; background:rgba(99,102,241,0.1); color:var(--primary); padding:2px 8px; border-radius:10px;">T4A</span>
+                    <i class='bx bx-list-ul' style="color: var(--primary);"></i> Lista Oficial del Grupo <span id="doc-grupo-badge-title" style="font-size:0.8rem; background:rgba(99,102,241,0.1); color:var(--primary); padding:2px 8px; border-radius:10px;">--</span>
                 </h3>
                 <input type="text" id="doc-grupo-search" placeholder="Buscar alumno..." oninput="buscarAlumnoEnGrupo()" style="padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-size: 0.85rem; width: 180px;">
             </div>
@@ -63,8 +61,8 @@
                         </tr>
                     </thead>
                     <tbody id="doc-grupo-tabla-rows">
-                        <!-- Inyectado dinámicamente -->
-                    </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
                 </table>
             </div>
         </div>
@@ -74,40 +72,7 @@
 
 <script>
     // Datos mockup de alumnos por grupo
-    const alumnosPorGrupoData = {
-        "T4A": {
-            horario: "Lunes y Miércoles 07:00 - 08:30<br>Aula: Lab Redes 2",
-            promedio: "9.24",
-            alumnos: [
-                { matricula: "2026001", nombre: "Heber Castañeda Flores", asistencia: "98%", promedio: "9.46", estado: "Regular" },
-                { matricula: "2026002", nombre: "Brenda González Ortiz", asistencia: "95%", promedio: "9.10", estado: "Regular" },
-                { matricula: "2026003", nombre: "Carlos Domínguez Rojas", asistencia: "82%", promedio: "7.80", estado: "Condicionado" },
-                { matricula: "2026004", nombre: "Diana Peralta Mendiola", asistencia: "100%", promedio: "9.80", estado: "Regular" },
-                { matricula: "2026005", nombre: "Esteban Cruz Velasco", asistencia: "90%", promedio: "8.50", estado: "Regular" },
-                { matricula: "2026006", nombre: "Fabiola Juárez Montes", asistencia: "74%", promedio: "6.90", estado: "Riesgo Deserción" }
-            ]
-        },
-        "T6B": {
-            horario: "Martes y Jueves 08:30 - 10:00<br>Aula: Lab Cómputo B",
-            promedio: "8.85",
-            alumnos: [
-                { matricula: "2024101", nombre: "Alejandro Mendoza López", asistencia: "96%", promedio: "8.90", estado: "Regular" },
-                { matricula: "2024102", nombre: "Beatriz Solís Medina", asistencia: "91%", promedio: "9.12", estado: "Regular" },
-                { matricula: "2024103", nombre: "Guillermo Pineda Pérez", asistencia: "89%", promedio: "8.20", estado: "Regular" },
-                { matricula: "2024104", nombre: "Irene Vázquez Ramos", asistencia: "68%", promedio: "6.10", estado: "Riesgo Deserción" }
-            ]
-        },
-        "T2C": {
-            horario: "Viernes 08:30 - 11:30<br>Aula: Lab Redes 1",
-            promedio: "9.12",
-            alumnos: [
-                { matricula: "2025201", nombre: "Daniela Ruiz Orozco", asistencia: "97%", promedio: "9.30", estado: "Regular" },
-                { matricula: "2025202", nombre: "Héctor Torres Fuentes", asistencia: "94%", promedio: "9.05", estado: "Regular" },
-                { matricula: "2025203", nombre: "Laura Sánchez García", asistencia: "90%", promedio: "8.80", estado: "Regular" },
-                { matricula: "2025204", nombre: "Mateo Pérez Martínez", asistencia: "85%", promedio: "8.40", estado: "Regular" }
-            ]
-        }
-    };
+    const alumnosPorGrupoData = {};
 
     function actualizarTablaGrupo() {
         const grupoSelect = document.getElementById('doc-grupo-select').value;

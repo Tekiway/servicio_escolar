@@ -42,9 +42,8 @@
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">GRUPO DESTINO</label>
                         <select id="tarea-grupo" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; color: #475569;">
-                            <option value="T4A">T4A (Programación Web)</option>
-                            <option value="T6B">T6B (Bases de Datos)</option>
-                        </select>
+                <option value="" disabled selected>Cargando grupos...</option>
+            </select>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">PUNTOS MÁXIMOS</label>
@@ -80,28 +79,7 @@
         if (storedTareas) {
             listaTareasDocente = JSON.parse(storedTareas);
         } else {
-            listaTareasDocente = [
-                {
-                    id: 1,
-                    titulo: "Práctica 2: Layouts Responsivos con Flexbox y CSS Grid",
-                    grupo: "T4A",
-                    entregas: 5,
-                    total: 6,
-                    puntos: 10,
-                    fecha: "2026-06-05T23:59",
-                    instrucciones: "Desarrollar una interfaz moderna y fluida aplicando layouts CSS responsivos. Entregar en archivo ZIP con código y capturas."
-                },
-                {
-                    id: 2,
-                    titulo: "Avance Proyecto 1: Modelado Relacional de Base de Datos",
-                    grupo: "T6B",
-                    entregas: 3,
-                    total: 4,
-                    puntos: 10,
-                    fecha: "2026-06-08T18:00",
-                    instrucciones: "Entregar diagrama de Entidad Relación junto con el script DDL de creación de tablas e índices en MySQL."
-                }
-            ];
+            listaTareasDocente = [];
             localStorage.setItem('docente_lista_tareas', JSON.stringify(listaTareasDocente));
         }
 
@@ -174,9 +152,8 @@
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">GRUPO DESTINO</label>
                         <select id="tarea-grupo" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; color: #475569;">
-                            <option value="T4A">T4A (Programación Web)</option>
-                            <option value="T6B">T6B (Bases de Datos)</option>
-                        </select>
+                <option value="" disabled selected>Cargando grupos...</option>
+            </select>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">PUNTOS MÁXIMOS</label>
@@ -252,21 +229,7 @@
                     <span style="font-size: 0.75rem; font-weight: bold; color: #64748b; text-transform: uppercase;">Entregas de Estudiantes:</span>
                     
                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; font-size: 0.85rem;">
-                            <div>
-                                <strong style="color: #1e293b; display: block;">Heber Castañeda Flores</strong>
-                                <span style="font-size: 0.72rem; color: #059669; font-weight: 600;"><i class='bx bx-check'></i> Archivo: practica2_heber.zip</span>
-                            </div>
-                            <button class="btn-finance-action" style="padding: 4px 8px; font-size: 0.72rem; background: var(--primary); border: none; color: white;" onclick="alert('Evaluando entrega de Heber Castañeda. Asignar calificación...')">Calificar</button>
-                        </div>
-
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; font-size: 0.85rem;">
-                            <div>
-                                <strong style="color: #1e293b; display: block;">Brenda González Ortiz</strong>
-                                <span style="font-size: 0.72rem; color: #059669; font-weight: 600;"><i class='bx bx-check'></i> Archivo: P2_BrendaG.zip</span>
-                            </div>
-                            <button class="btn-finance-action" style="padding: 4px 8px; font-size: 0.72rem; background: var(--primary); border: none; color: white;" onclick="alert('Evaluando entrega de Brenda González. Asignar calificación...')">Calificar</button>
-                        </div>
+                        <!-- Entregas dinámicas -->
                     </div>
                 </div>
             </div>

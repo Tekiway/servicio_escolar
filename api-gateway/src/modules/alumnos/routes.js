@@ -114,6 +114,14 @@ router.post('/login', async (req, res) => {
     res.json({ token: `mock.${payload}.sig`, rol: 'alumno', _modo: 'memoria' });
 });
 
+
+// PUT /api/alumnos/mi-info
+router.put('/mi-info', async (req, res) => {
+    const r = await tryAlumno('PUT', '/api/alumnos/mi-info', req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
 // GET /api/alumnos/:id
 router.get('/:id', async (req, res) => {
     const r = await tryAlumno('GET', `/api/alumnos/${req.params.id}`, null, req.headers);

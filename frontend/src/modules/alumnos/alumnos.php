@@ -79,7 +79,8 @@
 
                 <p class="menu-label">Salida</p>
                 <ul>
-                    <li><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li id="btn-volver-admin" style="display: none;"><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li><a href="../login/estudiantes.php" onclick="localStorage.clear()"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
@@ -87,7 +88,7 @@
         <main class="main-content">
             <header class="top-header">
                 <div class="user-welcome">
-                    <span>Bienvenido, <strong id="student-header-name">Heber Castañeda Flores</strong></span>
+                    <span>Bienvenido, <strong id="student-header-name">---</strong></span>
                 </div>
             </header>
 
@@ -154,6 +155,13 @@
 
         // Carga de inicio automático de forma robusta
         const initAlumno = () => {
+            // Mostrar botón admin solo si el rol es admin o directivo
+            const role = localStorage.getItem('user_role');
+            if (role === 'admin' || role === 'directivo') {
+                const btn = document.getElementById('btn-volver-admin');
+                if (btn) btn.style.display = 'block';
+            }
+
             // Actualizar nombre dinámico desde perfil si está almacenado
             const storedPerfil = localStorage.getItem('alumno_perfil');
             if (storedPerfil) {

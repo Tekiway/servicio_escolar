@@ -40,8 +40,8 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-colegiaturas-rows">
-                    <!-- Filas cargadas dinámicamente -->
-                </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
             </table>
         </div>
     </div>
@@ -96,9 +96,17 @@
 </div>
 
 <script>
-    function renderColegiaturas() {
-        const list = JSON.parse(localStorage.getItem('colegiaturas') || '[]');
+    async function renderColegiaturas() {
         const tbody = document.getElementById('tabla-colegiaturas-rows');
+        let list = [];
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('http://localhost:3000/api/finanzas/tuitions', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if(res.ok && data.data) list = data.data;
+        } catch(e) { console.error("Error fetching tuitions", e); }
         
         if (list.length === 0) {
             tbody.innerHTML = `
@@ -114,17 +122,18 @@
 
         let html = '';
         list.forEach((item, index) => {
-            const badgeClass = item.estado === 'Atrasado' ? 'badge danger' : (item.estado === 'Pendiente' ? 'badge warning' : 'badge success');
-            const iconClass = item.estado === 'Atrasado' ? 'bx bxs-error-circle' : (item.estado === 'Pendiente' ? 'bx bxs-info-circle' : 'bx bxs-check-circle');
-            const statusLabel = item.estado === 'Atrasado' ? `Atraso (${item.mes})` : (item.estado === 'Pendiente' ? 'Próximo a Vencer' : 'Al Corriente');
+            const estado = item.status || item.estado || 'Pendiente';
+            const badgeClass = estado === 'Atrasado' ? 'badge danger' : (estado === 'Pendiente' ? 'badge warning' : 'badge success');
+            const iconClass = estado === 'Atrasado' ? 'bx bxs-error-circle' : (estado === 'Pendiente' ? 'bx bxs-info-circle' : 'bx bxs-check-circle');
+            const statusLabel = estado === 'Atrasado' ? `Atraso (${item.mes})` : (estado === 'Pendiente' ? 'Próximo a Vencer' : 'Al Corriente');
 
             html += `
-                <tr class="fila-colegiatura" data-estado="${item.estado}">
+                <tr class="fila-colegiatura" data-estado="${estado}">
                     <td><strong>${item.matricula}</strong></td>
-                    <td>${item.nombre}</td>
+                    <td>${item.studentName || item.nombre}</td>
                     <td>${item.carrera || 'Ingeniería en TICs'}</td>
                     <td>${item.mes}</td>
-                    <td>$${parseFloat(item.monto).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>$${parseFloat(item.amount || item.monto).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                     <td><span class="${badgeClass}"><i class='${iconClass}'></i> ${statusLabel}</span></td>
                     <td>
                         <button class="btn-finance-action secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="imprimirRecibo('${item.matricula}', '${item.nombre}', '${item.mes}', '${item.monto}')">
@@ -189,7 +198,7 @@
         }
     }
 
-    function registrarCobroExitoso(event) {
+    async function registrarCobroExitoso(event) {
         event.preventDefault();
         const matricula = document.getElementById('form-matricula').value;
         const nombre = document.getElementById('form-nombre').value;
@@ -197,20 +206,37 @@
         const monto = document.getElementById('form-monto').value;
         const estado = document.getElementById('form-estatus').value;
 
-        const list = JSON.parse(localStorage.getItem('colegiaturas') || '[]');
-        list.unshift({
+        const payload = {
             matricula,
-            nombre,
+            studentName: nombre,
             carrera: 'Ingeniería en TICs | 4° Semestre',
             mes,
-            monto,
-            estado
-        });
-        localStorage.setItem('colegiaturas', JSON.stringify(list));
+            amount: parseFloat(monto),
+            status: estado
+        };
 
-        alert("Pago registrado y cargado exitosamente al balance mensual del Sistema.");
-        cerrarModalCobro();
-        renderColegiaturas();
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('http://localhost:3000/api/finanzas/tuitions', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                alert("Pago registrado y cargado exitosamente al balance mensual del Sistema.");
+                cerrarModalCobro();
+                renderColegiaturas();
+            } else {
+                const data = await res.json();
+                throw new Error(data.error || 'Error al registrar cobro');
+            }
+        } catch(e) {
+            alert("Error: " + e.message);
+        }
     }
 
     function imprimirRecibo(matricula, nombre, mes, monto) {

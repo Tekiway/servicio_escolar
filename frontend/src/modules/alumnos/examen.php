@@ -53,10 +53,10 @@
                     <div style="background: rgba(255,255,255,0.4); border: 1px solid rgba(226,232,240,0.8); padding: 15px; border-radius: 12px;">
                         <span style="font-size: 0.8rem; font-weight: bold; color: #64748b; display: block; margin-bottom: 10px; text-transform: uppercase;">Docentes a evaluar en esta sesión:</span>
                         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #475569;">
-                            <li style="display: flex; align-items: center; gap: 6px;"><i class='bx bxs-circle' style="font-size: 0.5rem; color: var(--primary);"></i> Ing. Ricardo Ramos (Programación Web)</li>
-                            <li style="display: flex; align-items: center; gap: 6px;"><i class='bx bxs-circle' style="font-size: 0.5rem; color: var(--secondary);"></i> Mtra. Patricia Garmendia (Redes de Computadoras)</li>
-                            <li style="display: flex; align-items: center; gap: 6px;"><i class='bx bxs-circle' style="font-size: 0.5rem; color: var(--accent);"></i> Dr. Manuel Ocampo (Bases de Datos II)</li>
-                            <li style="display: flex; align-items: center; gap: 6px;"><i class='bx bxs-circle' style="font-size: 0.5rem; color: #f59e0b;"></i> Ing. Joaquín Alavez (Sistemas Operativos)</li>
+                            <!-- dinámico -->
+                            <!-- dinámico -->
+                            <!-- dinámico -->
+                            <!-- dinámico -->
                         </ul>
                     </div>
                 </div>
@@ -133,20 +133,9 @@
 
 <script>
     // Plantilla inicial de docentes
-    const plantillaDocentes = [
-        { id: 1, name: "Ing. Ricardo Ramos", subject: "Programación Web I", avatar: "https://ui-avatars.com/api/?name=Ricardo+Ramos&background=6366f1&color=fff&rounded=true" },
-        { id: 2, name: "Mtra. Patricia Garmendia", subject: "Redes de Computadoras I", avatar: "https://ui-avatars.com/api/?name=Patricia+Garmendia&background=a855f7&color=fff&rounded=true" },
-        { id: 3, name: "Dr. Manuel Ocampo", subject: "Bases de Datos II", avatar: "https://ui-avatars.com/api/?name=Manuel+Ocampo&background=0ea5e9&color=fff&rounded=true" },
-        { id: 4, name: "Ing. Joaquín Alavez", subject: "Sistemas Operativos", avatar: "https://ui-avatars.com/api/?name=Joaquin+Alavez&background=f59e0b&color=fff&rounded=true" }
-    ];
+    const plantillaDocentes = [];
 
-    const evalQuestions = [
-        "1. ¿El docente asiste con regularidad y puntualidad a impartir las clases asignadas?",
-        "2. ¿El profesor expone los temas con claridad y muestra un dominio profundo de la materia?",
-        "3. ¿El docente fomenta el respeto mutuo, la sana convivencia y la participación activa del grupo?",
-        "4. ¿Los métodos de evaluación (exámenes, proyectos) corresponden a los temas enseñados en clase?",
-        "5. ¿El profesor se muestra accesible para resolver dudas fuera del horario de clase si es necesario?"
-    ];
+    const evalQuestions = [];
 
     let currentQuestionIdx = 0;
     let selectedOptionIdx = null;
@@ -169,53 +158,18 @@
     }
 
     function renderProgresoGlobal() {
-        let total = plantillaDocentes.length;
-        let completados = 0;
-
-        for (let id in evaluacionesEstado) {
-            if (evaluacionesEstado[id]) completados++;
-        }
-
-        const ratioText = document.getElementById('eval-progress-ratio');
-        const progressBar = document.getElementById('eval-progress-bar-global');
+        document.getElementById('eval-result-screen').style.display = 'none';
+        document.getElementById('eval-start-screen').style.display = 'flex';
+        document.getElementById('eval-question-screen').style.display = 'none';
+        document.getElementById('eval-transition-screen').style.display = 'none';
+        
         const infoBox = document.getElementById('eval-status-info');
-
-        ratioText.textContent = `${completados} de ${total}`;
-        const pct = (completados / total) * 100;
-        progressBar.style.width = `${pct}%`;
-
-        if (completados === total) {
-            localStorage.setItem('alumno_evaluacion_docente', 'true');
-            infoBox.innerHTML = `
-                <div style="display: flex; gap: 10px; align-items: center; color: #059669; font-weight: 700; font-size: 0.9rem;">
-                    <i class='bx bxs-check-circle' style="font-size:1.3rem;"></i> LIBERADO / COMPLETADO
-                </div>
-                <p style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Tu comprobante de evaluación de este periodo está activo. Puedes acceder al Kárdex de materias libremente.</p>
-            `;
-            
-            // Si está todo completo, mostrar la pantalla final directamente
-            document.getElementById('eval-start-screen').style.display = 'none';
-            document.getElementById('eval-question-screen').style.display = 'none';
-            document.getElementById('eval-transition-screen').style.display = 'none';
-            document.getElementById('eval-result-screen').style.display = 'flex';
-        } else {
-            localStorage.removeItem('alumno_evaluacion_docente');
-            infoBox.innerHTML = `
-                <div style="display: flex; gap: 10px; align-items: center; color: #ef4444; font-weight: 700; font-size: 0.9rem;">
-                    <i class='bx bxs-error-circle' style="font-size:1.3rem;"></i> EVALUACIÓN EN PROCESO
-                </div>
-                <p style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Completa la evaluación secuencial de tus 4 profesores para desbloquear tu boleta escolar.</p>
-            `;
-            document.getElementById('eval-result-screen').style.display = 'none';
-            
-            // Encontrar el primer docente no evaluado
-            activeTeacherIndex = plantillaDocentes.findIndex(d => !evaluacionesEstado[d.id]);
-            if (activeTeacherIndex === -1) activeTeacherIndex = 0;
-
-            document.getElementById('eval-start-screen').style.display = 'flex';
-            document.getElementById('eval-question-screen').style.display = 'none';
-            document.getElementById('eval-transition-screen').style.display = 'none';
-        }
+        infoBox.innerHTML = `
+            <div style="display: flex; gap: 10px; align-items: center; color: var(--primary); font-weight: 700; font-size: 0.9rem;">
+                <i class='bx bxs-info-circle' style="font-size:1.3rem;"></i> LISTO PARA EVALUAR
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Esperando carga de profesores...</p>
+        `;
     }
 
     // Función principal invocada al hacer click en el botón "INICIAR EVALUACIÓN AHORA"
@@ -228,12 +182,18 @@
     }
 
     function loadTeacherCuestionario() {
+        if(plantillaDocentes.length === 0) {
+            alert("No hay docentes cargados para evaluar.");
+            document.getElementById('eval-start-screen').style.display = 'flex';
+            document.getElementById('eval-question-screen').style.display = 'none';
+            return;
+        }
         const docente = plantillaDocentes[activeTeacherIndex];
 
-        document.getElementById('eval-teacher-active-avatar').src = docente.avatar;
-        document.getElementById('eval-teacher-active-name').textContent = docente.name;
-        document.getElementById('eval-teacher-active-subject').textContent = docente.subject;
-        document.getElementById('eval-teacher-active-counter').textContent = `Profesor ${activeTeacherIndex + 1} de 4`;
+        document.getElementById('eval-teacher-active-avatar').src = docente.avatar || '';
+        document.getElementById('eval-teacher-active-name').textContent = docente.name || '---';
+        document.getElementById('eval-teacher-active-subject').textContent = docente.subject || '---';
+        document.getElementById('eval-teacher-active-counter').textContent = `Profesor ${activeTeacherIndex + 1}`;
 
         loadEvalQuestion();
     }

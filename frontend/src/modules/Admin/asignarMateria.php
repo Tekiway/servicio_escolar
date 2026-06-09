@@ -31,14 +31,7 @@
             <div class="materias-selection-area">
                 <p class="area-label">Materias Disponibles:</p>
                 <div class="materias-flex-list">
-                    <div class="item-selection selected">
-                        <strong>Estructura de Datos</strong>
-                        <small>Semestre 3 • 4 Créditos</small>
-                    </div>
-                    <div class="item-selection">
-                        <strong>Bases de Datos</strong>
-                        <small>Semestre 3 • 4 Créditos</small>
-                    </div>
+                    <!-- Dinámico: JS llena esto -->
                 </div>
             </div>
         </div>
@@ -55,23 +48,7 @@
                 <input type="text" placeholder="Buscar docente por nombre..." class="modern-input-small search-icon">
             </div>
             <div class="docentes-flex-list">
-                <div class="user-card selected">
-                    <div class="user-img"><i class='bx bxs-user-circle'></i></div>
-                    <div class="user-info">
-                        <p class="u-name">Heber Castañeda</p>
-                        <p class="u-email">heber@instituto.edu.mx</p>
-                        <span class="badge load-low">Carga baja</span>
-                    </div>
-                    <div class="check-icon"><i class='bx bxs-check-circle'></i></div>
-                </div>
-                <div class="user-card">
-                    <div class="user-img"><i class='bx bxs-user-circle'></i></div>
-                    <div class="user-info">
-                        <p class="u-name">Sindy Ximena</p>
-                        <p class="u-email">sindy@instituto.edu.mx</p>
-                        <span class="badge load-full">Tiempo completo</span>
-                    </div>
-                </div>
+                <!-- Dinámico: JS llena esto -->
             </div>
         </div>
     </div>
@@ -88,16 +65,17 @@
                 <div class="summary-item"><strong>Docente:</strong> Heber Castañeda</div>
             </div>
             <div class="form-grid-3cols">
-                <input type="text" placeholder="Grupo" class="modern-input-small">
-                <input type="text" placeholder="Aula" class="modern-input-small">
-                <input type="text" placeholder="Horario" class="modern-input-small">
+                <input type="text" id="asignar-grupo" placeholder="Ej. A" class="modern-input-small">
+                <input type="text" id="asignar-aula" placeholder="Ej. Aula 101" class="modern-input-small">
+                <input type="text" id="asignar-horario" placeholder="Ej. L-V 08:00 - 09:00" class="modern-input-small">
             </div>
             <div class="action-buttons-row">
-                <button class="btn-cancel">Cancelar</button>
-                <button class="btn-confirm-load">Finalizar Asignación</button>
+                <button class="btn-cancel" onclick="reiniciarAsignacion()">Cancelar</button>
+                <button class="btn-confirm-load" id="btn-confirm-asignacion" onclick="finalizarAsignacion()">Finalizar Asignación</button>
             </div>
         </div>
     </div>
 </div>
+<script src="./frontend/src/modules/Admin/js/asignarMateria.js?v=1"></script>
 
 

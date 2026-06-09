@@ -6,6 +6,7 @@ const checkFinanceAuth = require('../middlewares/authMiddleware');
 
 // Crear un cobro (Protegido)
 router.post('/tuitions', checkFinanceAuth, financeController.createInvoice);
+router.get('/tuitions', checkFinanceAuth, financeController.getAllTuitions);
 
 // Pagar una colegiatura (Protegido)
 router.patch('/tuitions/:id/pay', checkFinanceAuth, financeController.collectPayment);

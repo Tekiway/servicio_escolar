@@ -7,18 +7,6 @@
         <p style="color: #64748b;">Consulta tu sede de examen asignada, descarga temarios y realiza tu simulador de evaluación interactivo.</p>
     </div>
 
-    <!-- Blocker de Validación -->
-    <div id="examen-blocker-message" style="display: none; background: #fff; border: 1px solid rgba(0,0,0,0.05); padding: 40px; text-align: center; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-        <i class='bx bx-lock-alt' style="font-size: 4.5rem; color: #ef4444; margin-bottom: 15px;"></i>
-        <h3 style="font-size: 1.4rem; font-weight: 800; color: #1e293b;">Módulo Bloqueado</h3>
-        <p style="color: #64748b; margin-top: 5px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;" id="examen-blocker-text">
-            Antes de acceder a este módulo, debes completar tus trámites de <strong>Ficha</strong>, <strong>Carga de Documentos</strong> y <strong>Validación de Pago</strong>.
-        </p>
-        <button id="examen-blocker-btn" class="btn-finance-action" style="margin-top: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white;" onclick="cargarModulo('Ficha')">
-            <i class='bx bxs-edit-location'></i> Completar Ficha
-        </button>
-    </div>
-
     <!-- Panel de Examen General -->
     <div id="examen-container" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 25px; align-items: start;">
         
@@ -31,12 +19,12 @@
                 <h3 style="margin: 0 0 15px 0; font-size: 1.15rem; font-weight: 800; color: #1e293b; font-family: 'Outfit', sans-serif;">PASE DE EXAMEN OFICIAL</h3>
                 
                 <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: #475569;">
-                    <span><strong>Aspirante:</strong> <span id="pase-nombre">Nombre</span></span>
-                    <span><strong>Folio:</strong> #2026-F-8821</span>
-                    <span><strong>Carrera:</strong> <span id="pase-carrera">Carrera</span></span>
-                    <span><strong>Fecha:</strong> Jueves 25 de Junio, 2026</span>
-                    <span><strong>Horario:</strong> 09:00 AM (Tolerancia 15 min)</span>
-                    <span><strong>Sede:</strong> Edificio C, Aula 302</span>
+                    <span><strong>Aspirante:</strong> <span id="pase-nombre">---</span></span>
+                    <span><strong>Folio:</strong> ---</span>
+                    <span><strong>---:</strong> <span id="pase-carrera">---</span></span>
+                    <span><strong>Fecha:</strong> ---</span>
+                    <span><strong>Horario:</strong> ---</span>
+                    <span><strong>Sede:</strong> ---</span>
                 </div>
 
                 <div style="margin-top: 20px; border-top: 1px dashed #e2e8f0; padding-top: 15px; text-align: center;">
@@ -133,97 +121,11 @@
 
 <script>
     (function() {
-        const storedFicha = localStorage.getItem('aspirante_ficha');
-        const storedDocs = localStorage.getItem('aspirante_documentos');
-        const storedPago = localStorage.getItem('aspirante_pago');
-
-        const blocker = document.getElementById('examen-blocker-message');
-        const blockerText = document.getElementById('examen-blocker-text');
-        const blockerBtn = document.getElementById('examen-blocker-btn');
-        const container = document.getElementById('examen-container');
-
-        if (!storedFicha) {
-            blocker.style.display = 'block';
-            container.style.display = 'none';
-            blockerText.innerHTML = "Antes de consultar tu examen o simulador, debes completar tu <strong>Trámite de Ficha de Examen</strong>.";
-            blockerBtn.innerHTML = "<i class='bx bxs-edit-location'></i> Hacer Trámite de Ficha";
-            blockerBtn.setAttribute("onclick", "cargarModulo('Ficha')");
-            return;
-        }
-
-        if (!storedDocs) {
-            blocker.style.display = 'block';
-            container.style.display = 'none';
-            blockerText.innerHTML = "Tu ficha está lista, pero debes subir tus <strong>Documentos Oficiales</strong> para validación del expediente.";
-            blockerBtn.innerHTML = "<i class='bx bxs-cloud-upload'></i> Subir Documentos";
-            blockerBtn.setAttribute("onclick", "cargarModulo('Documentos')");
-            return;
-        }
-
-        if (!storedPago) {
-            blocker.style.display = 'block';
-            container.style.display = 'none';
-            blockerText.innerHTML = "Tus documentos están validados. Ahora debes registrar y <strong>Acreditar tu Pago</strong> de Ficha escolar.";
-            blockerBtn.innerHTML = "<i class='bx bxs-credit-card'></i> Registrar / Pagar Ficha";
-            blockerBtn.setAttribute("onclick", "cargarModulo('Pago')");
-            return;
-        }
-
-        // Cargar datos
-        const data = JSON.parse(storedFicha);
-        document.getElementById('pase-nombre').textContent = data.nombre;
-        document.getElementById('pase-carrera').textContent = data.carrera;
-
-        // Si ya hay un score guardado, saltar a la pantalla de resultados
-        const score = localStorage.getItem('aspirante_examen_score');
-        if (score) {
-            showQuizResults(parseInt(score));
-        }
+        // Bloqueos removidos. La interfaz se muestra siempre.
     })();
 
     // Cuestionario Lógico
-    const quizQuestions = [
-        {
-            q: "Si un tren eléctrico va hacia el norte a 100 km/h y el viento sopla hacia el sur a 30 km/h, ¿hacia dónde va el humo del tren?",
-            options: [
-                { text: "Hacia el sur", correct: false },
-                { text: "No echa humo porque es eléctrico", correct: true },
-                { text: "Hacia el este", correct: false }
-            ]
-        },
-        {
-            q: "¿Cuál es el número que completa lógicamente la siguiente serie numérica: 2, 4, 8, 16, ...?",
-            options: [
-                { text: "20", correct: false },
-                { text: "24", correct: false },
-                { text: "32", correct: true }
-            ]
-        },
-        {
-            q: "Algunos meses del año tienen 30 días, otros tienen 31. ¿Cuántos meses tienen 28 días?",
-            options: [
-                { text: "1 mes (Febrero)", correct: false },
-                { text: "Todos los 12 meses", correct: true },
-                { text: "Ninguno", correct: false }
-            ]
-        },
-        {
-            q: "Si tres gatos cazan tres ratones en tres minutos, ¿cuántos minutos tardarán cien gatos en cazar cien ratones?",
-            options: [
-                { text: "3 minutos", correct: true },
-                { text: "100 minutos", correct: false },
-                { text: "300 minutos", correct: false }
-            ]
-        },
-        {
-            q: "El padre de Clara tiene cinco hijas: Lala, Lela, Lila, Lola... ¿Cómo se llama la quinta hija?",
-            options: [
-                { text: "Lula", correct: false },
-                { text: "Clara", correct: true },
-                { text: "Lola", correct: false }
-            ]
-        }
-    ];
+    const quizQuestions = [];
 
     let currentQuestionIdx = 0;
     let correctAnswersCount = 0;
@@ -236,6 +138,12 @@
     }
 
     function loadQuestion() {
+        if(quizQuestions.length === 0) {
+            alert("No hay preguntas cargadas en el simulador.");
+            document.getElementById('quiz-question-screen').style.display = 'none';
+            document.getElementById('quiz-start-screen').style.display = 'flex';
+            return;
+        }
         const qData = quizQuestions[currentQuestionIdx];
         
         document.getElementById('quiz-question-num').textContent = `PREGUNTA ${currentQuestionIdx + 1} DE 5`;

@@ -57,6 +57,25 @@ router.get('/:id/materias', authDocenteODirectivo, async (req, res) => {
 router.patch('/:id/materias/:materiaNombre/unidades/:numUnidad', authDocenteODirectivo, ctrl.modificarCalificacion);
 
 // Solo visualización para alumno autenticado
+
+router.put('/mi-info', auth, async (req, res) => {
+	try {
+		const alumno = await require('../models/Alumno').findById(req.user.id);
+		if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+
+        const { nombre, username, email, carrera } = req.body;
+        if(nombre) alumno.nombre = nombre;
+        if(username) alumno.username = username;
+        if(email) alumno.email = email;
+        if(carrera) alumno.carrera = carrera;
+
+        await alumno.save();
+		res.json({ message: 'Perfil actualizado con éxito', alumno });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
 router.get('/mi-info', auth, async (req, res) => {
 	try {
 		const alumno = await require('../models/Alumno').findById(req.user.id, '-password');

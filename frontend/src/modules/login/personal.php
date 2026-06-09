@@ -31,14 +31,16 @@
                     <i class="bx bxs-institution"></i>
                 </div>
                 <h2>Acceso Personal</h2>
-                <p>Ingresa al área administrativa o docente</p>
+                <p>Directivos, Finanzas, Recursos Humanos, Docentes</p>
             </div>
 
             <form id="form-login-personal" onsubmit="validarPersonal(event)">
+
+
                 <div class="form-group">
                     <label>Usuario o RFC</label>
                     <div class="input-wrapper">
-                        <input type="text" id="usuario" placeholder="Ej. admin o docente" required autocomplete="off">
+                        <input type="text" id="usuario" placeholder="Ej. prueba" required autocomplete="off">
                         <i class="bx bx-user"></i>
                     </div>
                 </div>
@@ -58,8 +60,7 @@
             </form>
 
             <div class="login-footer" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                <a href="../alumnos/alumnos.php"><i class="bx bxs-graduation"></i> Portal de Estudiantes</a>
-                <a href="../Aspirantes/aspirantes.php" style="color: #a855f7;"><i class="bx bxs-user-plus"></i> Portal de Aspirantes</a>
+                <a href="estudiantes.php" style="color: var(--primary); font-size: 0.95rem;"><i class="bx bxs-graduation"></i> Acceso para Estudiantes (Alumnos / Aspirantes)</a>
             </div>
         </div>
     </div>
@@ -94,57 +95,21 @@
                 btnSubmit.innerHTML = "Ingresar al Portal <i class='bx bx-right-arrow-alt'></i>";
             };
 
-            // 1. Intentar login mock centralizado (admin / directivo)
             try {
                 const res = await fetch(`${GATEWAY}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usuario, password, portal: 'personal' })
+                    body: JSON.stringify({ usuario, password })
                 });
                 const data = await res.json();
 
                 if (res.ok && data.status === 'success') {
                     localStorage.setItem('user_role', data.data.role);
+                    if(data.data.token) localStorage.setItem('token', data.data.token);
                     window.location.href = data.data.redirectUrl;
                     return;
                 }
-            } catch (_) { /* Gateway sin respuesta, intentar directivo */ }
-
-            // 2. Intentar login como directivo real
-            try {
-                const res = await fetch(`${GATEWAY}/directivos/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: usuario, email: usuario, password })
-                });
-                const data = await res.json();
-
-                if (res.ok && data.token) {
-                    localStorage.setItem('token',     data.token);
-                    localStorage.setItem('user_role', 'directivo');
-                    localStorage.setItem('user_data', JSON.stringify({ nombre: data.nombre, rol: 'directivo' }));
-                    window.location.href = '../../../../index.php';
-                    return;
-                }
-            } catch (_) { /* continuar */ }
-
-            // 3. Intentar login como docente real
-            try {
-                const res = await fetch(`${GATEWAY}/docentes/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: usuario, email: usuario, password })
-                });
-                const data = await res.json();
-
-                if (res.ok && data.token) {
-                    localStorage.setItem('token',     data.token);
-                    localStorage.setItem('user_role', 'docente');
-                    localStorage.setItem('user_data', JSON.stringify(data.docente || {}));
-                    window.location.href = '../Docente/docente.php';
-                    return;
-                }
-            } catch (_) { /* continuar */ }
+            } catch (_) {}
 
             mostrarError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
         }

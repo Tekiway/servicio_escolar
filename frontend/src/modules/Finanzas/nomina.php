@@ -54,8 +54,8 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-nomina-rows">
-                    <!-- Filas cargadas dinámicamente -->
-                </tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
             </table>
         </div>
     </div>

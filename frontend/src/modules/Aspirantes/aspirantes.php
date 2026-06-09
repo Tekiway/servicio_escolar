@@ -85,7 +85,8 @@
 
                 <p class="menu-label">Salida</p>
                 <ul>
-                    <li><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li id="btn-volver-admin" style="display: none;"><a href="../../../../index.php"><i class='bx bx-arrow-back'></i> Volver a Admin</a></li>
+                    <li><a href="../login/estudiantes.php" onclick="localStorage.clear()"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
@@ -157,6 +158,12 @@
 
         // Carga de inicio automático de forma robusta
         const initAspirante = () => {
+            const role = localStorage.getItem('user_role');
+            if (role === 'admin' || role === 'directivo') {
+                const btn = document.getElementById('btn-volver-admin');
+                if (btn) btn.style.display = 'block';
+            }
+
             const storedAspirante = localStorage.getItem('aspirante_registro');
             if (storedAspirante) {
                 const data = JSON.parse(storedAspirante);
