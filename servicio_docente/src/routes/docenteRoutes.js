@@ -31,6 +31,9 @@ router.post('/login', directivoAuth, async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
+router.post('/tareas', require('../controllers/tareaController').crearTarea);
+router.get('/tareas', require('../controllers/tareaController').obtenerTareas);
+
 router.get('/', directivoAuth, ctrl.obtenerTodos);
 router.get('/buscar', directivoAuth, ctrl.buscarDocentes); // Uso: /buscar?filtro=NombreOId
 router.put('/:id', directivoAuth, ctrl.editarDocente);

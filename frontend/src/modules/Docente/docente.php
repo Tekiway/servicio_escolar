@@ -173,5 +173,6 @@
             initDocente();
         }
     </script>
+    <script src="../../js/apiGateway.js"></script>
 </body>
 </html>

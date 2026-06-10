@@ -71,33 +71,31 @@
 </div>
 
 <script>
-    // Tareas iniciales del docente en localStorage para simulación persistente
     let listaTareasDocente = [];
 
-    function initTareas() {
-        const storedTareas = localStorage.getItem('docente_lista_tareas');
-        if (storedTareas) {
-            listaTareasDocente = JSON.parse(storedTareas);
-        } else {
-            listaTareasDocente = [];
-            localStorage.setItem('docente_lista_tareas', JSON.stringify(listaTareasDocente));
+    async function initTareas() {
+        try {
+            listaTareasDocente = await API.Docentes.obtenerTareas();
+            renderTareasList();
+        } catch (error) {
+            console.error('Error al cargar tareas:', error);
+            document.getElementById('doc-tareas-list').innerHTML = `<div style="text-align:center; padding:30px; color:#ef4444;">Error al cargar las tareas.</div>`;
         }
-
-        renderTareasList();
     }
 
     function renderTareasList() {
         const container = document.getElementById('doc-tareas-list');
         container.innerHTML = '';
 
-        if (listaTareasDocente.length === 0) {
+        if (!listaTareasDocente || listaTareasDocente.length === 0) {
             container.innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">No hay tareas publicadas en este periodo escolar.</div>`;
             return;
         }
 
         listaTareasDocente.forEach(t => {
-            const ratio = t.entregas / t.total;
+            const ratio = t.total ? (t.entregas / t.total) : 0;
             const pct = (ratio * 100).toFixed(0);
+            const idToPass = t._id ? `'${t._id}'` : `'${t.id}'`;
             
             const card = document.createElement('div');
             card.style.cssText = "background: rgba(255,255,255,0.4); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.2s;";
@@ -119,7 +117,7 @@
                         </div>
                         <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Entregas: ${t.entregas} de ${t.total} (${pct}%)</span>
                     </div>
-                    <button class="btn-finance-action" style="padding: 6px 12px; font-size: 0.75rem;" onclick="revisarEntregas(${t.id})">Revisar</button>
+                    <button class="btn-finance-action" style="padding: 6px 12px; font-size: 0.75rem;" onclick="revisarEntregas(${idToPass})">Revisar</button>
                 </div>
             `;
 
@@ -131,7 +129,7 @@
         if (!isoString) return '';
         const parts = isoString.split('T');
         const fecha = parts[0].split('-').reverse().join('/');
-        const hora = parts[1] || '';
+        const hora = parts[1] ? parts[1].substring(0, 5) : '';
         return `${fecha} a las ${hora} hrs`;
     }
 
@@ -152,8 +150,9 @@
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">GRUPO DESTINO</label>
                         <select id="tarea-grupo" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; color: #475569;">
-                <option value="" disabled selected>Cargando grupos...</option>
-            </select>
+                            <option value="T4A">T4A</option>
+                            <option value="T4B">T4B</option>
+                        </select>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">PUNTOS MÁXIMOS</label>
@@ -178,7 +177,7 @@
         `;
     }
 
-    function guardarNuevaTarea(event) {
+    async function guardarNuevaTarea(event) {
         event.preventDefault();
         const titulo = document.getElementById('tarea-titulo').value;
         const grupo = document.getElementById('tarea-grupo').value;
@@ -189,7 +188,6 @@
         const totalAlumnos = grupo === 'T4A' ? 6 : 4;
 
         const nueva = {
-            id: Date.now(),
             titulo,
             grupo,
             entregas: 0,
@@ -199,17 +197,18 @@
             instrucciones
         };
 
-        listaTareasDocente.push(nueva);
-        localStorage.setItem('docente_lista_tareas', JSON.stringify(listaTareasDocente));
-
-        alert("¡Éxito!\nTarea publicada y notificada a los alumnos de forma exitosa.");
-        
-        renderTareasList();
-        mostrarModalCrearTarea();
+        try {
+            await API.Docentes.crearTarea(nueva);
+            alert("¡Éxito!\nTarea publicada y notificada a los alumnos de forma exitosa.");
+            mostrarModalCrearTarea();
+            initTareas();
+        } catch (error) {
+            alert("Error al publicar la tarea: " + error.message);
+        }
     }
 
     function revisarEntregas(id) {
-        const tarea = listaTareasDocente.find(t => t.id === id);
+        const tarea = listaTareasDocente.find(t => t._id === id || t.id === id);
         const panel = document.getElementById('panel-tarea-accion');
 
         panel.innerHTML = `

@@ -66,6 +66,7 @@
                 <p class="menu-label">Gestión Académica</p>
                 <ul>
                     <li><a href="#" onclick="cargarModulo('Curso')"><i class='bx bxs-calendar-event'></i> Mi Horario</a></li>
+                    <li><a href="#" onclick="cargarModulo('Tareas')"><i class='bx bx-book-content'></i> Mis Tareas</a></li>
                     <li><a href="#" onclick="cargarModulo('Perfil')"><i class='bx bxs-user-badge'></i> Mi Perfil</a></li>
                     <li><a href="#" onclick="cargarModulo('Evaluaciones')"><i class='bx bxs-spreadsheet'></i> Calificaciones</a></li>
                 </ul>
@@ -178,5 +179,6 @@
             initAlumno();
         }
     </script>
+    <script src="../../js/apiGateway.js"></script>
 </body>
 </html>

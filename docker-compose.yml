@@ -4,6 +4,7 @@ name: servicio_escolar
 
 services:
   alumno-service:
+    restart: always
     build: ./servicio_alumnos
     command: sh -c "npm install && npm run dev"
     ports:
@@ -31,6 +32,7 @@ services:
       - mongo-alumnos
 
   docente-service:
+    restart: always
     build:
       context: ./servicio_docente
       dockerfile: dockerfile
@@ -60,6 +62,7 @@ services:
       - mongo-docentes
 
   directivo-service:
+    restart: always
     build: ./servicio_directivo
     command: sh -c "npm install && npm run dev"
     ports:
@@ -86,6 +89,7 @@ services:
       - mongo-directivos
 
   finance-service:
+    restart: always
     build: ./servicio_finanzas
     command: sh -c "npm install && npm run dev"
     ports:
@@ -112,6 +116,7 @@ services:
       - mongo-finanzas
 
   aspirante-service:
+    restart: always
     build: ./servicio_aspirantes
     command: sh -c "npm install && npm run dev"
     ports:
@@ -138,12 +143,34 @@ services:
     depends_on:
       - mongo-aspirantes
 
-  frontend-service:
-    image: php:8.2-apache
+  api-gateway:
+    restart: always
+    build: ./api-gateway
+    command: sh -c "npm install && npm run dev"
     ports:
-      - "8080:80"
+      - "3000:3000"
     volumes:
-      - ./frontend:/var/www/html
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      PORT: 3000
+      JWT_SECRET: secreto
+      DOCENTE_SERVICE_URL: http://docente-service:3002
+      ALUMNO_SERVICE_URL: http://alumno-service:3001
+      DIRECTIVO_SERVICE_URL: http://directivo-service:3003
+      FINANZAS_SERVICE_URL: http://finance-service:3004
+      ASPIRANTE_SERVICE_URL: http://aspirante-service:3005
+    develop:
+      watch:
+        - action: sync
+          path: ./api-gateway
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./api-gateway/package.json
+        - action: rebuild
+          path: ./api-gateway/package-lock.json
     depends_on:
       - alumno-service
       - docente-service
@@ -151,7 +178,23 @@ services:
       - finance-service
       - aspirante-service
 
+  frontend-service:
+    restart: always
+    image: php:8.2-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/var/www/html
+    depends_on:
+      - api-gateway
+      - alumno-service
+      - docente-service
+      - directivo-service
+      - finance-service
+      - aspirante-service
+
   mongo-alumnos:
+    restart: always
     image: mongo:latest
     ports:
       - "27017:27017"
@@ -159,6 +202,7 @@ services:
       - mongo-alumnos-data:/data/db
 
   mongo-docentes:
+    restart: always
     image: mongo:latest
     ports:
       - "27018:27017"
@@ -166,6 +210,7 @@ services:
       - mongo-docentes-data:/data/db
 
   mongo-directivos:
+    restart: always
     image: mongo:latest
     ports:
       - "27019:27017"
@@ -173,6 +218,7 @@ services:
       - mongo-directivos-data:/data/db
 
   mongo-finanzas:
+    restart: always
     image: mongo:latest
     ports:
       - "27020:27017"
@@ -180,6 +226,7 @@ services:
       - mongo-finanzas-data:/data/db
 
   mongo-aspirantes:
+    restart: always
     image: mongo:latest
     ports:
       - "27021:27017"
