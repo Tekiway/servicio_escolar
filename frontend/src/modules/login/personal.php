@@ -109,7 +109,10 @@
                     window.location.href = data.data.redirectUrl;
                     return;
                 }
-            } catch (_) {}
+            } catch (error) {
+                mostrarError('Error de conexión con el servidor. El API Gateway está apagado.');
+                return;
+            }
 
             mostrarError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
         }

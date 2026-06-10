@@ -94,7 +94,11 @@
                     throw new Error(data.message || 'Credenciales incorrectas');
                 }
             } catch (error) {
-                alertText.textContent = "Usuario o contraseña incorrectos. Usa 'prueba' y 'prueba1'.";
+                if(error instanceof TypeError) {
+                    alertText.textContent = "Error de conexión con el servidor. El API Gateway está apagado.";
+                } else {
+                    alertText.textContent = error.message || "Usuario o contraseña incorrectos.";
+                }
                 alertBox.style.display = 'flex';
                 
                 alertBox.style.animation = 'none';
