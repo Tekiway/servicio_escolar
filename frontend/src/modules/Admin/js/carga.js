@@ -12,7 +12,7 @@ var docenteEnEdicion = null;
 if (!window.API) {
     console.log('[Carga] apiGateway.js no detectado. Cargando dinámicamente...');
     const s = document.createElement('script');
-    s.src = './src/js/apiGateway.js';
+    s.src = '/frontend/src/js/apiGateway.js';
     s.onload = _inicializarBoot;
     document.head.appendChild(s);
 } else {

@@ -19,7 +19,7 @@ function _inicializarMaterias() {
     if (!window.API || !window.API.Materias) {
         console.log('[Materias] apiGateway.js incompleto o no detectado. Forzando recarga sin caché...');
         const s = document.createElement('script');
-        s.src = './src/js/apiGateway.js?v=' + Date.now(); // Forzar siempre la última versión
+        s.src = '/frontend/src/js/apiGateway.js?v=' + Date.now(); // Forzar siempre la última versión
         s.onload = () => {
             _configurarEventosMaterias();
             cargarTablaMaterias();

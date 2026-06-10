@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Administrativo - Sistema Control Escolar</title>
-    <link rel="stylesheet" href="./frontend/src/styles/adminInicio.css">
-    <link rel="stylesheet" href="./frontend/src/styles/carreras.css">
-    <link rel="stylesheet" href="./frontend/src/styles/dashboard.css">
-    <link rel="stylesheet" href="./frontend/src/styles/carga.css">
-    <link rel="stylesheet" href="./frontend/src/styles/formulariosAdmin.css">
-    <link rel="stylesheet" href="./frontend/src/styles/agregarMateria.css">
-    <link rel="stylesheet" href="./frontend/src/styles/asignarMateria.css">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/frontend/src/styles/adminInicio.css">
+    <link rel="stylesheet" href="/frontend/src/styles/carreras.css">
+    <link rel="stylesheet" href="/frontend/src/styles/dashboard.css">
+    <link rel="stylesheet" href="/frontend/src/styles/carga.css">
+    <link rel="stylesheet" href="/frontend/src/styles/formulariosAdmin.css">
+    <link rel="stylesheet" href="/frontend/src/styles/agregarMateria.css">
+    <link rel="stylesheet" href="/frontend/src/styles/asignarMateria.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="./frontend/src/js/apiGateway.js?v=2"></script>
+    <script src="/frontend/src/js/apiGateway.js?v=2"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -34,15 +35,15 @@
                                     
                 <p class="menu-label">Portales del Sistema</p>
                 <ul>
-                    <li><a href="./frontend/src/modules/alumnos/alumnos.php"><i class='bx bxs-graduation'></i> Portal Alumnos</a></li>
-                    <li><a href="./frontend/src/modules/Aspirantes/aspirantes.php"><i class='bx bxs-user-plus'></i> Portal Aspirantes</a></li>
-                    <li><a href="./frontend/src/modules/Docente/docente.php"><i class='bx bxs-user-rectangle'></i> Portal Docente</a></li>
-                    <li><a href="./frontend/src/modules/Finanzas/finanzas.php"><i class='bx bxs-bank'></i> Portal Finanzas</a></li>
+                    <li><a href="/frontend/src/modules/alumnos/alumnos.php"><i class='bx bxs-graduation'></i> Portal Alumnos</a></li>
+                    <li><a href="/frontend/src/modules/Aspirantes/aspirantes.php"><i class='bx bxs-user-plus'></i> Portal Aspirantes</a></li>
+                    <li><a href="/frontend/src/modules/Docente/docente.php"><i class='bx bxs-user-rectangle'></i> Portal Docente</a></li>
+                    <li><a href="/frontend/src/modules/Finanzas/finanzas.php"><i class='bx bxs-bank'></i> Portal Finanzas</a></li>
                 </ul>
                                     
                 <p class="menu-label">Sesión</p>
                 <ul>
-                    <li><a href="./frontend/src/modules/login/personal.php"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
+                    <li><a href="/frontend/src/modules/login/personal.php"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
