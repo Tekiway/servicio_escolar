@@ -78,7 +78,7 @@
             
             // Ruta corregida a la carpeta general Admin
             const nombreArchivo = nombre.charAt(0).toLowerCase() + nombre.slice(1);
-            const ruta = `./frontend/src/modules/Admin/${nombreArchivo}.php`; 
+            const ruta = `/frontend/src/modules/Admin/${nombreArchivo}.php`;
 
             fetch(ruta)
                 .then(response => {
@@ -108,7 +108,7 @@
                     const nuevoScript = document.createElement('script');
                     nuevoScript.id = 'script-modulo';
                     // Nota: los paths aqui siguen siendo relativos a index.php (el que hace include)
-                    nuevoScript.src = `./frontend/src/modules/Admin/js/${nombreArchivo}.js?v=${new Date().getTime()}`;
+                    nuevoScript.src = `/frontend/src/modules/Admin/js/${nombreArchivo}.js?v=${new Date().getTime()}`;
                     nuevoScript.onerror = () => {
                         console.log(`Módulo ${nombre} cargado sin archivo JS específico.`);
                         nuevoScript.remove();
@@ -119,7 +119,8 @@
                     contenedor.innerHTML = `
                         <div style="padding:20px; color: #64748b;">
                             <h3>Error de Carga</h3>
-                            <p>No se encontró "${nombre}.php" en frontend/src/modules/Admin/</p>
+                            <p>No se encontró "${nombreArchivo}.php" en frontend/src/modules/Admin/</p>
+                            <small>Ruta intentada: ${ruta}</small>
                         </div>`;
                 });
         }

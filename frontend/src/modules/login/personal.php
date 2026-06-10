@@ -22,7 +22,7 @@
 
         <div class="alert-box info" id="info-message" style="display: flex;">
             <i class="bx bx-info-circle"></i>
-            <span><strong>Prueba:</strong> Usa 'admin' o 'docente'</span>
+            <span><strong>Prueba:</strong> Usa el usuario directivo semilla (admin.directivo / Admin1234)</span>
         </div>
 
         <div class="login-card">
@@ -96,17 +96,18 @@
             };
 
             try {
-                const res = await fetch(`${GATEWAY}/auth/login`, {
+                const res = await fetch(`${GATEWAY}/directivos/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usuario, password })
+                    body: JSON.stringify({ email: usuario, username: usuario, password })
                 });
                 const data = await res.json();
 
-                if (res.ok && data.status === 'success') {
-                    localStorage.setItem('user_role', data.data.role);
-                    if(data.data.token) localStorage.setItem('token', data.data.token);
-                    window.location.href = data.data.redirectUrl;
+                if (res.ok && data.token) {
+                    localStorage.setItem('user_role', 'directivo');
+                    localStorage.setItem('token', data.token);
+                    if (data.directivo) localStorage.setItem('user_data', JSON.stringify(data.directivo));
+                    window.location.href = '../Admin/admin.php';
                     return;
                 }
             } catch (error) {

@@ -65,7 +65,7 @@ async function tryAlumno(method, path, body, headers) {
 
 // GET /api/alumnos
 router.get('/', async (req, res) => {
-    const r = await tryAlumno('GET', '/api/alumnos', null, req.headers);
+    const r = await tryAlumno('GET', '/api/alumnos/solo-info', null, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.json(alumnosMemoria);
 });
@@ -146,6 +146,34 @@ router.get('/:id/materias', async (req, res) => {
     const r = await tryAlumno('GET', `/api/alumnos/${req.params.id}/materias`, null, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.json([]);
+});
+
+// POST /api/alumnos/:id/materias
+router.post('/:id/materias', async (req, res) => {
+    const r = await tryAlumno('POST', `/api/alumnos/${req.params.id}/materias`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
+// GET /api/alumnos/:id/materias/:materiaNombre/calificaciones
+router.get('/:id/materias/:materiaNombre/calificaciones', async (req, res) => {
+    const materia = encodeURIComponent(req.params.materiaNombre);
+    const r = await tryAlumno('GET', `/api/alumnos/${req.params.id}/materias/${materia}/calificaciones`, null, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
+// PATCH /api/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad
+router.patch('/:id/materias/:materiaNombre/unidades/:numUnidad', async (req, res) => {
+    const materia = encodeURIComponent(req.params.materiaNombre);
+    const r = await tryAlumno(
+        'PATCH',
+        `/api/alumnos/${req.params.id}/materias/${materia}/unidades/${req.params.numUnidad}`,
+        req.body,
+        req.headers
+    );
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
 });
 
 module.exports = router;

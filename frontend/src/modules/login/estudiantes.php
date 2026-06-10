@@ -22,7 +22,7 @@
 
         <div class="alert-box info" id="info-message" style="display: flex;">
             <i class="bx bx-info-circle"></i>
-            <span><strong>Prueba:</strong> Usa 'prueba_alumno' o 'prueba_aspirante'</span>
+            <span><strong>Prueba:</strong> Usa credenciales reales de alumno (usuario o email + contrasena)</span>
         </div>
 
         <div class="login-card">
@@ -78,20 +78,21 @@
 
             try {
                 // Conectar al API Gateway
-                const response = await fetch('http://localhost:3000/api/auth/login', {
+                const response = await fetch('http://localhost:3000/api/alumnos/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usuario: usuarioVal, password: passwordVal })
+                    body: JSON.stringify({ email: usuarioVal, username: usuarioVal, password: passwordVal })
                 });
 
                 const data = await response.json();
 
-                if (response.ok && data.status === 'success') {
-                    localStorage.setItem('user_role', data.data.role);
-                    if(data.data.token) localStorage.setItem('token', data.data.token);
-                    window.location.href = data.data.redirectUrl;
+                if (response.ok && data.token) {
+                    localStorage.setItem('user_role', 'alumno');
+                    localStorage.setItem('token', data.token);
+                    if (data.alumno) localStorage.setItem('user_data', JSON.stringify(data.alumno));
+                    window.location.href = '../alumnos/alumnos.php';
                 } else {
-                    throw new Error(data.message || 'Credenciales incorrectas');
+                    throw new Error(data.error || data.message || 'Credenciales incorrectas');
                 }
             } catch (error) {
                 if(error instanceof TypeError) {

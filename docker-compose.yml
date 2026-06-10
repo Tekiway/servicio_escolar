@@ -3,6 +3,40 @@
 name: servicio_escolar
 
 services:
+  api-gateway:
+    build: ./api-gateway
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      PORT: 3000
+      DOCENTE_SERVICE_URL: http://docente-service:3002
+      ALUMNO_SERVICE_URL: http://alumno-service:3001
+      DIRECTIVO_SERVICE_URL: http://directivo-service:3003
+      FINANZAS_SERVICE_URL: http://finance-service:3004
+      ASPIRANTE_SERVICE_URL: http://aspirante-service:3005
+      JWT_SECRET: secreto
+    develop:
+      watch:
+        - action: sync
+          path: ./api-gateway
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./api-gateway/package.json
+        - action: rebuild
+          path: ./api-gateway/package-lock.json
+    depends_on:
+      - alumno-service
+      - docente-service
+      - directivo-service
+      - finance-service
+      - aspirante-service
+
   alumno-service:
     build: ./servicio_alumnos
     command: sh -c "npm install && npm run dev"
@@ -140,11 +174,14 @@ services:
 
   frontend-service:
     image: php:8.2-apache
+    command: /bin/sh -c "echo 'ServerName localhost' > /etc/apache2/conf-available/servername.conf && a2enconf servername && apache2-foreground"
     ports:
       - "8080:80"
     volumes:
-      - ./frontend:/var/www/html
+      - ./index.php:/var/www/html/index.php
+      - ./frontend:/var/www/html/frontend
     depends_on:
+      - api-gateway
       - alumno-service
       - docente-service
       - directivo-service

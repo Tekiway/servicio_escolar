@@ -1,5 +1,6 @@
 // controllers/financeController.js
 const financeService = require('../services/financeService');
+const Tuition = require('../models/Tuition');
 
 // Crear factura de cobro
 exports.createInvoice = async (req, res) => {

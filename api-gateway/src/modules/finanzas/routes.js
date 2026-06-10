@@ -65,27 +65,27 @@ function validarToken(req, res, next) {
 
 // GET /api/finanzas/tuitions
 router.get('/tuitions', validarToken, async (req, res) => {
-    const r = await tryFinanzas('GET', '/api/finanzas/tuitions', null, req.headers);
+    const r = await tryFinanzas('GET', '/api/finance/tuitions', null, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.status(503).json({ error: 'Servicio de Finanzas no disponible.' });
 });
 
 router.post('/tuitions', validarToken, async (req, res) => {
-    const r = await tryFinanzas('POST', '/api/finanzas/tuitions', req.body, req.headers);
+    const r = await tryFinanzas('POST', '/api/finance/tuitions', req.body, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.status(503).json({ error: 'Servicio de Finanzas no disponible.', code: 'FINANZAS_OFFLINE' });
 });
 
 // PATCH /api/finanzas/tuitions/:id/pay
 router.patch('/tuitions/:id/pay', validarToken, async (req, res) => {
-    const r = await tryFinanzas('PATCH', `/api/finanzas/tuitions/${req.params.id}/pay`, req.body, req.headers);
+    const r = await tryFinanzas('PATCH', `/api/finance/tuitions/${req.params.id}/pay`, req.body, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.status(503).json({ error: 'Servicio de Finanzas no disponible.' });
 });
 
 // GET /api/finanzas/tuitions/student/:studentId
 router.get('/tuitions/student/:studentId', validarToken, async (req, res) => {
-    const r = await tryFinanzas('GET', `/api/finanzas/tuitions/student/${req.params.studentId}`, null, req.headers);
+    const r = await tryFinanzas('GET', `/api/finance/tuitions/student/${req.params.studentId}`, null, req.headers);
     if (r.ok) return res.status(r.status).json(r.data);
     res.status(503).json({ error: 'Servicio de Finanzas no disponible.' });
 });

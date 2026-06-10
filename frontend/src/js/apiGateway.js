@@ -42,10 +42,10 @@ async function request(method, endpoint, body = null) {
 
 const Auth = {
     loginPersonal: (usuario, password) =>
-        request('POST', '/auth/login', { usuario, password, portal: 'personal' }),
+        request('POST', '/directivos/login', { email: usuario, username: usuario, password }),
 
     loginEstudiante: (usuario, password) =>
-        request('POST', '/auth/login', { usuario, password, portal: 'estudiante' }),
+        request('POST', '/alumnos/login', { email: usuario, username: usuario, password }),
 
     loginAlumno: (credencial, password) =>
         request('POST', '/alumnos/login', { email: credencial, username: credencial, password }),
@@ -86,7 +86,7 @@ const Alumnos = {
         request('GET', '/alumnos/solo-info'),
 
     buscar: (filtro) =>
-        request('GET', `/alumnos/buscar?filtro=${encodeURIComponent(filtro)}`),
+        request('GET', `/alumnos/buscar?query=${encodeURIComponent(filtro)}`),
 
     miInfo: () =>
         request('GET', '/alumnos/mi-info'),
