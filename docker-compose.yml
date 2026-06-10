@@ -38,6 +38,7 @@ services:
       - aspirante-service
 
   alumno-service:
+    restart: always
     build: ./servicio_alumnos
     command: sh -c "npm install && npm run dev"
     ports:
@@ -65,6 +66,7 @@ services:
       - mongo-alumnos
 
   docente-service:
+    restart: always
     build:
       context: ./servicio_docente
       dockerfile: dockerfile
@@ -94,6 +96,7 @@ services:
       - mongo-docentes
 
   directivo-service:
+    restart: always
     build: ./servicio_directivo
     command: sh -c "npm install && npm run dev"
     ports:
@@ -120,6 +123,7 @@ services:
       - mongo-directivos
 
   finance-service:
+    restart: always
     build: ./servicio_finanzas
     command: sh -c "npm install && npm run dev"
     ports:
@@ -146,6 +150,7 @@ services:
       - mongo-finanzas
 
   aspirante-service:
+    restart: always
     build: ./servicio_aspirantes
     command: sh -c "npm install && npm run dev"
     ports:
@@ -173,6 +178,7 @@ services:
       - mongo-aspirantes
 
   frontend-service:
+    restart: always
     image: php:8.2-apache
     command: /bin/sh -c "echo 'ServerName localhost' > /etc/apache2/conf-available/servername.conf && a2enconf servername && apache2-foreground"
     ports:
@@ -189,6 +195,7 @@ services:
       - aspirante-service
 
   mongo-alumnos:
+    restart: always
     image: mongo:latest
     ports:
       - "27017:27017"
@@ -196,6 +203,7 @@ services:
       - mongo-alumnos-data:/data/db
 
   mongo-docentes:
+    restart: always
     image: mongo:latest
     ports:
       - "27018:27017"
@@ -203,6 +211,7 @@ services:
       - mongo-docentes-data:/data/db
 
   mongo-directivos:
+    restart: always
     image: mongo:latest
     ports:
       - "27019:27017"
@@ -210,6 +219,7 @@ services:
       - mongo-directivos-data:/data/db
 
   mongo-finanzas:
+    restart: always
     image: mongo:latest
     ports:
       - "27020:27017"
@@ -217,6 +227,7 @@ services:
       - mongo-finanzas-data:/data/db
 
   mongo-aspirantes:
+    restart: always
     image: mongo:latest
     ports:
       - "27021:27017"

@@ -120,4 +120,19 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Docente eliminado (memoria).' });
 });
 
+// POST /api/docentes/tareas
+router.post('/tareas', async (req, res) => {
+    const r = await tryDocente('POST', '/api/docentes/tareas', req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Docentes no disponible.' });
+});
+
+// GET /api/docentes/tareas
+router.get('/tareas', async (req, res) => {
+    const qs = req.query.grupo ? `?grupo=${encodeURIComponent(req.query.grupo)}` : '';
+    const r = await tryDocente('GET', `/api/docentes/tareas${qs}`, null, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.json([]);
+});
+
 module.exports = router;

@@ -76,7 +76,13 @@ const Docentes = {
         request('DELETE', `/docentes/${id}`),
 
     buscar: (filtro) =>
-        request('GET', `/docentes/buscar?filtro=${encodeURIComponent(filtro)}`)
+        request('GET', `/docentes/buscar?filtro=${encodeURIComponent(filtro)}`),
+
+    crearTarea: (datos) =>
+        request('POST', '/docentes/tareas', datos),
+
+    obtenerTareas: (grupo = '') =>
+        request('GET', `/docentes/tareas${grupo ? `?grupo=${encodeURIComponent(grupo)}` : ''}`)
 };
 
 // ─── Alumnos ──────────────────────────────────────────────────────────────────

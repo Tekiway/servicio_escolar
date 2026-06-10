@@ -50,3 +50,12 @@ app.listen(env.PORT, () => {
     console.log(`   ➡️  /api/aspirantes  → ${env.ASPIRANTE_SERVICE_URL}`);
     console.log(`===================================================`);
 });
+
+// Manejo de errores globales para evitar que el servidor se caiga
+process.on('uncaughtException', (err) => {
+    console.error('🔥 [CRÍTICO] Excepción no capturada:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🔥 [CRÍTICO] Promesa rechazada sin manejar:', reason);
+});
