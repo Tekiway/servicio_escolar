@@ -181,3 +181,52 @@
 .btn-guardar-cambios { background: #22c55e; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 .btn-aceptar-modal { background: transparent; color: #a855f7; border: 2px solid #a855f7; padding: 8px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 .close-x { font-size: 1.5rem; color: #94a3b8; cursor: pointer; }
+
+/* ── 3 columnas para el formulario ── */
+.carga-row-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+/* ── Botón refresh tabla ── */
+.section-title { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; user-select: none; }
+.btn-refresh-tabla {
+    background: #f3e8ff; color: #a855f7; border: 1px solid #e9d5ff;
+    width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; transition: all 0.2s;
+}
+.btn-refresh-tabla:hover { background: #a855f7; color: white; }
+
+/* ── Modal form en grid (sin label de ancho fijo) ── */
+.modal-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 0;
+}
+.modal-form-row label {
+    font-size: 0.75rem; font-weight: 700; color: #475569;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.modal-form-row input,
+.modal-form-row select {
+    padding: 10px 14px; border: 1.5px solid #e2e8f0;
+    border-radius: 10px; font-size: 0.9rem; background: #f8fafc;
+    transition: border-color 0.2s;
+}
+.modal-form-row input:focus,
+.modal-form-row select:focus {
+    border-color: #a855f7; outline: none;
+    box-shadow: 0 0 0 3px rgba(168,85,247,.1);
+}
+
+/* ── Max-width del card ── */
+.main-card-carga { max-width: 1000px; }
+
+@media (max-width: 768px) {
+    .carga-row-3col { grid-template-columns: 1fr; }
+    .carga-row-2col { grid-template-columns: 1fr; }
+}
+

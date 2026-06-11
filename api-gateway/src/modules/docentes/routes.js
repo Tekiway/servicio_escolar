@@ -120,6 +120,14 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Docente eliminado (memoria).' });
 });
 
+// PATCH /api/docentes/:id/reset-password — Resetear contraseña
+router.patch('/:id/reset-password', async (req, res) => {
+    const r = await tryDocente('PATCH', `/api/docentes/${req.params.id}/reset-password`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Docentes no disponible para resetear contraseña.' });
+});
+
+
 // POST /api/docentes/tareas
 router.post('/tareas', async (req, res) => {
     const r = await tryDocente('POST', '/api/docentes/tareas', req.body, req.headers);

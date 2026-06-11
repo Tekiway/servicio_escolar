@@ -2,8 +2,8 @@
     <div class="header-carga">
         <div class="icon-carga-box"><i class='bx bx-cog'></i></div>
         <div class="info-carga">
-            <h2>Gestión de Carga Académica</h2>
-            <p>Administración de docentes, planes de estudio y datos institucionales.</p>
+            <h2>Gestión de Docentes</h2>
+            <p>Registro completo, credenciales de acceso y administración del personal docente.</p>
         </div>
     </div>
 
@@ -15,63 +15,118 @@
                 <div class="header-left">
                     <i id="ico-reg" class='bx bx-chevron-down'></i>
                     <i class='bx bx-user-plus' style="color: #a855f7;"></i>
-                    <span>Registro de Docentes</span>
+                    <span>Registro de Nuevo Docente</span>
                 </div>
             </div>
             <div id="form-reg" class="seccion-colapsable">
                 <form id="form-registrar-docente" class="form-carga-grid">
 
-                    <!-- Fila 1: Nombre -->
-                    <div class="carga-input-group">
-                        <label>NOMBRE COMPLETO DEL DOCENTE</label>
-                        <input type="text" id="reg-nombre" name="nombre_docente"
-                               placeholder="Ej. Juan Pérez García" required>
+                    <!-- Fila 1: Nombre completo (3 columnas) -->
+                    <div class="carga-row-3col">
+                        <div class="carga-input-group">
+                            <label>NOMBRE(S) <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-nombre" placeholder="Ej. Juan Carlos" required>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>APELLIDO PATERNO <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-apellido-paterno" placeholder="Ej. Pérez" required>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>APELLIDO MATERNO</label>
+                            <input type="text" id="reg-apellido-materno" placeholder="Ej. García">
+                        </div>
                     </div>
 
                     <!-- Fila 2: Email + Username -->
                     <div class="carga-row-2col">
                         <div class="carga-input-group">
-                            <label>CORREO ELECTRÓNICO</label>
-                            <input type="email" id="reg-email" name="email_docente"
-                                   placeholder="Ej. juan.perez@escuela.edu.mx" required>
+                            <label>CORREO ELECTRÓNICO <span style="color:#dc2626">*</span></label>
+                            <input type="email" id="reg-email" placeholder="juan.perez@escuela.edu.mx" required
+                                   oninput="sugerirUsername()">
                         </div>
                         <div class="carga-input-group">
                             <label>USUARIO (username)</label>
-                            <input type="text" id="reg-username" name="username_docente"
-                                   placeholder="Ej. juan.perez">
+                            <input type="text" id="reg-username" placeholder="Se genera automáticamente del email">
                         </div>
                     </div>
 
-                    <!-- Fila 3: RFC + Contraseña -->
+                    <!-- Fila 3: No. Empleado + Contraseña -->
                     <div class="carga-row-2col">
                         <div class="carga-input-group">
-                            <label>NÚMERO DE EMPLEADO / RFC</label>
-                            <input type="text" id="reg-numero-empleado" name="rfc_docente"
-                                   placeholder="RFC o Clave de empleado" required>
+                            <label>NÚMERO DE EMPLEADO <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-numero-empleado" placeholder="Ej. DOC-2026-001" required>
                         </div>
                         <div class="carga-input-group">
-                            <label>CONTRASEÑA INICIAL</label>
-                            <input type="password" id="reg-password" name="password_docente"
-                                   placeholder="Contraseña de acceso" required>
+                            <label>CONTRASEÑA INICIAL <span style="color:#dc2626">*</span></label>
+                            <div style="position:relative;">
+                                <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required
+                                       style="padding-right:40px; width:100%; box-sizing:border-box;">
+                                <i class='bx bx-show' id="toggle-pass-ico"
+                                   onclick="toggleVerPass()"
+                                   style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#94a3b8;font-size:1.2rem;"></i>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Fila 4: Especialidad + Carrera -->
                     <div class="carga-row-2col">
                         <div class="carga-input-group">
-                            <label>ESPECIALIDAD / ÁREA</label>
-                            <input type="text" id="reg-especialidad" name="especialidad_docente"
-                                   placeholder="Ej. Matemáticas, Programación...">
+                            <label>ESPECIALIDAD / ÁREA <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-especialidad" placeholder="Ej. Matemáticas, Programación..." required>
                         </div>
                         <div class="carga-input-group">
-                            <label>CARRERA ASIGNADA</label>
-                            <select id="reg-carrera" name="id_carrera" required>
+                            <label>CARRERA ASIGNADA <span style="color:#dc2626">*</span></label>
+                            <select id="reg-carrera" required>
                                 <option value="" disabled selected>Seleccionar Carrera...</option>
                                 <option value="Ingeniería en TICs">Ingeniería en TICs</option>
                                 <option value="Administración">Administración</option>
                                 <option value="Contaduría">Contaduría</option>
                                 <option value="Gastronomía">Gastronomía</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Fila 5: Grado + Contrato + Turno -->
+                    <div class="carga-row-3col">
+                        <div class="carga-input-group">
+                            <label>GRADO ACADÉMICO</label>
+                            <select id="reg-grado">
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Técnico Superior">Técnico Superior</option>
+                                <option value="Maestría">Maestría</option>
+                                <option value="Doctorado">Doctorado</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>TIPO DE CONTRATO</label>
+                            <select id="reg-contrato">
+                                <option value="Tiempo Completo">Tiempo Completo</option>
+                                <option value="Medio Tiempo">Medio Tiempo</option>
+                                <option value="Por Horas">Por Horas</option>
+                                <option value="Honorarios">Honorarios</option>
+                            </select>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>TURNO</label>
+                            <select id="reg-turno">
+                                <option value="Matutino">Matutino</option>
+                                <option value="Vespertino">Vespertino</option>
+                                <option value="Nocturno">Nocturno</option>
+                                <option value="Mixto">Mixto</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Fila 6: Teléfono + Fecha de Ingreso -->
+                    <div class="carga-row-2col">
+                        <div class="carga-input-group">
+                            <label>TELÉFONO</label>
+                            <input type="tel" id="reg-telefono" placeholder="Ej. 5512345678">
+                        </div>
+                        <div class="carga-input-group">
+                            <label>FECHA DE INGRESO</label>
+                            <input type="date" id="reg-fecha-ingreso">
                         </div>
                     </div>
 
@@ -96,25 +151,29 @@
                 <div class="header-left">
                     <i id="ico-tab" class='bx bx-chevron-down'></i>
                     <i class='bx bx-list-ul' style="color: #a855f7;"></i>
-                    <span>Docentes en el Sistema</span>
+                    <span>Docentes Registrados</span>
                 </div>
+                <button onclick="event.stopPropagation(); cargarTablaDocentes()" class="btn-refresh-tabla" title="Actualizar tabla">
+                    <i class='bx bx-refresh'></i>
+                </button>
             </div>
             <div id="tabla-doc" class="seccion-colapsable">
                 <div class="table-container-responsive">
                     <table class="tabla-sistema">
                         <thead>
                             <tr>
-                                <th>NOMBRE DEL DOCENTE</th>
-                                <th>EMAIL</th>
-                                <th>USUARIO</th>
-                                <th>RFC / CLAVE</th>
+                                <th>NOMBRE COMPLETO</th>
+                                <th>EMAIL / USUARIO</th>
+                                <th>NO. EMPLEADO</th>
                                 <th>ESPECIALIDAD</th>
+                                <th>CONTRATO / TURNO</th>
+                                <th>ESTATUS</th>
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-docentes-body">
                             <tr>
-                                <td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">
+                                <td colspan="7" style="text-align:center; padding:20px; color:#94a3b8;">
                                     <i class='bx bx-loader-alt bx-spin'></i> Cargando docentes...
                                 </td>
                             </tr>
@@ -127,36 +186,108 @@
     </div><!-- /body-carga -->
 </div><!-- /main-card-carga -->
 
-<!-- ── MODAL EDITAR DOCENTE ── -->
+<!-- ── MODAL: EDITAR DOCENTE ── -->
 <div id="modal-editar-docente" class="modal-overlay">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width:650px; width:95%;">
         <div class="modal-header">
             <div class="header-left-content">
                 <i class='bx bxs-user-detail' style="font-size: 2.2rem; color: #a855f7;"></i>
                 <div class="header-texts">
                     <input type="text" id="edit-header-nombre" class="modal-title-input" value="">
-                    <p>Edición de Información del Docente</p>
+                    <p>Edición de datos del Docente</p>
                 </div>
             </div>
             <span class="close-x" onclick="cerrarModalEditar()">&times;</span>
         </div>
         <div class="modal-body">
             <input type="hidden" id="edit-id">
-            <div class="modal-form-row">
-                <label>Nombre Completo</label>
-                <input type="text" id="edit-nombre">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
+                <div class="modal-form-row">
+                    <label>Nombre(s)</label>
+                    <input type="text" id="edit-nombre">
+                </div>
+                <div class="modal-form-row">
+                    <label>Apellido Paterno</label>
+                    <input type="text" id="edit-ap-paterno">
+                </div>
+                <div class="modal-form-row">
+                    <label>Apellido Materno</label>
+                    <input type="text" id="edit-ap-materno">
+                </div>
             </div>
-            <div class="modal-form-row">
-                <label>Email</label>
-                <input type="email" id="edit-email">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label>Email</label>
+                    <input type="email" id="edit-email">
+                </div>
+                <div class="modal-form-row">
+                    <label>Teléfono</label>
+                    <input type="tel" id="edit-telefono">
+                </div>
             </div>
-            <div class="modal-form-row">
-                <label>RFC / No. Empleado</label>
-                <input type="text" id="edit-rfc">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label>No. Empleado</label>
+                    <input type="text" id="edit-rfc">
+                </div>
+                <div class="modal-form-row">
+                    <label>Especialidad</label>
+                    <input type="text" id="edit-especialidad">
+                </div>
             </div>
-            <div class="modal-form-row">
-                <label>Especialidad / Carrera Asignada</label>
-                <input type="text" id="edit-carrera">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label>Grado Académico</label>
+                    <select id="edit-grado">
+                        <option value="Licenciatura">Licenciatura</option>
+                        <option value="Técnico Superior">Técnico Superior</option>
+                        <option value="Maestría">Maestría</option>
+                        <option value="Doctorado">Doctorado</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="modal-form-row">
+                    <label>Tipo de Contrato</label>
+                    <select id="edit-contrato">
+                        <option value="Tiempo Completo">Tiempo Completo</option>
+                        <option value="Medio Tiempo">Medio Tiempo</option>
+                        <option value="Por Horas">Por Horas</option>
+                        <option value="Honorarios">Honorarios</option>
+                    </select>
+                </div>
+                <div class="modal-form-row">
+                    <label>Turno</label>
+                    <select id="edit-turno">
+                        <option value="Matutino">Matutino</option>
+                        <option value="Vespertino">Vespertino</option>
+                        <option value="Nocturno">Nocturno</option>
+                        <option value="Mixto">Mixto</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label>Carrera Asignada</label>
+                    <select id="edit-carrera">
+                        <option value="Ingeniería en TICs">Ingeniería en TICs</option>
+                        <option value="Administración">Administración</option>
+                        <option value="Contaduría">Contaduría</option>
+                        <option value="Gastronomía">Gastronomía</option>
+                    </select>
+                </div>
+                <div class="modal-form-row">
+                    <label>Estatus</label>
+                    <select id="edit-estatus">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        <option value="Baja Temporal">Baja Temporal</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -164,6 +295,44 @@
                 <i class='bx bx-check-double'></i> Guardar Cambios
             </button>
             <button class="btn-aceptar-modal" onclick="cerrarModalEditar()">
+                <i class='bx bx-x'></i> Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: RESET CONTRASEÑA ── -->
+<div id="modal-reset-pass" class="modal-overlay">
+    <div class="modal-content" style="max-width:420px; width:95%;">
+        <div class="modal-header">
+            <div class="header-left-content">
+                <i class='bx bx-lock-open-alt' style="font-size:2rem; color:#f59e0b;"></i>
+                <div class="header-texts">
+                    <h3 id="reset-pass-titulo" style="margin:0; font-size:1.1rem;">Restablecer Contraseña</h3>
+                    <p>El docente podrá usar esta nueva contraseña</p>
+                </div>
+            </div>
+            <span class="close-x" onclick="cerrarModalReset()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="reset-docente-id">
+            <div class="modal-form-row">
+                <label>NUEVA CONTRASEÑA</label>
+                <div style="position:relative;">
+                    <input type="password" id="reset-nueva-pass" placeholder="Mínimo 6 caracteres"
+                           style="padding-right:40px; width:100%; box-sizing:border-box;">
+                    <i class='bx bx-show' onclick="toggleVerPassReset()"
+                       id="toggle-reset-ico"
+                       style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#94a3b8;font-size:1.2rem;"></i>
+                </div>
+            </div>
+            <p id="reset-error" style="display:none; color:#dc2626; font-size:0.85rem; margin-top:8px;"></p>
+        </div>
+        <div class="modal-footer">
+            <button id="btn-confirmar-reset" class="btn-guardar-cambios" style="background:linear-gradient(135deg,#f59e0b,#d97706);" onclick="confirmarResetPassword()">
+                <i class='bx bx-lock-open-alt'></i> Restablecer Contraseña
+            </button>
+            <button class="btn-aceptar-modal" onclick="cerrarModalReset()">
                 <i class='bx bx-x'></i> Cancelar
             </button>
         </div>

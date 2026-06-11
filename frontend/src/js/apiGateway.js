@@ -82,7 +82,10 @@ const Docentes = {
         request('POST', '/docentes/tareas', datos),
 
     obtenerTareas: (grupo = '') =>
-        request('GET', `/docentes/tareas${grupo ? `?grupo=${encodeURIComponent(grupo)}` : ''}`)
+        request('GET', `/docentes/tareas${grupo ? `?grupo=${encodeURIComponent(grupo)}` : ''}`),
+
+    resetPassword: (id, nuevaPassword) =>
+        request('PATCH', `/docentes/${id}/reset-password`, { nuevaPassword })
 };
 
 // ─── Alumnos ──────────────────────────────────────────────────────────────────
