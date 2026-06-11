@@ -3,40 +3,9 @@
 name: servicio_escolar
 
 services:
-  api-gateway:
-    build: ./api-gateway
-    restart: unless-stopped
-    command: sh -c "npm install && npm run dev"
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./api-gateway:/app
-      - /app/node_modules
-    environment:
-      PORT: 3000
-      DOCENTE_SERVICE_URL: http://docente-service:3002
-      ALUMNO_SERVICE_URL: http://alumno-service:3001
-      DIRECTIVO_SERVICE_URL: http://directivo-service:3003
-      FINANZAS_SERVICE_URL: http://finance-service:3004
-      ASPIRANTE_SERVICE_URL: http://aspirante-service:3005
-      JWT_SECRET: secreto
-    develop:
-      watch:
-        - action: sync
-          path: ./api-gateway
-          target: /app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: ./api-gateway/package.json
-        - action: rebuild
-          path: ./api-gateway/package-lock.json
-    depends_on:
-      - alumno-service
-      - docente-service
-      - directivo-service
-      - finance-service
-      - aspirante-service
+  # ⚠️ api-gateway ya NO corre en Docker.
+  # Es gestionado por PM2 directamente en el sistema.
+  # Para arrancarlo: pm2 start ecosystem.config.js (desde api-gateway/)
 
   alumno-service:
     restart: always
@@ -188,7 +157,6 @@ services:
       - ./index.php:/var/www/html/index.php
       - ./frontend:/var/www/html/frontend
     depends_on:
-      - api-gateway
       - alumno-service
       - docente-service
       - directivo-service
