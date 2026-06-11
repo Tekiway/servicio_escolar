@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../styles/formulariosAdmin.css">
     <link rel="stylesheet" href="../../styles/agregarMateria.css">
     <link rel="stylesheet" href="../../styles/asignarMateria.css">
+    <link rel="stylesheet" href="../../styles/grupos.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../js/apiGateway.js?v=2"></script>
@@ -25,13 +26,21 @@
             
             <nav class="nav-menu">
                 <p class="menu-label">Control Académico</p>
-                    <ul>
-                        <li><a href="#" onclick="cargarModulo('Inicio')"><i class='bx bxs-dashboard'></i> Panel Inicio</a></li>
-                        <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-layout'></i> Gestión de Docentes</a></li>
-                        <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
-                        <li><a href="#" onclick="cargarModulo('AsignarMateria')"><i class='bx bxs-user-check'></i> Asignar a Materia</a></li>
-                        <li><a href="#" onclick="cargarModulo('Carreras')"><i class='bx bxs-graduation'></i> Gestionar Carreras</a></li>
-                    </ul>
+                <ul>
+                    <li><a href="#" onclick="cargarModulo('Inicio')"><i class='bx bxs-dashboard'></i> Panel Inicio</a></li>
+                    <li><a href="#" onclick="cargarModulo('Carreras')"><i class='bx bxs-graduation'></i> Gestionar Carreras</a></li>
+                    <li><a href="#" onclick="cargarModulo('Grupos')"><i class='bx bx-calendar-event'></i> Grupos y Horarios</a></li>
+                    <li><a href="#" onclick="cargarModulo('AgregarMateria')"><i class='bx bxs-book-add'></i> Agregar Materia</a></li>
+                    <li><a href="#" onclick="cargarModulo('AsignarMateria')"><i class='bx bxs-user-check'></i> Asignar a Materia</a></li>
+                </ul>
+
+                <p class="menu-label">Gestión de Usuarios</p>
+                <ul>
+                    <li><a href="#" onclick="cargarModulo('AspirantesAdmin')"><i class='bx bxs-user-plus'></i> Gestión de Aspirantes</a></li>
+                    <li><a href="#" onclick="cargarModulo('AlumnosAdmin')"><i class='bx bxs-user-detail'></i> Gestión de Alumnos</a></li>
+                    <li><a href="#" onclick="cargarModulo('Carga')"><i class='bx bxs-user-rectangle'></i> Gestión de Docentes</a></li>
+                    <li><a href="#" onclick="cargarModulo('PersonalAdmin')"><i class='bx bxs-briefcase'></i> Gestión Administrativa</a></li>
+                </ul>
                                     
                 <p class="menu-label">Portales del Sistema</p>
                 <ul>
