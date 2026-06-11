@@ -173,7 +173,7 @@ function _renderTabla(tbody, docentes) {
                 <small style="color:#a855f7;font-weight:600;">@${d.username || '—'}</small></td>
             <td>${d.numeroEmpleado || '—'}</td>
             <td>${d.especialidad || '—'}<br>
-                <small style="color:#94a3b8;">${d.carrera || ''}</small></td>
+                <small style="color:#94a3b8;">${d.formacionProfesional || d.carrera || ''}</small></td>
             <td>${d.tipoContrato || '—'}<br>
                 <small style="color:#94a3b8;">${d.turno || ''}</small></td>
             <td>${_badgeEstatus(d.estatus)}</td>
@@ -218,20 +218,21 @@ function _registrarEventos() {
         const get = id => (document.getElementById(id)?.value || '').trim();
 
         const datos = {
-            nombre:          get('reg-nombre'),
-            apellidoPaterno: get('reg-apellido-paterno'),
-            apellidoMaterno: get('reg-apellido-materno'),
-            email:           get('reg-email'),
-            username:        get('reg-username'),
-            password:        get('reg-password'),
-            numeroEmpleado:  get('reg-numero-empleado'),
-            especialidad:    get('reg-especialidad'),
-            carrera:         get('reg-carrera'),
-            gradoAcademico:  get('reg-grado'),
-            tipoContrato:    get('reg-contrato'),
-            turno:           get('reg-turno'),
-            telefono:        get('reg-telefono'),
-            fechaIngreso:    get('reg-fecha-ingreso') || new Date().toISOString().split('T')[0]
+            nombre:               get('reg-nombre'),
+            apellidoPaterno:      get('reg-apellido-paterno'),
+            apellidoMaterno:      get('reg-apellido-materno'),
+            email:                get('reg-email'),
+            username:             get('reg-username'),
+            password:             get('reg-password'),
+            numeroEmpleado:       get('reg-numero-empleado'),
+            especialidad:         get('reg-especialidad'),
+            formacionProfesional: get('reg-formacion'),
+            carrera:              get('reg-carrera'),
+            gradoAcademico:       get('reg-grado'),
+            tipoContrato:         get('reg-contrato'),
+            turno:                get('reg-turno'),
+            telefono:             get('reg-telefono'),
+            fechaIngreso:         get('reg-fecha-ingreso') || new Date().toISOString().split('T')[0]
         };
 
         if (!datos.nombre)          { _mostrarError('El nombre es obligatorio.');           _setBtnLoading(btn, false); return; }
@@ -278,6 +279,7 @@ function abrirModalEditar(datosJson) {
     set('edit-telefono',     d.telefono);
     set('edit-rfc',          d.numeroEmpleado);
     set('edit-especialidad', d.especialidad);
+    set('edit-formacion',    d.formacionProfesional);
     setOpt('edit-grado',     d.gradoAcademico);
     setOpt('edit-contrato',  d.tipoContrato);
     setOpt('edit-turno',     d.turno);
@@ -303,18 +305,19 @@ async function guardarCambios() {
     const getOpt = id => document.getElementById(id)?.value || '';
 
     const datos = {
-        nombre:          get('edit-nombre'),
-        apellidoPaterno: get('edit-ap-paterno'),
-        apellidoMaterno: get('edit-ap-materno'),
-        email:           get('edit-email'),
-        telefono:        get('edit-telefono'),
-        numeroEmpleado:  get('edit-rfc'),
-        especialidad:    get('edit-especialidad'),
-        gradoAcademico:  getOpt('edit-grado'),
-        tipoContrato:    getOpt('edit-contrato'),
-        turno:           getOpt('edit-turno'),
-        carrera:         getOpt('edit-carrera'),
-        estatus:         getOpt('edit-estatus')
+        nombre:               get('edit-nombre'),
+        apellidoPaterno:      get('edit-ap-paterno'),
+        apellidoMaterno:      get('edit-ap-materno'),
+        email:                get('edit-email'),
+        telefono:             get('edit-telefono'),
+        numeroEmpleado:       get('edit-rfc'),
+        especialidad:         get('edit-especialidad'),
+        formacionProfesional: get('edit-formacion'),
+        gradoAcademico:       getOpt('edit-grado'),
+        tipoContrato:         getOpt('edit-contrato'),
+        turno:                getOpt('edit-turno'),
+        carrera:              getOpt('edit-carrera'),
+        estatus:              getOpt('edit-estatus')
     };
 
     try {

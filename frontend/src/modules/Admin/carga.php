@@ -68,11 +68,30 @@
                         </div>
                     </div>
 
-                    <!-- Fila 4: Especialidad + Carrera -->
-                    <div class="carga-row-2col">
+                    <!-- Fila 4: Especialidad + Formación Profesional + Carrera -->
+                    <div class="carga-row-3col">
                         <div class="carga-input-group">
-                            <label>ESPECIALIDAD / ÁREA <span style="color:#dc2626">*</span></label>
+                            <label>ESPECIALIDAD QUE IMPARTE <span style="color:#dc2626">*</span></label>
                             <input type="text" id="reg-especialidad" placeholder="Ej. Matemáticas, Programación..." required>
+                        </div>
+                        <div class="carga-input-group">
+                            <label>FORMACIÓN PROFESIONAL</label>
+                            <input type="text" id="reg-formacion" list="lista-formaciones"
+                                   placeholder="Ej. Ing. en Sistemas, Contador Público...">
+                            <datalist id="lista-formaciones">
+                                <option value="Ingeniero en Sistemas"></option>
+                                <option value="Ingeniero en TICs"></option>
+                                <option value="Ingeniero Industrial"></option>
+                                <option value="Ingeniero Civil"></option>
+                                <option value="Licenciado en Administración"></option>
+                                <option value="Contador Público"></option>
+                                <option value="Licenciado en Contaduría"></option>
+                                <option value="Licenciado en Derecho"></option>
+                                <option value="Licenciado en Gastronomía"></option>
+                                <option value="Licenciado en Pedagogía"></option>
+                                <option value="Maestro en Ciencias"></option>
+                                <option value="Doctor en Ciencias"></option>
+                            </datalist>
                         </div>
                         <div class="carga-input-group">
                             <label>CARRERA ASIGNADA <span style="color:#dc2626">*</span></label>
@@ -234,12 +253,41 @@
                     <input type="text" id="edit-rfc">
                 </div>
                 <div class="modal-form-row">
-                    <label>Especialidad</label>
+                    <label>Especialidad que Imparte</label>
                     <input type="text" id="edit-especialidad">
                 </div>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:14px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label>Formación Profesional</label>
+                    <input type="text" id="edit-formacion" list="lista-formaciones-edit"
+                           placeholder="Ej. Ing. en Sistemas, Contador Público...">
+                    <datalist id="lista-formaciones-edit">
+                        <option value="Ingeniero en Sistemas"></option>
+                        <option value="Ingeniero en TICs"></option>
+                        <option value="Ingeniero Industrial"></option>
+                        <option value="Ingeniero Civil"></option>
+                        <option value="Licenciado en Administración"></option>
+                        <option value="Contador Público"></option>
+                        <option value="Licenciado en Contaduría"></option>
+                        <option value="Licenciado en Derecho"></option>
+                        <option value="Licenciado en Gastronomía"></option>
+                        <option value="Licenciado en Pedagogía"></option>
+                        <option value="Maestro en Ciencias"></option>
+                        <option value="Doctor en Ciencias"></option>
+                    </datalist>
+                </div>
+                <div class="modal-form-row">
+                    <label>Carrera Asignada</label>
+                    <select id="edit-carrera">
+                        <option value="Ingeniería en TICs">Ingeniería en TICs</option>
+                        <option value="Administración">Administración</option>
+                        <option value="Contaduría">Contaduría</option>
+                        <option value="Gastronomía">Gastronomía</option>
+                    </select>
+                </div>
+            </div>
                 <div class="modal-form-row">
                     <label>Grado Académico</label>
                     <select id="edit-grado">

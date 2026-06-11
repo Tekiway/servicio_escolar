@@ -14,6 +14,7 @@ const DocenteSchema = new mongoose.Schema({
     // ── Datos institucionales ──────────────────────────
     numeroEmpleado:  { type: String, required: true, unique: true, trim: true },
     especialidad:    { type: String, required: true, trim: true },
+    formacionProfesional: { type: String, trim: true, default: '' }, // Ej: Ingeniero en Sistemas, Contador Público
     carrera:         { type: String, trim: true },
     gradoAcademico:  {
         type: String,
