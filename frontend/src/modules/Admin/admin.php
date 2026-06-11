@@ -42,14 +42,6 @@
                     <li><a href="#" onclick="cargarModulo('PersonalAdmin')"><i class='bx bxs-briefcase'></i> Gestión Administrativa</a></li>
                 </ul>
                                     
-                <p class="menu-label">Portales del Sistema</p>
-                <ul>
-                    <li><a href="/frontend/src/modules/alumnos/alumnos.php"><i class='bx bxs-graduation'></i> Portal Alumnos</a></li>
-                    <li><a href="/frontend/src/modules/Aspirantes/aspirantes.php"><i class='bx bxs-user-plus'></i> Portal Aspirantes</a></li>
-                    <li><a href="/frontend/src/modules/Docente/docente.php"><i class='bx bxs-user-rectangle'></i> Portal Docente</a></li>
-                    <li><a href="/frontend/src/modules/Finanzas/finanzas.php"><i class='bx bxs-bank'></i> Portal Finanzas</a></li>
-                </ul>
-                                    
                 <p class="menu-label">Sesión</p>
                 <ul>
                     <li><a href="/frontend/src/modules/login/personal.php"><i class='bx bx-log-out'></i> Cerrar Sesión</a></li>
