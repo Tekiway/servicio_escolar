@@ -5,6 +5,7 @@ name: servicio_escolar
 services:
   api-gateway:
     build: ./api-gateway
+    restart: unless-stopped
     command: sh -c "npm install && npm run dev"
     ports:
       - "3000:3000"

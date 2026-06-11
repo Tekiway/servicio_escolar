@@ -1,0 +1,17 @@
+[Unit]
+Description=Servicio Escolar - Docker Compose Stack
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/lampp/htdocs/servicio_escolar
+ExecStart=/opt/lampp/htdocs/servicio_escolar/start-services.sh
+ExecStop=/usr/bin/docker compose -f /opt/lampp/htdocs/servicio_escolar/docker-compose.yml down
+TimeoutStartSec=120
+User=root
+
+[Install]
+WantedBy=multi-user.target
