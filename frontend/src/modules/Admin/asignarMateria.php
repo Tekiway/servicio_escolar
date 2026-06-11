@@ -148,6 +148,64 @@
     </div>
 </div>
 
+<div class="main-card-materias table-card-mt" style="margin-top: 30px;">
+    <div class="header-materias accordion-header active" onclick="togglePanel('tabla-asignaciones')">
+        <div class="icon-materia-box table-icon"><i class='bx bx-list-ul'></i></div>
+        <div class="info-materia">
+            <h2>Asignaciones Registradas</h2>
+            <p>Visualiza, edita o elimina los horarios asignados a los docentes.</p>
+        </div>
+        <i class='bx bx-chevron-down arrow-icon'></i>
+    </div>
+
+    <div id="tabla-asignaciones" class="accordion-content active" style="display:block; padding:20px;">
+        <div class="table-responsive">
+            <table class="materia-custom-table" style="width:100%; text-align:left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2e8f0; background: #f8fafc;">
+                        <th style="padding:12px;">Materia</th>
+                        <th style="padding:12px;">Docente</th>
+                        <th style="padding:12px;">Grupo / Aula</th>
+                        <th style="padding:12px;">Horario</th>
+                        <th style="padding:12px; text-align:center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-asignaciones-body">
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding:20px;">
+                            <i class='bx bx-loader-alt bx-spin'></i> Cargando asignaciones...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Asignacion -->
+<div id="modal-editar-asignacion" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+    <div class="modal-content" style="background:white; padding:30px; border-radius:15px; width:500px; max-width:90%;">
+        <h3 style="margin-top:0; color:#1e293b;"><i class='bx bx-edit'></i> Editar Asignación</h3>
+        <input type="hidden" id="edit-asig-id">
+        <div style="margin-bottom:15px;">
+            <label style="font-weight:bold;">Grupo</label>
+            <input type="text" id="edit-asig-grupo" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom:15px;">
+            <label style="font-weight:bold;">Aula / Lab</label>
+            <input type="text" id="edit-asig-aula" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="margin-bottom:15px;">
+            <label style="font-weight:bold;">Horario (Día y Horas)</label>
+            <input type="text" id="edit-asig-horario" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button onclick="document.getElementById('modal-editar-asignacion').style.display='none'" style="padding:8px 15px; border-radius:8px; border:1px solid #cbd5e1; background:white; cursor:pointer;">Cancelar</button>
+            <button onclick="guardarEdicionAsignacion()" style="padding:8px 15px; border-radius:8px; background:#3b82f6; color:white; border:none; cursor:pointer;">Guardar Cambios</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // Simulación rápida para que el usuario lo pruebe visualmente
     function seleccionarMateria(el, nombre) {

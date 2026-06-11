@@ -96,20 +96,44 @@
             };
 
             try {
-                const res = await fetch(`${GATEWAY}/directivos/login`, {
+                // Primero intentamos como Docente
+                let res = await fetch(`${GATEWAY}/docentes/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: usuario, username: usuario, password })
                 });
-                const data = await res.json();
+                let data = await res.json();
+
+                if (res.ok && data.token) {
+                    localStorage.setItem('user_role', 'docente');
+                    localStorage.setItem('token', data.token);
+                    if (data.docente) localStorage.setItem('user_data', JSON.stringify(data.docente));
+                    window.location.href = '../Docente/docente.php';
+                    return;
+                }
+
+                // Si falla, intentamos como Directivo (Admin o Finanzas)
+                res = await fetch(`${GATEWAY}/directivos/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: usuario, username: usuario, password })
+                });
+                data = await res.json();
 
                 if (res.ok && data.token) {
                     localStorage.setItem('user_role', 'directivo');
                     localStorage.setItem('token', data.token);
-                    if (data.directivo) localStorage.setItem('user_data', JSON.stringify(data.directivo));
+                    if (data.directivo) {
+                        localStorage.setItem('user_data', JSON.stringify(data.directivo));
+                        if (data.directivo.area === 'Finanzas') {
+                            window.location.href = '../Finanzas/finanzas.php';
+                            return;
+                        }
+                    }
                     window.location.href = '../Admin/admin.php';
                     return;
                 }
+
             } catch (error) {
                 mostrarError('Error de conexión con el servidor. El API Gateway está apagado.');
                 return;

@@ -34,7 +34,11 @@ router.post('/login', ctrl.autenticarAlumno);
 // Visualizacion y modificaciones de alumnos para docente/directivo autenticado
 router.get('/solo-info', authDocenteODirectivo, ctrl.obtenerTodosSoloInfo);
 router.get('/buscar', authDocenteODirectivo, ctrl.buscarAlumnos);
+router.put('/:id', authDocenteODirectivo, ctrl.actualizarAlumno);
+router.delete('/:id', authDocenteODirectivo, ctrl.eliminarAlumno);
 router.put('/:id/carrera', authDocenteODirectivo, ctrl.actualizarCarrera);
+router.patch('/:id/reset-password', authDocenteODirectivo, ctrl.resetPassword);
+router.patch('/:id/credenciales', authDocenteODirectivo, ctrl.actualizarCredenciales);
 router.post('/:id/materias', authDocenteODirectivo, ctrl.registrarMateria);
 router.get('/:id/materias/:materiaNombre/calificaciones', authDocenteODirectivo, ctrl.verCalificacionesMateria);
 

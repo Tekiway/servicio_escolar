@@ -25,6 +25,12 @@ app.post('/api/directivos/login', loginDirectivo);
 app.get('/api/directivos', directivoAuth, obtenerDirectivos);
 app.get('/api/directivos/:id', directivoAuth, obtenerDirectivoPorId);
 app.post('/api/directivos', directivoAuth, crearDirectivo);
+app.put('/api/directivos/:id', directivoAuth, require('./controllers/directivosControllers').actualizarDirectivo);
+app.delete('/api/directivos/:id', directivoAuth, require('./controllers/directivosControllers').eliminarDirectivo);
+app.patch('/api/directivos/:id/credenciales', directivoAuth, require('./controllers/directivosControllers').actualizarCredenciales);
+
+const academicoRoutes = require('./routes/academicoRoutes');
+app.use('/api/academico', academicoRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Microservicio corriendo en http://localhost:${PORT}`);

@@ -164,6 +164,14 @@
                 const btn = document.getElementById('btn-volver-admin');
                 if (btn) btn.style.display = 'block';
             }
+
+            const storedPerfil = localStorage.getItem('user_data');
+            if (storedPerfil) {
+                const data = JSON.parse(storedPerfil);
+                const userName = document.querySelector('.user-welcome strong');
+                if (userName) userName.textContent = 'Bienvenido ' + (data.username || data.nombre);
+            }
+
             cargarModulo('Inicio');
         };
 

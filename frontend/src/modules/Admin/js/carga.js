@@ -32,20 +32,7 @@ function _inicializar() {
     if (fechaInput) fechaInput.value = new Date().toISOString().split('T')[0];
 }
 
-// ─── Sugerir username desde email ─────────────────────────────────────────────
-function sugerirUsername() {
-    const email    = document.getElementById('reg-email')?.value || '';
-    const usernameInput = document.getElementById('reg-username');
-    if (usernameInput && !usernameInput.dataset.editadoManualmente) {
-        usernameInput.value = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g, '');
-    }
-}
 
-// Marcar que el username fue editado manualmente
-(function() {
-    const u = document.getElementById('reg-username');
-    if (u) u.addEventListener('input', () => { u.dataset.editadoManualmente = 'true'; });
-})();
 
 // ─── Toggle ver contraseña ────────────────────────────────────────────────────
 function toggleVerPass() {
@@ -185,8 +172,8 @@ function _renderTabla(tbody, docentes) {
                         <i class='bx bx-edit-alt'></i>
                     </button>
                     <button class="btn-action-view" style="background:rgba(245,158,11,.15);color:#d97706;"
-                        onclick="abrirModalReset('${d._id}', '${(nombreCompleto || d.nombre || '').replace(/'/g, "\\'")}')"
-                        title="Resetear contraseña">
+                        onclick="abrirModalReset('${d._id}', '${(nombreCompleto || d.nombre || '').replace(/'/g, "\\'")}', '${d.username}')"
+                        title="Cambiar Accesos">
                         <i class='bx bx-lock-open-alt'></i>
                     </button>
                     <button class="btn-action-delete"
@@ -237,7 +224,7 @@ function _registrarEventos() {
 
         if (!datos.nombre)          { _mostrarError('El nombre es obligatorio.');           _setBtnLoading(btn, false); return; }
         if (!datos.apellidoPaterno) { _mostrarError('El apellido paterno es obligatorio.');  _setBtnLoading(btn, false); return; }
-        if (!datos.email)           { _mostrarError('El email es obligatorio.');             _setBtnLoading(btn, false); return; }
+        if (!datos.username)        { _mostrarError('El usuario es obligatorio.');           _setBtnLoading(btn, false); return; }
         if (!datos.password)        { _mostrarError('La contraseña inicial es obligatoria.'); _setBtnLoading(btn, false); return; }
         if (datos.password.length < 6) { _mostrarError('La contraseña debe tener al menos 6 caracteres.'); _setBtnLoading(btn, false); return; }
         if (!datos.numeroEmpleado)  { _mostrarError('El número de empleado es obligatorio.'); _setBtnLoading(btn, false); return; }
@@ -333,9 +320,10 @@ async function guardarCambios() {
 }
 
 // ─── Modal de reset de contraseña ─────────────────────────────────────────────
-function abrirModalReset(id, nombre) {
+function abrirModalReset(id, nombre, currentUsername) {
     document.getElementById('reset-docente-id').value = id;
-    document.getElementById('reset-pass-titulo').textContent = `Restablecer contraseña de ${nombre}`;
+    document.getElementById('reset-pass-titulo').textContent = `Accesos de ${nombre}`;
+    document.getElementById('reset-nuevo-username').value = currentUsername || '';
     document.getElementById('reset-nueva-pass').value = '';
     const err = document.getElementById('reset-error');
     if (err) err.style.display = 'none';
@@ -349,22 +337,24 @@ function cerrarModalReset() {
 
 async function confirmarResetPassword() {
     const id            = document.getElementById('reset-docente-id')?.value;
+    const nuevoUsername = document.getElementById('reset-nuevo-username')?.value?.trim();
     const nuevaPassword = document.getElementById('reset-nueva-pass')?.value?.trim();
     const errEl         = document.getElementById('reset-error');
 
-    if (!nuevaPassword || nuevaPassword.length < 6) {
-        if (errEl) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; }
+    if (!nuevoUsername) {
+        if (errEl) { errEl.textContent = 'El usuario no puede estar vacío.'; errEl.style.display = 'block'; }
         return;
     }
     if (errEl) errEl.style.display = 'none';
 
     const btn = document.getElementById('btn-confirmar-reset');
-    _setBtnLoading(btn, true, 'Restableciendo...');
+    _setBtnLoading(btn, true, 'Guardando...');
 
     try {
-        const res = await API.Docentes.resetPassword(id, nuevaPassword);
-        _mostrarFeedback(`✅ ${res.message || 'Contraseña restablecida correctamente.'}`, 'warning');
+        const res = await API.Docentes.actualizarCredenciales(id, nuevoUsername, nuevaPassword);
+        _mostrarFeedback(`✅ ${res.mensaje || res.message || 'Accesos actualizados correctamente.'}`, 'warning');
         cerrarModalReset();
+        cargarTablaDocentes();
     } catch (err) {
         if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
         _mostrarFeedback(err.message, 'error');

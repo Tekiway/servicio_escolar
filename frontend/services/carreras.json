@@ -9,5 +9,16 @@
         "objetivo": "",
         "ingreso": "",
         "egreso": ""
+    },
+    {
+        "id": "3",
+        "nombre": "asdasd",
+        "clave": "asdadas",
+        "modalidad": "Escolarizada",
+        "duracion": "5",
+        "estado": "Activa",
+        "objetivo": "sdadasd",
+        "ingreso": "sdasd",
+        "egreso": "asdasd"
     }
 ]

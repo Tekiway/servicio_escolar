@@ -198,9 +198,52 @@ const loginDirectivo = async (req, res) => {
     }
 };
 
+const actualizarCredenciales = async (req, res) => {
+    try {
+        const directivo = await Directivo.findById(req.params.id);
+        if (!directivo) return res.status(404).json({ mensaje: 'Directivo no encontrado' });
+
+        const { username, password } = req.body;
+        if (username) directivo.username = username;
+        
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            directivo.password = await bcrypt.hash(password, salt);
+        }
+
+        await directivo.save();
+        res.json({ mensaje: 'Credenciales actualizadas exitosamente.' });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al actualizar credenciales', error: error.message });
+    }
+};
+const actualizarDirectivo = async (req, res) => {
+    try {
+        const { password, ...resto } = req.body;
+        const directivo = await Directivo.findByIdAndUpdate(req.params.id, resto, { new: true }).select('-password');
+        if (!directivo) return res.status(404).json({ mensaje: 'Directivo no encontrado' });
+        res.json(directivo);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al actualizar directivo', error: error.message });
+    }
+};
+
+const eliminarDirectivo = async (req, res) => {
+    try {
+        const directivo = await Directivo.findByIdAndDelete(req.params.id);
+        if (!directivo) return res.status(404).json({ mensaje: 'Directivo no encontrado' });
+        res.json({ mensaje: 'Directivo eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al eliminar directivo', error: error.message });
+    }
+};
+
 module.exports = {
     obtenerDirectivos,
     obtenerDirectivoPorId,
     crearDirectivo,
-    loginDirectivo
+    loginDirectivo,
+    actualizarCredenciales,
+    actualizarDirectivo,
+    eliminarDirectivo
 };

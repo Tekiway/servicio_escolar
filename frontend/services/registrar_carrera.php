@@ -76,6 +76,9 @@ if (!empty($id)) {
         "egreso" => $egreso
     ];
     $data[] = $nuevaCarrera;
-    file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    echo json_encode(["success" => true, "message" => "Carrera registrada correctamente."]);
+    if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) !== false) {
+        echo json_encode(["success" => true, "message" => "Carrera registrada correctamente."]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Error interno: No se pudo escribir en la base de datos (Permisos DENEGADOS)."]);
+    }
 }

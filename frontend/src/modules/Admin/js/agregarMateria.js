@@ -306,16 +306,26 @@ function editarMateria(datosJson) {
     const form = document.getElementById('form-agregar-materia');
     if (!form) return;
 
-    // Llenar campos
-    form.querySelector('[name="carrera_materia"]').value = m.carrera || '';
-    form.querySelector('[name="semestre_materia"]').value = m.semestre || '';
-    form.querySelector('[name="tipo_materia"]').value = m.tipo_materia || 'Tronco Común';
-    form.querySelector('[name="nombre_materia"]').value = m.nombre || '';
-    form.querySelector('[name="clave_materia"]').value = m.clave || '';
-    form.querySelector('[name="horas_teoricas"]').value = m.horas_teoricas || '';
-    form.querySelector('[name="horas_practicas"]').value = m.horas_practicas || '';
-    form.querySelector('[name="creditos"]').value = m.creditos || '';
-    form.querySelector('[name="objetivo_general"]').value = m.objetivo_general || '';
+    // Llenar campos con seguridad
+    if(form.querySelector('[name="carrera_materia"]')) form.querySelector('[name="carrera_materia"]').value = m.carrera || '';
+    if(form.querySelector('[name="semestre_materia"]')) form.querySelector('[name="semestre_materia"]').value = m.semestre || '';
+    if(form.querySelector('[name="tipo_materia"]')) form.querySelector('[name="tipo_materia"]').value = m.tipo_materia || 'Obligatoria';
+    if(form.querySelector('[name="nombre_materia"]')) form.querySelector('[name="nombre_materia"]').value = m.nombre || '';
+    if(form.querySelector('[name="clave_materia"]')) form.querySelector('[name="clave_materia"]').value = m.clave || '';
+    if(form.querySelector('[name="horas_teoricas"]')) form.querySelector('[name="horas_teoricas"]').value = m.horas_teoricas || '';
+    if(form.querySelector('[name="horas_practicas"]')) form.querySelector('[name="horas_practicas"]').value = m.horas_practicas || '';
+    if(form.querySelector('[name="creditos"]')) form.querySelector('[name="creditos"]').value = m.creditos || '';
+    if(form.querySelector('[name="objetivo_materia"]')) form.querySelector('[name="objetivo_materia"]').value = m.objetivo_general || m.objetivo_materia || '';
+    if(form.querySelector('[name="descripcion_materia"]')) form.querySelector('[name="descripcion_materia"]').value = m.descripcion || '';
+    if(form.querySelector('[name="clasificacion_academica"]')) form.querySelector('[name="clasificacion_academica"]').value = m.clasificacion_academica || '';
+    if(form.querySelector('[name="area_conocimiento"]')) form.querySelector('[name="area_conocimiento"]').value = m.area_conocimiento || '';
+    if(form.querySelector('[name="modalidad"]')) form.querySelector('[name="modalidad"]').value = m.modalidad || 'Presencial';
+    if(form.querySelector('[name="competencia_general"]')) form.querySelector('[name="competencia_general"]').value = m.competencia_general || '';
+    if(form.querySelector('[name="competencias_especificas"]')) form.querySelector('[name="competencias_especificas"]').value = m.competencias_especificas || '';
+    if(form.querySelector('[name="prerrequisitos"]')) form.querySelector('[name="prerrequisitos"]').value = m.prerrequisitos || '';
+    if(form.querySelector('[name="estado"]')) form.querySelector('[name="estado"]').value = m.estado || 'Activa';
+    if(form.querySelector('[name="version_programa"]')) form.querySelector('[name="version_programa"]').value = m.version_programa || '';
+    if(form.querySelector('[name="observaciones"]')) form.querySelector('[name="observaciones"]').value = m.observaciones || '';
 
     // Llenar unidades
     const container = document.getElementById('unidades-container');

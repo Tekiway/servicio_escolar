@@ -4,7 +4,7 @@
     "carrera": "Ingeniería en TICs",
     "semestre": "2",
     "tipo_materia": "Obligatoria",
-    "nombre": "sdvsdvsdvsd",
+    "nombre": "TEST",
     "clave": "efsdcsdv",
     "descripcion": "vsdvsdvsdv",
     "horas_teoricas": 3,
@@ -36,6 +36,53 @@
         "competencia": "ascasc",
         "subtemas": "ascasc",
         "observaciones": "ascasc"
+      }
+    ]
+  },
+  {
+    "_id": "mat-1781189291426",
+    "carrera": "Ingeniería en TICs",
+    "semestre": "2",
+    "tipo_materia": "Obligatoria",
+    "nombre": "ascascasc",
+    "clave": "sacasc",
+    "descripcion": "sacascasc",
+    "horas_teoricas": 4,
+    "horas_practicas": 4,
+    "total_horas": 8,
+    "creditos": 3,
+    "clasificacion_academica": "scsdcsdcsd",
+    "area_conocimiento": "dscsdcsdc",
+    "modalidad": "Presencial",
+    "competencia_general": "sdcsdcsd",
+    "competencias_especificas": "sdcds",
+    "objetivo_general": "sdsdc",
+    "prerrequisitos": "sdcsdc",
+    "estado": "Activa",
+    "version_programa": "2010",
+    "fecha_creacion": "2026-06-11",
+    "observaciones": "asaaaasxassxasx",
+    "unidades": [
+      {
+        "tema": "zcasc",
+        "objetivo": "ascacasc",
+        "competencia": "scasc",
+        "subtemas": "ascacasc",
+        "observaciones": "ascasca"
+      },
+      {
+        "tema": "asac",
+        "objetivo": "sacasc",
+        "competencia": "ascac",
+        "subtemas": "asas",
+        "observaciones": "ascasc"
+      },
+      {
+        "tema": "ascasc",
+        "objetivo": "sacasc",
+        "competencia": "sacasc",
+        "subtemas": "ascasc",
+        "observaciones": "ascascasc"
       }
     ]
   }

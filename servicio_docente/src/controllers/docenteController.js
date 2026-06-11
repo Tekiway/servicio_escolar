@@ -10,10 +10,9 @@ exports.registrarDocente = async (req, res) => {
         if (!email)    return res.status(400).json({ error: 'El email es obligatorio' });
         if (!password) return res.status(400).json({ error: 'La contraseña es obligatoria' });
 
-        // Auto-generar username si no se proporciona
-        const base = (username || email.split('@')[0] || '').toLowerCase().trim();
-        if (!base) return res.status(400).json({ error: 'El usuario es obligatorio' });
+        if (!username) return res.status(400).json({ error: 'El usuario de login es obligatorio' });
 
+        const base = username.toLowerCase().trim();
         let usernameFinal = base;
         let intento = 0;
         while (await Docente.exists({ username: usernameFinal })) {
@@ -91,26 +90,25 @@ exports.editarDocente = async (req, res) => {
     }
 };
 
-// ── Resetear contraseña ───────────────────────────────────────────────────────
-exports.resetPassword = async (req, res) => {
+// ── Actualizar Credenciales ───────────────────────────────────────────────────
+exports.actualizarCredenciales = async (req, res) => {
     try {
-        const { nuevaPassword } = req.body;
-        if (!nuevaPassword || nuevaPassword.length < 6) {
-            return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+        const docente = await Docente.findById(req.params.id);
+        if (!docente) return res.status(404).json({ error: 'Docente no encontrado' });
+
+        const { username, password } = req.body;
+        
+        if (username) {
+            docente.username = username;
         }
 
-        const salt         = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(nuevaPassword, salt);
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            docente.password = await bcrypt.hash(password, salt);
+        }
 
-        const docente = await Docente.findByIdAndUpdate(
-            req.params.id,
-            { password: passwordHash },
-            { new: true }
-        ).select('-password');
-
-        if (!docente) return res.status(404).json({ message: 'Docente no encontrado' });
-
-        res.json({ message: `Contraseña de "${docente.nombre}" restablecida correctamente.`, docente });
+        await docente.save();
+        res.json({ message: 'Credenciales actualizadas exitosamente.', docente });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

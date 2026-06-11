@@ -127,6 +127,20 @@ router.patch('/:id/reset-password', async (req, res) => {
     res.status(503).json({ error: 'Servicio de Docentes no disponible para resetear contraseña.' });
 });
 
+// PATCH /api/docentes/:id/credenciales — Actualizar credenciales
+router.patch('/:id/credenciales', async (req, res) => {
+    const r = await tryDocente('PATCH', `/api/docentes/${req.params.id}/credenciales`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    
+    // Fallback in memory
+    const idx = docentesMemoria.findIndex(d => d._id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Docente no encontrado' });
+    
+    if (req.body.username) docentesMemoria[idx].username = req.body.username;
+    if (req.body.password) docentesMemoria[idx].password = req.body.password;
+    
+    res.json({ success: true, message: 'Credenciales actualizadas en memoria.', data: docentesMemoria[idx] });
+});
 
 // POST /api/docentes/tareas
 router.post('/tareas', async (req, res) => {

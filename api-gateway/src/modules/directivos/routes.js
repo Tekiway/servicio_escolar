@@ -136,4 +136,42 @@ router.post('/login', async (req, res) => {
     });
 });
 
+// PUT /api/directivos/:id
+router.put('/:id', async (req, res) => {
+    const r = await tryDirectivo('PUT', `/api/directivos/${req.params.id}`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    
+    // Fallback in memory
+    const idx = directivosMemoria.findIndex(d => d._id === req.params.id);
+    if (idx !== -1) {
+        Object.assign(directivosMemoria[idx], req.body);
+        return res.json(directivosMemoria[idx]);
+    }
+    
+    res.status(503).json({ error: 'Servicio de Directivos no disponible' });
+});
+
+// DELETE /api/directivos/:id
+router.delete('/:id', async (req, res) => {
+    const r = await tryDirectivo('DELETE', `/api/directivos/${req.params.id}`, null, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Directivos no disponible' });
+});
+
+// PATCH /api/directivos/:id/credenciales
+router.patch('/:id/credenciales', async (req, res) => {
+    const r = await tryDirectivo('PATCH', `/api/directivos/${req.params.id}/credenciales`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    
+    // Fallback in memory
+    const idx = directivosMemoria.findIndex(d => d._id === req.params.id);
+    if (idx !== -1) {
+        if (req.body.username) directivosMemoria[idx].username = req.body.username;
+        if (req.body.password) directivosMemoria[idx].password = req.body.password;
+        return res.json({ success: true, message: 'Credenciales actualizadas en memoria.', data: directivosMemoria[idx] });
+    }
+    
+    res.status(503).json({ error: 'Servicio de Directivos no disponible' });
+});
+
 module.exports = router;

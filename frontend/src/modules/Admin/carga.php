@@ -41,12 +41,11 @@
                     <div class="carga-row-2col">
                         <div class="carga-input-group">
                             <label>CORREO ELECTRÓNICO <span style="color:#dc2626">*</span></label>
-                            <input type="email" id="reg-email" placeholder="juan.perez@escuela.edu.mx" required
-                                   oninput="sugerirUsername()">
+                            <input type="email" id="reg-email" placeholder="juan.perez@escuela.edu.mx" required>
                         </div>
                         <div class="carga-input-group">
-                            <label>USUARIO (username)</label>
-                            <input type="text" id="reg-username" placeholder="Se genera automáticamente del email">
+                            <label>USUARIO (LOGIN) <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-username" placeholder="Ej. docjuan" required>
                         </div>
                     </div>
 
@@ -218,51 +217,51 @@
             </div>
             <span class="close-x" onclick="cerrarModalEditar()">&times;</span>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: 500px; overflow-y: auto; padding-right:10px;">
             <input type="hidden" id="edit-id">
 
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
                 <div class="modal-form-row">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="edit-nombre">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Nombre(s)</label>
+                    <input type="text" id="edit-nombre" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                 </div>
                 <div class="modal-form-row">
-                    <label>Apellido Paterno</label>
-                    <input type="text" id="edit-ap-paterno">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Apellido Paterno</label>
+                    <input type="text" id="edit-ap-paterno" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                 </div>
                 <div class="modal-form-row">
-                    <label>Apellido Materno</label>
-                    <input type="text" id="edit-ap-materno">
-                </div>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
-                <div class="modal-form-row">
-                    <label>Email</label>
-                    <input type="email" id="edit-email">
-                </div>
-                <div class="modal-form-row">
-                    <label>Teléfono</label>
-                    <input type="tel" id="edit-telefono">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Apellido Materno</label>
+                    <input type="text" id="edit-ap-materno" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                 </div>
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
                 <div class="modal-form-row">
-                    <label>No. Empleado</label>
-                    <input type="text" id="edit-rfc">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Email</label>
+                    <input type="email" id="edit-email" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                 </div>
                 <div class="modal-form-row">
-                    <label>Especialidad que Imparte</label>
-                    <input type="text" id="edit-especialidad">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Teléfono</label>
+                    <input type="tel" id="edit-telefono" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                 </div>
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
                 <div class="modal-form-row">
-                    <label>Formación Profesional</label>
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">No. Empleado</label>
+                    <input type="text" id="edit-rfc" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+                </div>
+                <div class="modal-form-row">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Especialidad que Imparte</label>
+                    <input type="text" id="edit-especialidad" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
+                <div class="modal-form-row">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Formación Profesional</label>
                     <input type="text" id="edit-formacion" list="lista-formaciones-edit"
-                           placeholder="Ej. Ing. en Sistemas, Contador Público...">
+                           placeholder="Ej. Ing. en Sistemas, Contador Público..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                     <datalist id="lista-formaciones-edit">
                         <option value="Ingeniero en Sistemas"></option>
                         <option value="Ingeniero en TICs"></option>
@@ -279,8 +278,8 @@
                     </datalist>
                 </div>
                 <div class="modal-form-row">
-                    <label>Carrera Asignada</label>
-                    <select id="edit-carrera">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Carrera Asignada</label>
+                    <select id="edit-carrera" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                         <option value="Ingeniería en TICs">Ingeniería en TICs</option>
                         <option value="Administración">Administración</option>
                         <option value="Contaduría">Contaduría</option>
@@ -288,9 +287,11 @@
                     </select>
                 </div>
             </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-top:14px;">
                 <div class="modal-form-row">
-                    <label>Grado Académico</label>
-                    <select id="edit-grado">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Grado Académico</label>
+                    <select id="edit-grado" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                         <option value="Licenciatura">Licenciatura</option>
                         <option value="Técnico Superior">Técnico Superior</option>
                         <option value="Maestría">Maestría</option>
@@ -299,8 +300,8 @@
                     </select>
                 </div>
                 <div class="modal-form-row">
-                    <label>Tipo de Contrato</label>
-                    <select id="edit-contrato">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Tipo de Contrato</label>
+                    <select id="edit-contrato" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                         <option value="Tiempo Completo">Tiempo Completo</option>
                         <option value="Medio Tiempo">Medio Tiempo</option>
                         <option value="Por Horas">Por Horas</option>
@@ -308,32 +309,20 @@
                     </select>
                 </div>
                 <div class="modal-form-row">
-                    <label>Turno</label>
-                    <select id="edit-turno">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Turno</label>
+                    <select id="edit-turno" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                         <option value="Matutino">Matutino</option>
                         <option value="Vespertino">Vespertino</option>
                         <option value="Nocturno">Nocturno</option>
                         <option value="Mixto">Mixto</option>
                     </select>
                 </div>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
                 <div class="modal-form-row">
-                    <label>Carrera Asignada</label>
-                    <select id="edit-carrera">
-                        <option value="Ingeniería en TICs">Ingeniería en TICs</option>
-                        <option value="Administración">Administración</option>
-                        <option value="Contaduría">Contaduría</option>
-                        <option value="Gastronomía">Gastronomía</option>
-                    </select>
-                </div>
-                <div class="modal-form-row">
-                    <label>Estatus</label>
-                    <select id="edit-estatus">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#64748b; margin-bottom:5px;">Estatus</label>
+                    <select id="edit-estatus" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
                         <option value="Activo">Activo</option>
                         <option value="Inactivo">Inactivo</option>
-                        <option value="Baja Temporal">Baja Temporal</option>
+                        <option value="Permiso">Permiso</option>
                     </select>
                 </div>
             </div>
@@ -364,10 +353,16 @@
         </div>
         <div class="modal-body">
             <input type="hidden" id="reset-docente-id">
+            
+            <div class="modal-form-row" style="margin-bottom:15px;">
+                <label>NUEVO USUARIO (LOGIN)</label>
+                <input type="text" id="reset-nuevo-username" placeholder="Nuevo usuario" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+            </div>
+
             <div class="modal-form-row">
                 <label>NUEVA CONTRASEÑA</label>
                 <div style="position:relative;">
-                    <input type="password" id="reset-nueva-pass" placeholder="Mínimo 6 caracteres"
+                    <input type="password" id="reset-nueva-pass" placeholder="Dejar en blanco para no cambiar"
                            style="padding-right:40px; width:100%; box-sizing:border-box;">
                     <i class='bx bx-show' onclick="toggleVerPassReset()"
                        id="toggle-reset-ico"

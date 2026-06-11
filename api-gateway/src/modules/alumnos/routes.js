@@ -141,6 +141,50 @@ router.put('/:id/carrera', async (req, res) => {
     res.json(alumnosMemoria[idx]);
 });
 
+// PUT /api/alumnos/:id
+router.put('/:id', async (req, res) => {
+    const r = await tryAlumno('PUT', `/api/alumnos/${req.params.id}`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    const idx = alumnosMemoria.findIndex(a => a._id === req.params.id);
+    if (idx !== -1) {
+        Object.assign(alumnosMemoria[idx], req.body);
+        return res.json(alumnosMemoria[idx]);
+    }
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
+// DELETE /api/alumnos/:id
+router.delete('/:id', async (req, res) => {
+    const r = await tryAlumno('DELETE', `/api/alumnos/${req.params.id}`, null, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    const idx = alumnosMemoria.findIndex(a => a._id === req.params.id);
+    if (idx !== -1) {
+        alumnosMemoria.splice(idx, 1);
+        return res.json({ message: "Alumno eliminado (memoria)" });
+    }
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
+// PATCH /api/alumnos/:id/credenciales
+router.patch('/:id/credenciales', async (req, res) => {
+    const r = await tryAlumno('PATCH', `/api/alumnos/${req.params.id}/credenciales`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    const idx = alumnosMemoria.findIndex(a => a._id === req.params.id);
+    if (idx !== -1) {
+        if (req.body.username) alumnosMemoria[idx].username = req.body.username;
+        if (req.body.password) alumnosMemoria[idx].password = req.body.password;
+        return res.json(alumnosMemoria[idx]);
+    }
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
+// PATCH /api/alumnos/:id/reset-password
+router.patch('/:id/reset-password', async (req, res) => {
+    const r = await tryAlumno('PATCH', `/api/alumnos/${req.params.id}/reset-password`, req.body, req.headers);
+    if (r.ok) return res.status(r.status).json(r.data);
+    res.status(503).json({ error: 'Servicio de Alumnos no disponible' });
+});
+
 // GET /api/alumnos/:id/materias
 router.get('/:id/materias', async (req, res) => {
     const r = await tryAlumno('GET', `/api/alumnos/${req.params.id}/materias`, null, req.headers);

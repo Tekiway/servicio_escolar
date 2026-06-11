@@ -14,6 +14,30 @@ exports.verCalificacionesMateria = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+const Alumno = require('../models/Alumno');
+
+// --- ACTUALIZAR Y ELIMINAR ---
+exports.actualizarAlumno = async (req, res) => {
+    try {
+        const { password, ...resto } = req.body;
+        const alumno = await Alumno.findByIdAndUpdate(req.params.id, resto, { new: true }).select('-password');
+        if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+        res.json(alumno);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.eliminarAlumno = async (req, res) => {
+    try {
+        const alumno = await Alumno.findByIdAndDelete(req.params.id);
+        if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+        res.json({ message: 'Alumno eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 // --- AUTENTICACIÓN ---
@@ -111,6 +135,44 @@ exports.actualizarCarrera = async (req, res) => {
         res.json(alumno);
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+// --- RESET PASSWORD ---
+exports.resetPassword = async (req, res) => {
+    try {
+        const alumno = await Alumno.findById(req.params.id);
+        if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+
+        // Password is reset to their username (matricula) by default
+        const salt = await bcrypt.genSalt(10);
+        alumno.password = await bcrypt.hash(alumno.username, salt);
+        await alumno.save();
+
+        res.json({ message: 'Contraseña restablecida exitosamente a la matrícula del alumno.' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// --- EDITAR CREDENCIALES ---
+exports.actualizarCredenciales = async (req, res) => {
+    try {
+        const alumno = await Alumno.findById(req.params.id);
+        if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+
+        const { username, password } = req.body;
+        if (username) alumno.username = username;
+        
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            alumno.password = await bcrypt.hash(password, salt);
+        }
+
+        await alumno.save();
+        res.json({ message: 'Credenciales actualizadas exitosamente.' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 

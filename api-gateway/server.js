@@ -46,6 +46,7 @@ app.listen(env.PORT, () => {
     console.log(`   ➡️  /api/docentes    → ${env.DOCENTE_SERVICE_URL}`);
     console.log(`   ➡️  /api/alumnos     → ${env.ALUMNO_SERVICE_URL}`);
     console.log(`   ➡️  /api/directivos  → ${env.DIRECTIVO_SERVICE_URL}`);
+    console.log(`   ➡️  /api/academico   → ${env.DIRECTIVO_SERVICE_URL}`);
     console.log(`   ➡️  /api/finanzas    → ${env.FINANZAS_SERVICE_URL}`);
     console.log(`   ➡️  /api/aspirantes  → ${env.ASPIRANTE_SERVICE_URL}`);
     console.log(`===================================================`);

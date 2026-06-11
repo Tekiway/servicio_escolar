@@ -75,6 +75,9 @@ const Docentes = {
     eliminar: (id) =>
         request('DELETE', `/docentes/${id}`),
 
+    actualizarCredenciales: (id, username, password) =>
+        request('PATCH', `/docentes/${id}/credenciales`, { username, password }),
+
     buscar: (filtro) =>
         request('GET', `/docentes/buscar?filtro=${encodeURIComponent(filtro)}`),
 
@@ -106,6 +109,12 @@ const Alumnos = {
     registrar: (datos) =>
         request('POST', '/alumnos', datos),
 
+    editar: (id, datos) =>
+        request('PUT', `/alumnos/${id}`, datos),
+
+    eliminar: (id) =>
+        request('DELETE', `/alumnos/${id}`),
+
     actualizarCarrera: (id, carrera) =>
         request('PUT', `/alumnos/${id}/carrera`, { carrera }),
 
@@ -116,7 +125,13 @@ const Alumnos = {
         request('GET', `/alumnos/${id}/materias/${encodeURIComponent(materiaNombre)}/calificaciones`),
 
     modificarCalificacion: (id, materiaNombre, numUnidad, calificacion) =>
-        request('PATCH', `/alumnos/${id}/materias/${encodeURIComponent(materiaNombre)}/unidades/${numUnidad}`, { calificacion })
+        request('PATCH', `/alumnos/${id}/materias/${encodeURIComponent(materiaNombre)}/unidades/${numUnidad}`, { calificacion }),
+
+    resetPassword: (id) =>
+        request('PATCH', `/alumnos/${id}/reset-password`),
+
+    actualizarCredenciales: (id, username, password) =>
+        request('PATCH', `/alumnos/${id}/credenciales`, { username, password })
 };
 
 // ─── Directivos ───────────────────────────────────────────────────────────────
@@ -129,7 +144,16 @@ const Directivos = {
         request('POST', '/directivos', datos),
 
     obtener: (id) =>
-        request('GET', `/directivos/${id}`)
+        request('GET', `/directivos/${id}`),
+
+    editar: (id, datos) =>
+        request('PUT', `/directivos/${id}`, datos),
+
+    eliminar: (id) =>
+        request('DELETE', `/directivos/${id}`),
+
+    actualizarCredenciales: (id, username, password) =>
+        request('PATCH', `/directivos/${id}/credenciales`, { username, password })
 };
 
 // ─── Aspirantes ───────────────────────────────────────────────────────────────
@@ -183,6 +207,25 @@ const Finanzas = {
         request('GET', `/finanzas/tuitions/student/${studentId}`)
 };
 
+// ─── Académico (Grupos y Horarios) ──────────────────────────────────────────
+
+const Academico = {
+    crearGrupo: (datos) =>
+        request('POST', '/academico/grupos', datos),
+
+    obtenerGrupos: () =>
+        request('GET', '/academico/grupos'),
+
+    asignarHorario: (datos) =>
+        request('POST', '/academico/horarios', datos),
+
+    obtenerHorariosPorGrupo: (grupoId) =>
+        request('GET', `/academico/horarios/grupo/${grupoId}`),
+
+    obtenerHorarioDocente: (docenteId) =>
+        request('GET', `/academico/horarios/docente/${docenteId}`)
+};
+
 // ─── Exports públicos ─────────────────────────────────────────────────────────
 
 window.API = {
@@ -192,5 +235,6 @@ window.API = {
     Directivos,
     Aspirantes,
     Finanzas,
-    Materias
+    Materias,
+    Academico
 };

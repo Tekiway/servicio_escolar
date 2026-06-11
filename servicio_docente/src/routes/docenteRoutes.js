@@ -10,8 +10,8 @@ router.get('/buscar',     directivoAuth, ctrl.buscarDocentes);
 router.put('/:id',        directivoAuth, ctrl.editarDocente);
 router.delete('/:id',     directivoAuth, ctrl.eliminarDocente);
 
-// ── Reset de contraseña ───────────────────────────────────────────────────────
-router.patch('/:id/reset-password', directivoAuth, ctrl.resetPassword);
+// ── Actualizar Credenciales ───────────────────────────────────────────────────
+router.patch('/:id/credenciales', directivoAuth, ctrl.actualizarCredenciales);
 
 // ── Tareas ────────────────────────────────────────────────────────────────────
 router.post('/tareas', require('../controllers/tareaController').crearTarea);

@@ -81,7 +81,7 @@ window.enviarEdicionModal = function() {
     btnGuardar.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
     btnGuardar.disabled = true;
 
-    fetch('./services/registrar_carrera.php', {
+    fetch('../../../services/registrar_carrera.php', {
         method: 'POST',
         body: formData
     })
@@ -89,7 +89,7 @@ window.enviarEdicionModal = function() {
     .then(data => {
         if(data.success) {
             alert("¡Cambios guardados con éxito en Nakumi!");
-            location.reload(); // Recargar para ver reflejado en la tabla
+            if (window.cargarModulo) window.cargarModulo('Carreras');
         } else {
             alert("Error al actualizar: " + data.message);
             btnGuardar.innerHTML = "<i class='bx bx-check-double'></i> Guardar Cambios";
@@ -109,7 +109,7 @@ window.eliminarCarrera = function(id, nombre) {
         const datos = new FormData();
         datos.append('id_eliminar', id);
 
-        fetch('./services/eliminar_carrera.php', {
+        fetch('../../../services/eliminar_carrera.php', {
             method: 'POST',
             body: datos
         })
@@ -117,7 +117,7 @@ window.eliminarCarrera = function(id, nombre) {
         .then(data => {
             if (data.success) {
                 alert("Carrera eliminada correctamente.");
-                location.reload(); // Refrescamos la tabla
+                if (window.cargarModulo) window.cargarModulo('Carreras');
             } else {
                 alert("Error al eliminar: " + data.message);
             }
@@ -137,7 +137,7 @@ document.addEventListener('submit', function(e) {
         btnGuardar.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
         btnGuardar.disabled = true;
 
-        fetch('./services/registrar_carrera.php', {
+        fetch('../../../services/registrar_carrera.php', {
             method: 'POST',
             body: formData
         })
@@ -145,7 +145,7 @@ document.addEventListener('submit', function(e) {
         .then(data => {
             if(data.success) {
                 alert("¡Carrera registrada con éxito!");
-                location.reload();
+                if (window.cargarModulo) window.cargarModulo('Carreras');
             } else {
                 alert("Error al registrar: " + data.message);
                 btnGuardar.innerHTML = originalHTML;

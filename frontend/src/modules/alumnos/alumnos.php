@@ -164,10 +164,10 @@
             }
 
             // Actualizar nombre dinámico desde perfil si está almacenado
-            const storedPerfil = localStorage.getItem('alumno_perfil');
+            const storedPerfil = localStorage.getItem('user_data');
             if (storedPerfil) {
                 const data = JSON.parse(storedPerfil);
-                document.getElementById('student-header-name').textContent = data.nombre;
+                document.getElementById('student-header-name').textContent = 'Bienvenido ' + (data.username || data.nombre);
             }
             
             cargarModulo('Inicio');
