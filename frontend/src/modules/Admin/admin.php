@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>Panel Administrativo - Sistema Control Escolar</title>
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/frontend/src/styles/adminInicio.css">
-    <link rel="stylesheet" href="/frontend/src/styles/carreras.css">
-    <link rel="stylesheet" href="/frontend/src/styles/dashboard.css">
-    <link rel="stylesheet" href="/frontend/src/styles/carga.css">
-    <link rel="stylesheet" href="/frontend/src/styles/formulariosAdmin.css">
-    <link rel="stylesheet" href="/frontend/src/styles/agregarMateria.css">
-    <link rel="stylesheet" href="/frontend/src/styles/asignarMateria.css">
+    <link rel="stylesheet" href="../../styles/adminInicio.css">
+    <link rel="stylesheet" href="../../styles/carreras.css">
+    <link rel="stylesheet" href="../../styles/dashboard.css">
+    <link rel="stylesheet" href="../../styles/carga.css">
+    <link rel="stylesheet" href="../../styles/formulariosAdmin.css">
+    <link rel="stylesheet" href="../../styles/agregarMateria.css">
+    <link rel="stylesheet" href="../../styles/asignarMateria.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/frontend/src/js/apiGateway.js?v=2"></script>
+    <script src="../../js/apiGateway.js?v=2"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -77,9 +77,9 @@
             // Guardar el módulo actual para persistencia al recargar
             localStorage.setItem('moduloActual_Admin', nombre);
             
-            // Ruta corregida a la carpeta general Admin
+            // Ruta relativa al archivo actual (funciona en LAMPP y Docker)
             const nombreArchivo = nombre.charAt(0).toLowerCase() + nombre.slice(1);
-            const ruta = `/frontend/src/modules/Admin/${nombreArchivo}.php`;
+            const ruta = `${nombreArchivo}.php`;
 
             fetch(ruta)
                 .then(response => {
@@ -108,8 +108,8 @@
                     // Cargar el script correspondiente al módulo de forma dinámica
                     const nuevoScript = document.createElement('script');
                     nuevoScript.id = 'script-modulo';
-                    // Nota: los paths aqui siguen siendo relativos a index.php (el que hace include)
-                    nuevoScript.src = `/frontend/src/modules/Admin/js/${nombreArchivo}.js?v=${new Date().getTime()}`;
+                    // Ruta relativa al archivo actual
+                    nuevoScript.src = `js/${nombreArchivo}.js?v=${new Date().getTime()}`;
                     nuevoScript.onerror = () => {
                         console.log(`Módulo ${nombre} cargado sin archivo JS específico.`);
                         nuevoScript.remove();
