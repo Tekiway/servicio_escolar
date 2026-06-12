@@ -35,7 +35,7 @@ services:
       - ./servicio_alumnos:/app
       - /app/node_modules
     environment:
-      MONGO_URI: mongodb://mongo-alumnos:27017/alumnos_db
+      MONGO_URI_ALUMNOS: mongodb://mongo-alumnos:27017/alumnos_db
       PORT: 3001
       JWT_SECRET: secreto
       DOCENTES_URL: http://docente-service:3002
@@ -65,7 +65,7 @@ services:
       - ./servicio_docente:/app
       - /app/node_modules
     environment:
-      MONGO_URI: mongodb://mongo-docentes:27017/docentes_db
+      MONGO_URI_DOCENTES: mongodb://mongo-docentes:27017/docentes_db
       PORT: 3002
       JWT_SECRET: secreto
       ALUMNOS_URL: http://alumno-service:3001
@@ -93,7 +93,7 @@ services:
       - ./servicio_directivo:/app
       - /app/node_modules
     environment:
-      MONGO_URI: mongodb://mongo-directivos:27017/directivos_db
+      MONGO_URI_DIRECTIVOS: mongodb://mongo-directivos:27017/directivos_db
       PORT: 3003
       JWT_SECRET: secreto
     develop:
@@ -120,7 +120,7 @@ services:
       - ./servicio_finanzas:/app
       - /app/node_modules
     environment:
-      MONGO_URI: mongodb://mongo-finanzas:27017/finanzas_db
+      MONGO_URI_FINANZAS: mongodb://mongo-finanzas:27017/finanzas_db
       PORT: 3004
       JWT_SECRET: secreto
     develop:
@@ -147,7 +147,7 @@ services:
       - ./servicio_aspirantes:/app
       - /app/node_modules
     environment:
-      MONGO_URI: mongodb://mongo-aspirantes:27017/aspirantes_db
+      MONGO_URI_ASPIRANTES: mongodb://mongo-aspirantes:27017/aspirantes_db
       PORT: 3005
       JWT_SECRET: secreto
       ALUMNOS_URL: http://alumno-service:3001
