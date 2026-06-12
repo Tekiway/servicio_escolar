@@ -4,7 +4,8 @@
  * Toda petición al backend pasa por aquí — sin fetch dispersos en las vistas.
  */
 
-const GATEWAY_URL = 'http://localhost:3000/api';
+// Cambiar localhost por la URL pública que te dé Railway para el api-gateway
+const GATEWAY_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://tu-api-gateway.up.railway.app/api';
 
 // ─── Utilidades internas ──────────────────────────────────────────────────────
 
@@ -35,6 +36,12 @@ async function request(method, endpoint, body = null) {
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
+        // Si el servidor responde que el token no vale (401 o 403), mandamos al login
+        if (response.status === 401 || response.status === 403) {
+            Auth.logout();
+            window.location.href = '/servicio_escolar/frontend/src/modules/login/personal.php';
+            return;
+        }
         const msg = data?.message || data?.error || `Error ${response.status}`;
         throw new Error(msg);
     }
@@ -61,6 +68,13 @@ const Auth = {
         localStorage.removeItem('token');
         localStorage.removeItem('user_role');
         localStorage.removeItem('user_data');
+    },
+
+    // Nueva utilidad para proteger páginas
+    verificarSesion: () => {
+        if (!getToken()) {
+            window.location.href = '/servicio_escolar/frontend/src/modules/login/personal.php';
+        }
     }
 };
 

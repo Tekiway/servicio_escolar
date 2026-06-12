@@ -14,15 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$jsonFile = __DIR__ . '/asignaciones.json';
-
-// Leer JSON existente
-$asignaciones = [];
-if (file_exists($jsonFile)) {
-    $raw = file_get_contents($jsonFile);
-    $asignaciones = json_decode($raw, true) ?: [];
-}
-
 // Leer body
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -43,40 +34,34 @@ if (empty($materia) || empty($docente) || empty($grupo) || empty($aula) || empty
     exit;
 }
 
-// Validar conflicto de horario (si el mismo docente ya tiene clase a esa misma hora)
-foreach ($asignaciones as $asig) {
-    if ($asig['docenteId'] === $docenteId && $asig['horario'] === $horario) {
-        echo json_encode([
-            'success' => false,
-            'message' => "Conflicto de horario: El docente {$docente} ya tiene asignada la materia \"{$asig['materia']}\" en el horario {$horario}."
-        ]);
-        exit;
-    }
-    if ($asig['aula'] === $aula && $asig['horario'] === $horario) {
-        echo json_encode([
-            'success' => false,
-            'message' => "Conflicto de Aula: El {$aula} ya está ocupado en el horario {$horario} por la materia \"{$asig['materia']}\"."
-        ]);
-        exit;
-    }
-}
+// Determinar URL del Gateway (Local vs Producción)
+$gatewayHost = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') 
+    ? 'http://localhost:3000' 
+    : 'https://tu-api-gateway.up.railway.app'; // Reemplazar por tu URL de Railway después
 
-$nuevaAsignacion = [
-    'id'        => uniqid('asig_', true),
-    'materia'   => $materia,
-    'clave'     => $clave,
-    'docente'   => $docente,
-    'docenteId' => $docenteId,
-    'grupo'     => $grupo,
-    'aula'      => $aula,
-    'horario'   => $horario,
-    'fecha'     => date('Y-m-d H:i:s')
-];
+$url = "{$gatewayHost}/api/academico/horarios";
 
-$asignaciones[] = $nuevaAsignacion;
+// Enviar datos al Microservicio mediante el Gateway
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($input));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: ' . ($_SERVER['HTTP_AUTHORIZATION'] ?? '')
+]);
 
-if (file_put_contents($jsonFile, json_encode($asignaciones, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) !== false) {
-    echo json_encode(['success' => true, 'message' => 'Asignación registrada correctamente.', 'data' => $nuevaAsignacion]);
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($httpCode >= 200 && $httpCode < 300) {
+    echo $response;
 } else {
-    echo json_encode(['success' => false, 'message' => 'Error al escribir el archivo de asignaciones.']);
+    http_response_code($httpCode ?: 500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error al comunicar con el API Gateway',
+        'details' => json_decode($response)
+    ]);
 }

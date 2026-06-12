@@ -4,7 +4,8 @@ const axios = require('axios');
 const docenteAuth = require('../middlewares/docenteAuth'); // Middleware de autenticación docente
 
 // URL base del microservicio de alumnos (ajusta el puerto si es necesario)
-const ALUMNOS_URL = process.env.ALUMNOS_URL || 'http://servicio_alumnos:3000';
+// Ajustado para coincidir con el nombre del servicio y puerto en docker-compose.yml
+const ALUMNOS_URL = process.env.ALUMNOS_URL || 'http://alumno-service:3001';
 
 // Modificar calificación de una unidad de un alumno
 router.patch('/alumnos/:id/materias/:materiaNombre/unidades/:numUnidad', docenteAuth, async (req, res) => {
