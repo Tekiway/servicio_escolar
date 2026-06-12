@@ -37,7 +37,7 @@ if (empty($materia) || empty($docente) || empty($grupo) || empty($aula) || empty
 // Determinar URL del Gateway (Local vs Producción)
 $gatewayHost = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') 
     ? 'http://localhost:3000' 
-    : 'https://TU-DOMINIO-REAL-DE-GATEWAY.up.railway.app'; // Reemplazar por tu URL de Railway real
+    : 'https://tu-api-gateway.up.railway.app'; // Reemplazar por tu URL de Railway real
 
 $url = "{$gatewayHost}/api/academico/horarios";
 
