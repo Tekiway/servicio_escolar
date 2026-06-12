@@ -62,6 +62,8 @@
                             <th>MATRÍCULA / CORREO</th>
                             <th>CARRERA</th>
                             <th>SEM. / GRUPO</th>
+                            <th>USUARIO</th>
+                            <th>CONTRASEÑA</th>
                             <th>ESTATUS</th>
                             <th>ACCIONES</th>
                         </tr>

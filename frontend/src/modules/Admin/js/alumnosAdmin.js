@@ -18,11 +18,14 @@ async function cargarAlumnos() {
                 <tr>
                     <td><b>${al.nombre} ${al.apellidos || ''}</b><br><small>CURP: ${al.curp || 'N/D'}</small></td>
                     <td>${al.matricula || 'N/A'}<br><small>${al.email}</small></td>
-                    <td>${al.carrera || 'Sin Asignar'}<br>
-                        <small style="color:#2563eb;font-weight:600;">Usr: ${al.username || 'N/A'}</small><br>
-                        <small style="color:#d97706;font-weight:600;">Pass: ${al.password || '***'}</small>
-                    </td>
+                    <td>${al.carrera || 'Sin Asignar'}</td>
                     <td>${al.semestre || '1ro'}<br><small>Grupo ${al.grupo || 'N/A'}</small></td>
+                    <td>
+                        <small style="color:#2563eb;font-weight:600;"><i class='bx bx-user'></i> @${al.username || 'N/D'}</small>
+                    </td>
+                    <td>
+                        <small style="color:#d97706;font-weight:600;"><i class='bx bx-key'></i> *** (Oculta)</small>
+                    </td>
                     <td><span style="background:${statusColor};color:${statusText};padding:3px 10px;border-radius:20px;font-size:0.78rem;font-weight:700;">${al.status || 'Activo'}</span></td>
                     <td>
                         <div class="acciones-group-flex">

@@ -181,7 +181,9 @@
                         <thead>
                             <tr>
                                 <th>NOMBRE COMPLETO</th>
-                                <th>EMAIL / USUARIO</th>
+                                <th>EMAIL</th>
+                                <th>USUARIO</th>
+                                <th>CONTRASEÑA</th>
                                 <th>NO. EMPLEADO</th>
                                 <th>ESPECIALIDAD</th>
                                 <th>CONTRATO / TURNO</th>

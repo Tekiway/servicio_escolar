@@ -6,24 +6,7 @@ const https = require('https');
 const ALUMNO_URL = process.env.ALUMNO_SERVICE_URL || 'http://localhost:3001';
 const TIMEOUT_MS = 2000;
 
-let alumnosMemoria = [
-    {
-        _id: 'alu-001',
-        nombre: 'Carlos Rodríguez López',
-        username: 'crodriguez',
-        matricula: 'A2024001',
-        email: 'crodriguez@escuela.edu.mx',
-        carrera: 'Ingeniería en TICs'
-    },
-    {
-        _id: 'alu-002',
-        nombre: 'Sofía Hernández Méndez',
-        username: 'shernandez',
-        matricula: 'A2024002',
-        email: 'shernandez@escuela.edu.mx',
-        carrera: 'Ingeniería en TICs'
-    }
-];
+let alumnosMemoria = [];
 
 function httpRequest(method, urlStr, body, headers, timeoutMs) {
     return new Promise((resolve) => {
@@ -76,7 +59,7 @@ router.get('/solo-info', async (req, res) => {
     if (r.ok) return res.status(r.status).json(r.data);
     res.json(alumnosMemoria.map(a => ({
         _id: a._id, nombre: a.nombre, matricula: a.matricula,
-        carrera: a.carrera, email: a.email
+        carrera: a.carrera, email: a.email, username: a.username, estatus: a.estatus
     })));
 });
 

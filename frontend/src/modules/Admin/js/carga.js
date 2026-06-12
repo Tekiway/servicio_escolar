@@ -156,8 +156,13 @@ function _renderTabla(tbody, docentes) {
         <tr>
             <td><b>${nombreCompleto || d.nombre || '—'}</b><br>
                 <small style="color:#94a3b8;">${d.gradoAcademico || ''}</small></td>
-            <td>${d.email || '—'}<br>
-                <small style="color:#a855f7;font-weight:600;">@${d.username || '—'}</small></td>
+            <td>${d.email || '—'}</td>
+            <td>
+                <small style="color:#a855f7;font-weight:600;"><i class='bx bx-user'></i> @${d.username || 'N/D'}</small>
+            </td>
+            <td>
+                <small style="color:#d97706;font-weight:600;"><i class='bx bx-key'></i> *** (Oculta)</small>
+            </td>
             <td>${d.numeroEmpleado || '—'}</td>
             <td>${d.especialidad || '—'}<br>
                 <small style="color:#94a3b8;">${d.formacionProfesional || d.carrera || ''}</small></td>

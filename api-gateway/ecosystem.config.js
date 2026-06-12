@@ -6,7 +6,7 @@ module.exports = {
             cwd: '/opt/lampp/htdocs/servicio_escolar/api-gateway',
             instances: 1,
             autorestart: true,       // Reinicia si crashea
-            watch: false,            // No watch en producción
+            watch: true,             // Recarga automáticamente al detectar cambios en los archivos
             max_memory_restart: '200M',
             env: {
                 NODE_ENV: 'production',

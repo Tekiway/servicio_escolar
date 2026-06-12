@@ -3,9 +3,27 @@
 name: servicio_escolar
 
 services:
-  # ⚠️ api-gateway ya NO corre en Docker.
-  # Es gestionado por PM2 directamente en el sistema.
-  # Para arrancarlo: pm2 start ecosystem.config.js (desde api-gateway/)
+  api-gateway:
+    restart: always
+    build: ./api-gateway
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      ALUMNO_SERVICE_URL: http://alumno-service:3001
+      DOCENTE_SERVICE_URL: http://docente-service:3002
+      DIRECTIVO_SERVICE_URL: http://directivo-service:3003
+      FINANCE_SERVICE_URL: http://finance-service:3004
+      ASPIRANTE_SERVICE_URL: http://aspirante-service:3005
+    depends_on:
+      - alumno-service
+      - docente-service
+      - directivo-service
+      - finance-service
+      - aspirante-service
 
   alumno-service:
     restart: always

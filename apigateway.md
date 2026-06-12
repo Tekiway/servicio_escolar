@@ -1,47 +1,73 @@
-# API Gateway - Requisitos Funcionales
+# API Gateway - Documentación Técnica y Configuración
 
-Este documento describe exclusivamente lo que el **API Gateway** necesita para funcionar correctamente dentro del ecosistema de microservicios.
+Este documento explica cómo está configurado el **API Gateway** de nuestro sistema, cómo funciona la arquitectura de red y las instrucciones exactas para ejecutarlo, de manera que todo el equipo pueda sincronizarse sin errores.
 
 ---
 
-## 1. Requisitos de Entorno (Environment)
-Para que el API Gateway arranque y encamine las peticiones, requiere de forma estricta un archivo `.env` en su directorio raíz con la configuración de las URLs de cada microservicio:
+## 1. ¿Qué es y qué hace el API Gateway?
+El API Gateway es el corazón del sistema. El Frontend **no se comunica directamente** con la base de datos ni con los microservicios individuales. Toda petición del Frontend (PHP/JS) pasa primero por el API Gateway (puerto `3000`), y este se encarga de:
+1. Validar la solicitud.
+2. Enrutarla al microservicio correcto (`alumno-service`, `docente-service`, etc.).
+3. **Mecanismo de Respaldo (Fallback):** Si un microservicio se cae (por error de sintaxis o fallo en la BD), el API Gateway intercepta el error y utiliza memoria temporal para que la interfaz web no se congele ni lance errores críticos al usuario.
 
-```env
-PORT=3000
-DOCENTE_SERVICE_URL=http://localhost:3002
-ALUMNO_SERVICE_URL=http://localhost:3001
-DIRECTIVO_SERVICE_URL=http://localhost:3004
-FINANZAS_SERVICE_URL=http://localhost:3005
-ASPIRANTE_SERVICE_URL=http://localhost:3006
-```
+---
 
-## 2. Dependencias del Sistema
-El Gateway depende del entorno **Node.js** para ejecutarse. Los siguientes paquetes NPM son obligatorios para su funcionamiento:
+## 2. Arquitectura de Docker (Nueva Configuración)
 
-*   **`express`**: El motor principal del servidor HTTP.
-*   **`dotenv`**: Para leer las variables del archivo `.env`.
-*   **`http-proxy-middleware`**: (Si se utiliza para redireccionar peticiones complejas a los microservicios).
-*   **`cors`**: Necesario si el Frontend se encuentra en un puerto distinto al 3000.
+> [!IMPORTANT]
+> **El API Gateway YA NO corre mediante PM2 ni requiere Node.js instalado en sus computadoras de forma nativa.** 
 
-Estas dependencias se instalan ejecutando:
-```bash
-npm install
-```
+Ahora, **TODO el ecosistema está contenerizado**. El archivo `docker-compose.yml` en la raíz del proyecto es el único que necesitan usar. Las conexiones entre microservicios ya no usan `localhost`, sino que utilizan la red interna de Docker mediante los nombres de los servicios.
 
-## 3. Condiciones de Red
-*   El puerto principal del Gateway (por defecto **3000**) debe estar **libre y expuesto**.
-*   Los microservicios (Docentes, Alumnos, Directivos, etc.) deben estar **encendidos** y respondiendo en sus respectivos puertos (3001, 3002, etc.). El Gateway funcionará sin ellos, pero arrojará error al intentar enrutar tráfico a un servicio apagado.
+### Mapa de Servicios y Puertos Internos
+- **API Gateway:** Expuesto en `http://localhost:3000` (El único que el frontend llama).
+- **Alumnos:** `http://alumno-service:3001`
+- **Docentes:** `http://docente-service:3002`
+- **Directivos:** `http://directivo-service:3003`
+- **Finanzas:** `http://finance-service:3004`
+- **Aspirantes:** `http://aspirante-service:3005`
 
-## 4. Archivos Clave
-El funcionamiento del API Gateway depende de la integridad de los siguientes archivos en su interior:
-*   `server.js`: El punto de arranque y configuración central de CORS y puertos.
-*   `src/routes/index.js`: El mapa de enrutamiento que decide a qué URL externa redirigir cada petición (`/api/docentes`, `/api/alumnos`, etc.).
+*(Nota: Las variables de entorno ya están inyectadas directamente dentro del `docker-compose.yml`, por lo que **ya no necesitan** configurar un archivo `.env` manual para enrutar puertos).*
 
-## 5. Comando de Arranque (Obligatorio)
-Para ponerlo a funcionar y mantenerlo a la escucha de peticiones del frontend, se requiere lanzar el comando:
-```bash
-# Modo de producción (Mantiene el sistema vivo en 2do plano)
-pm2 start ecosystem.config.js
-```
-*(Alternativamente, se puede usar `node server.js` o `npm start` para pruebas locales).*
+---
+
+## 3. Instrucciones de Arranque para el Equipo
+
+Para descargar los últimos cambios y arrancar todo el sistema sin errores, sigan estos pasos exactos en su terminal (ubicados en la raíz del proyecto `servicio_escolar`):
+
+1. **Bajar los últimos cambios de GitHub (si aplica):**
+   ```bash
+   git pull origin main
+   ```
+
+2. **Apagar contenedores antiguos (Importante para evitar código basura o caché):**
+   ```bash
+   docker compose down
+   ```
+
+3. **Arrancar todo el sistema construyendo la última versión del código:**
+   ```bash
+   docker compose up -d --build
+   ```
+
+Este único comando (`--build`) obligará a Docker a leer los últimos cambios de código (como los arreglos del `apiGateway.js` o correcciones en controladores) y levantará MongoDB, el API Gateway y todos los microservicios juntos en segundo plano (`-d`).
+
+---
+
+## 4. Resolución de Problemas (Troubleshooting)
+
+Si algo "no guarda" o aparece un "N/D" persistente:
+
+1. **Caché Agresiva del Navegador (Problemas de "N/D" o Estilos CSS rotos):** 
+   - **Síntoma 1 (Datos):** Al editar un usuario, la tabla sigue mostrando "N/D" o el dato viejo a pesar de que el sistema dice "Guardado exitosamente".
+   - **Síntoma 2 (Estilos):** Las vistas cargan en blanco, pierden el diseño (CSS), o las rutas de los estilos parecen "romperse".
+   - **Solución:** El navegador (Chrome/Edge) guarda en memoria temporal archivos críticos como `apiGateway.js` o archivos CSS. Es **obligatorio** presionar `Ctrl + F5` (o borrar la caché del navegador) cada vez que bajen cambios del repositorio. Se han inyectado variables como `?v=3` en el código para evitar esto, pero un Hard Refresh es fundamental.
+2. **Revisar errores de Microservicios:** Si el API Gateway está funcionando, pero un dato no se actualiza, es probable que un microservicio haya crasheado (ej. error de sintaxis). Para ver los errores en tiempo real, ejecuten:
+   ```bash
+   # Ver logs del microservicio de alumnos
+   docker logs servicio_escolar-alumno-service-1 --tail 50
+   
+   # Ver logs del API Gateway
+   docker logs servicio_escolar-api-gateway-1 --tail 50
+   ```
+3. **Nodemon Autorestart:** Los contenedores están configurados con volumen y `nodemon`. Si editan un archivo dentro de la carpeta de un microservicio, Docker lo detectará y reiniciará ese servicio en 1 o 2 segundos automáticamente. No necesitan reiniciar todo Docker.

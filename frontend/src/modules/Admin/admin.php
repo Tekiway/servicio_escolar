@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../styles/grupos.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="../../js/apiGateway.js?v=2"></script>
+    <script src="../../js/apiGateway.js?v=3"></script>
     <style>
         .show { display: block !important; }
         #dropdown-perfil a:hover { background: #f1f5f9; }

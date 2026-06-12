@@ -24,10 +24,14 @@ async function request(method, endpoint, body = null) {
     const options = {
         method,
         headers: authHeaders(),
+        cache: 'no-store',
         ...(body ? { body: JSON.stringify(body) } : {})
     };
 
-    const response = await fetch(`${GATEWAY_URL}${endpoint}`, options);
+    const separator = endpoint.includes('?') ? '&' : '?';
+    const finalEndpoint = method === 'GET' ? `${endpoint}${separator}_t=${Date.now()}` : endpoint;
+
+    const response = await fetch(`${GATEWAY_URL}${finalEndpoint}`, options);
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {

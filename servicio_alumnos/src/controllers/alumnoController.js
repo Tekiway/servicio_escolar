@@ -71,8 +71,6 @@ exports.autenticarAlumno = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-const Alumno = require('../models/Alumno');
-
 // --- SECCIÓN ALUMNOS ---
 exports.registrarAlumno = async (req, res) => {
     try {
