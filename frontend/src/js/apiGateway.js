@@ -5,7 +5,7 @@
  */
 
 // Cambiar localhost por la URL pública que te dé Railway para el api-gateway
-const GATEWAY_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://tu-api-gateway.up.railway.app/api';
+const GATEWAY_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://tu-url-real-de-railway.up.railway.app/api';
 
 // ─── Utilidades internas ──────────────────────────────────────────────────────
 
@@ -247,6 +247,7 @@ const Academico = {
 // ─── Exports públicos ─────────────────────────────────────────────────────────
 
 window.API = {
+    BASE_URL: GATEWAY_URL,
     Auth,
     Docentes,
     Alumnos,

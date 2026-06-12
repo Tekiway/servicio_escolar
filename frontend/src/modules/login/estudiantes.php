@@ -65,6 +65,8 @@
         </div>
     </div>
 
+    <!-- Módulo central de comunicación con el API Gateway -->
+    <script src="../../js/apiGateway.js"></script>
     <script>
         async function validarEstudiante(event) {
             event.preventDefault();
@@ -78,7 +80,7 @@
 
             try {
                 // Conectar al API Gateway
-                const response = await fetch('http://localhost:3000/api/alumnos/login', {
+                const response = await fetch(`${API.BASE_URL}/alumnos/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: usuarioVal, username: usuarioVal, password: passwordVal })

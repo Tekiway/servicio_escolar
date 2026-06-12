@@ -68,7 +68,7 @@
     <!-- Módulo central de comunicación con el API Gateway -->
     <script src="../../js/apiGateway.js"></script>
     <script>
-        const GATEWAY = 'http://localhost:3000/api';
+        const GATEWAY = API.BASE_URL;
 
         async function validarPersonal(event) {
             event.preventDefault();
