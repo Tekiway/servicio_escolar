@@ -21,26 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // El endpoint es a través del Gateway /api/academico/grupos
-                const res = await fetch('http://localhost:3000/api/academico/grupos', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify(payload)
-                });
+                // Usamos el método centralizado del API Gateway
+                const data = await API.Academico.crearGrupo(payload);
                 
-                const data = await res.json();
-                if (res.ok) {
-                    alert('✅ Grupo registrado correctamente');
-                    form.reset();
-                    cargarTablaGrupos();
-                } else {
-                    alert('⚠️ Error: ' + (data.error || 'No se pudo registrar. Verifica que no exista un grupo igual.'));
-                }
+                alert('✅ Grupo registrado correctamente');
+                form.reset();
+                cargarTablaGrupos();
             } catch (err) {
-                alert('❌ Error de conexión: ' + err.message);
+                alert('⚠️ Error: ' + err.message);
             } finally {
                 btn.innerHTML = origText;
                 btn.disabled = false;
@@ -56,19 +44,19 @@ async function cargarTablaGrupos() {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;"><i class="bx bx-loader-alt bx-spin"></i> Cargando grupos...</td></tr>';
     
     try {
-        const res = await fetch('http://localhost:3000/api/academico/grupos', {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
+        // Usamos el método centralizado para obtener grupos
+        const response = await API.Academico.obtenerGrupos();
         
-        const json = await res.json();
+        // Verificamos si los datos vienen directamente en la respuesta o dentro de .data
+        const grupos = Array.isArray(response) ? response : (response.data || []);
         
-        if (!res.ok || json.length === 0) {
+        if (grupos.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#64748b;">No hay grupos registrados.</td></tr>';
             return;
         }
 
         let html = '';
-        json.forEach(g => {
+        grupos.forEach(g => {
             html += `
             <tr style="border-bottom:1px solid #e2e8f0;">
                 <td style="padding:10px;"><strong>${g.nombre}</strong><br><small>${g.semestre}</small></td>
